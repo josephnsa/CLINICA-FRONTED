@@ -1,42 +1,105 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# Compiled output
+# ============================================================
+# ANGULAR
+# ============================================================
 /dist
 /tmp
 /out-tsc
 /bazel-out
+/.angular/cache
 
-# Node
+# ============================================================
+# NODE
+# ============================================================
 /node_modules
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json.bak
 
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+# ============================================================
+# TESTING & COVERAGE
+# ============================================================
+/coverage
+testem.log
+/libpeerconnection.log
 
-# Visual Studio Code
+# ============================================================
+# BUILD & CACHE
+# ============================================================
+/typings
+/connect.lock
+.sass-cache/
+*.tsbuildinfo
+
+# ============================================================
+# ENTORNOS Y SECRETOS — nunca subir al repositorio
+# ============================================================
+.env
+.env.*
+!.env.example
+src/environments/environment.local.ts
+
+# ============================================================
+# IDEs y editores
+# ============================================================
+
+# VSCode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
+.history/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+# IntelliJ / WebStorm
+.idea/
+*.iml
+*.iws
+*.ipr
 
-# System files
+# Eclipse
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+
+# ============================================================
+# SISTEMA OPERATIVO
+# ============================================================
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+
+# ============================================================
+# LOGS GENERALES
+# ============================================================
+*.log
+logs/
