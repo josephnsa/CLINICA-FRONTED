@@ -1,0 +1,97 @@
+<div class="flex flex-col gap-6">
+  <mat-tab-group>
+    <mat-tab label="Especialidades">
+      <div class="mt-4 flex items-center gap-4" [formGroup]="specialtiesFiltersForm">
+        <mat-form-field appearance="outline" class="grow">
+          <mat-label>Buscar especialidad</mat-label>
+          <input
+            matInput
+            placeholder="Código o nombre"
+            formControlName="search"
+            (keyup.enter)="onSearchSpecialties()"
+          />
+        </mat-form-field>
+        <button mat-flat-button color="primary">
+          Nueva especialidad
+        </button>
+      </div>
+
+      <table mat-table [dataSource]="filteredSpecialties" class="w-full mt-4">
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>Código</th>
+          <td mat-cell *matCellDef="let row">{{ row.code }}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span [ngClass]="row.active ? 'text-green-600' : 'text-red-600'">
+              {{ row.active ? 'Activa' : 'Inactiva' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="specialtiesDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: specialtiesDisplayedColumns"></tr>
+      </table>
+    </mat-tab>
+
+    <mat-tab label="Especialistas">
+      <div class="mt-4 flex flex-wrap items-center gap-4" [formGroup]="doctorsFiltersForm">
+        <mat-form-field appearance="outline" class="grow">
+          <mat-label>Buscar médico</mat-label>
+          <input
+            matInput
+            placeholder="Nombre o Nº colegiatura"
+            formControlName="search"
+            (keyup.enter)="onSearchDoctors()"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Especialidad</mat-label>
+          <mat-select formControlName="specialtyId" (selectionChange)="onSearchDoctors()">
+            <mat-option value="">Todas</mat-option>
+            <mat-option *ngFor="let s of specialties" [value]="s.id">
+              {{ s.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary">
+          Nuevo especialista
+        </button>
+      </div>
+
+      <table mat-table [dataSource]="filteredDoctors" class="w-full mt-4">
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>Nombre completo</th>
+          <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="licenseNumber">
+          <th mat-header-cell *matHeaderCellDef>Nº colegiatura</th>
+          <td mat-cell *matCellDef="let row">{{ row.licenseNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="specialtyName">
+          <th mat-header-cell *matHeaderCellDef>Especialidad</th>
+          <td mat-cell *matCellDef="let row">{{ row.specialtyName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span [ngClass]="row.active ? 'text-green-600' : 'text-red-600'">
+              {{ row.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="doctorsDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: doctorsDisplayedColumns"></tr>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+

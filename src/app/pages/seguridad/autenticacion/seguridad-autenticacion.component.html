@@ -1,0 +1,91 @@
+<div class="grid gap-4 lg:grid-cols-2">
+  <!-- Sesión actual (login / localStorage) -->
+  <mat-card class="cardWithShadow">
+    <mat-card-title class="flex items-center justify-between">
+      <span>Sesión actual</span>
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="refreshToken()"
+        [disabled]="isRefreshing || !currentUser"
+      >
+        Refrescar token
+      </button>
+    </mat-card-title>
+    <mat-card-content class="mt-4">
+      <div *ngIf="currentUser; else noLocalUser" class="space-y-2 text-sm">
+        <div>
+          <span class="font-semibold">Nombre:</span>
+          <span>{{ currentUser.fullName }}</span>
+        </div>
+        <div>
+          <span class="font-semibold">Rol:</span>
+          <span>{{ currentUser.role }}</span>
+        </div>
+        <div>
+          <span class="font-semibold">Permisos:</span>
+          <span>{{ currentUser.permissions.join(', ') || '—' }}</span>
+        </div>
+        <div *ngIf="tokenPayload">
+          <span class="font-semibold">Expira:</span>
+          <span>
+            {{
+              (tokenPayload.exp * 1000) | date: 'short'
+            }}
+          </span>
+        </div>
+      </div>
+      <ng-template #noLocalUser>
+        <p class="text-sm text-gray-500">
+          No hay datos de sesión almacenados. Inicia sesión desde la pantalla de login.
+        </p>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Datos desde /api/auth/me -->
+  <mat-card class="cardWithShadow">
+    <mat-card-title class="flex items-center justify-between">
+      <span>Datos de /api/auth/me</span>
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="loadMe()"
+        [disabled]="isLoadingMe"
+      >
+        Volver a consultar
+      </button>
+    </mat-card-title>
+    <mat-card-content class="mt-4">
+      <div *ngIf="meData; else noMe" class="space-y-2 text-sm">
+        <div>
+          <span class="font-semibold">ID:</span>
+          <span>{{ meData.id }}</span>
+        </div>
+        <div>
+          <span class="font-semibold">Email:</span>
+          <span>{{ meData.email }}</span>
+        </div>
+        <div>
+          <span class="font-semibold">Nombre:</span>
+          <span>{{ meData.fullName }}</span>
+        </div>
+        <div>
+          <span class="font-semibold">Rol:</span>
+          <span>{{ meData.role }}</span>
+        </div>
+        <div>
+          <span class="font-semibold">Permisos:</span>
+          <span>{{ meData.permissions.join(', ') || '—' }}</span>
+        </div>
+      </div>
+      <ng-template #noMe>
+        <p class="text-sm text-gray-500">
+          Aún no se han cargado datos desde <code>/api/auth/me</code> o hubo un error en la
+          llamada.
+        </p>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>
+

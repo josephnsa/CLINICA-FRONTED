@@ -1,0 +1,79 @@
+<mat-card class="cardWithShadow max-w-3xl">
+  <mat-card-title>Parámetros de sede (multisede)</mat-card-title>
+  <mat-card-content class="mt-4">
+    <!-- Cabecera estilo tabla para mantener el diseño base -->
+    <div
+      class="grid grid-cols-[100px,1fr,1fr,180px,80px] items-center gap-4 px-4 pb-2 text-xs font-semibold text-slate-500"
+    >
+      <div>Código</div>
+      <div>Nombre</div>
+      <div>Dirección</div>
+      <div>Usuarios asignados</div>
+      <div class="text-right">Activa</div>
+    </div>
+
+    <mat-accordion class="block">
+      <mat-expansion-panel
+        *ngFor="let sede of sedes"
+        class="!shadow-none !border-t first:!border-t-0 !border-slate-100"
+      >
+        <mat-expansion-panel-header>
+          <div
+            class="grid grid-cols-[100px,1fr,1fr,180px,80px] items-center gap-4 w-full py-1"
+          >
+            <div class="text-sm font-medium text-slate-900">
+              {{ sede.code }}
+            </div>
+            <div class="text-sm text-slate-900">
+              <div class="font-medium">{{ sede.name }}</div>
+              <div class="text-xs text-slate-500">{{ sede.address }}</div>
+            </div>
+            <div class="text-sm text-slate-500">
+              <ng-container *ngIf="sede.users.length === 0">Sin usuarios</ng-container>
+              <ng-container *ngIf="sede.users.length === 1">
+                {{ sede.users[0].fullName }} ({{ sede.users[0].roleName }})
+              </ng-container>
+              <ng-container *ngIf="sede.users.length > 1">
+                {{ sede.users[0].fullName }} ({{ sede.users[0].roleName }})
+                y {{ sede.users.length - 1 }} más
+              </ng-container>
+            </div>
+            <div class="flex justify-end pr-2">
+              <mat-icon [color]="sede.isActive ? 'primary' : undefined">
+                {{ sede.isActive ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+
+        <div class="mt-4">
+          <ng-container *ngIf="sede.users.length === 0; else usersTable">
+            <span class="text-sm text-slate-500">Esta sede no tiene usuarios asignados.</span>
+          </ng-container>
+          <ng-template #usersTable>
+            <table mat-table [dataSource]="sede.users" class="w-full">
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fullName">
+                <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                <td mat-cell *matCellDef="let u">{{ u.fullName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="roleName">
+                <th mat-header-cell *matHeaderCellDef>Rol</th>
+                <td mat-cell *matCellDef="let u">{{ u.roleName }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="['email','fullName','roleName']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['email','fullName','roleName'];"></tr>
+            </table>
+          </ng-template>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
+

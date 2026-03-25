@@ -1,0 +1,74 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-center gap-4">
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="picker" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sede</mat-label>
+      <mat-select>
+        <mat-option value="">Todas</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 md:col-span-4">
+      <mat-card class="cardWithShadow">
+        <mat-card-title>Citas del día</mat-card-title>
+        <mat-card-content>
+          <h2 class="text-3xl font-bold mt-2">0</h2>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-span-12 md:col-span-4">
+      <mat-card class="cardWithShadow">
+        <mat-card-title>Exámenes del día</mat-card-title>
+        <mat-card-content>
+          <h2 class="text-3xl font-bold mt-2">0</h2>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-span-12 md:col-span-4">
+      <mat-card class="cardWithShadow">
+        <mat-card-title>Prescripciones del día</mat-card-title>
+        <mat-card-content>
+          <h2 class="text-3xl font-bold mt-2">0</h2>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <mat-card class="cardWithShadow">
+    <mat-card-title>Últimas 10 citas</mat-card-title>
+    <mat-card-content>
+      <table mat-table [dataSource]="[]" class="w-full mt-2">
+        <ng-container matColumnDef="hora">
+          <th mat-header-cell *matHeaderCellDef>Hora</th>
+          <td mat-cell *matCellDef="let row">{{ row.hora }}</td>
+        </ng-container>
+        <ng-container matColumnDef="paciente">
+          <th mat-header-cell *matHeaderCellDef>Paciente</th>
+          <td mat-cell *matCellDef="let row">{{ row.paciente }}</td>
+        </ng-container>
+        <ng-container matColumnDef="especialista">
+          <th mat-header-cell *matHeaderCellDef>Especialista</th>
+          <td mat-cell *matCellDef="let row">{{ row.especialista }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">{{ row.estado }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['hora','paciente','especialista','estado']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['hora','paciente','especialista','estado'];"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
+

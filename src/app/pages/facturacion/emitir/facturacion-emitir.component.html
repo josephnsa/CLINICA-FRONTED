@@ -1,0 +1,166 @@
+<div class="flex flex-col gap-4">
+  <mat-card class="cardWithShadow">
+    <mat-card-title>Emitir comprobante</mat-card-title>
+    <mat-card-content class="mt-4" [formGroup]="invoiceForm">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Sede</mat-label>
+          <mat-select formControlName="sedeId">
+            <mat-option *ngFor="let s of sedes" [value]="s.id">
+              {{ s.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Paciente (ID simulado)</mat-label>
+          <input matInput formControlName="patientId" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre de paciente (solo visual)</mat-label>
+          <input matInput formControlName="patientName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de comprobante</mat-label>
+          <mat-select formControlName="invoiceType">
+            <mat-option value="BOLETA">Boleta</mat-option>
+            <mat-option value="FACTURA">Factura</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Método de pago</mat-label>
+          <mat-select formControlName="paymentMethod">
+            <mat-option value="EFECTIVO">Efectivo</mat-option>
+            <mat-option value="TARJETA">Tarjeta</mat-option>
+            <mat-option value="TRANSFERENCIA">Transferencia</mat-option>
+            <mat-option value="SEGURO">Seguro</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-base font-semibold">Ítems</h3>
+          <button mat-stroked-button color="primary" type="button" (click)="addItem()">
+            Agregar ítem
+          </button>
+        </div>
+
+        <table mat-table [dataSource]="items.controls" class="w-full">
+          <ng-container matColumnDef="service">
+            <th mat-header-cell *matHeaderCellDef>Servicio</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <mat-form-field appearance="outline" class="w-full" [formGroupName]="i">
+                <mat-select formControlName="serviceId" (selectionChange)="onServiceChange(i)">
+                  <mat-option *ngFor="let s of services" [value]="s.id">
+                    {{ s.code }} - {{ s.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <mat-form-field appearance="outline" class="w-24" [formGroupName]="i">
+                <input matInput type="number" formControlName="quantity" />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unitPrice">
+            <th mat-header-cell *matHeaderCellDef>Precio unitario</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <mat-form-field appearance="outline" class="w-32" [formGroupName]="i">
+                <input matInput type="number" formControlName="unitPrice" />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subtotal">
+            <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+            <td mat-cell *matCellDef="let row; let i = index" [formGroupName]="i">
+              <span>
+                {{
+                  (row.get('quantity')?.value || 0) *
+                    (row.get('unitPrice')?.value || 0)
+                    | currency:'USD':'symbol':'1.2-2'
+                }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <button mat-icon-button type="button" (click)="removeItem(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="['service','quantity','unitPrice','subtotal','actions']"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['service','quantity','unitPrice','subtotal','actions']"
+          ></tr>
+        </table>
+
+        <div class="flex justify-end mt-4 text-base font-semibold">
+          Total:&nbsp;
+          {{ total | currency:'USD':'symbol':'1.2-2' }}
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="emitInvoice()"
+          [disabled]="isLoading"
+        >
+          Emitir comprobante
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="emittedInvoice" class="cardWithShadow">
+    <mat-card-title>Comprobante emitido</mat-card-title>
+    <mat-card-content class="mt-4 text-sm space-y-1">
+      <div><strong>Número:</strong> {{ emittedInvoice.number }}</div>
+      <div>
+        <strong>Fecha:</strong>
+        {{ emittedInvoice.date | date: 'short' }}
+      </div>
+      <div><strong>Paciente:</strong> {{ emittedInvoice.patient.fullName }}</div>
+      <div><strong>Sede:</strong> {{ emittedInvoice.sedeName }}</div>
+      <div>
+        <strong>Total:</strong>
+        {{ emittedInvoice.total | currency:'USD':'symbol':'1.2-2' }}
+      </div>
+      <div>
+        <strong>Estado:</strong>
+        {{ emittedInvoice.status }}
+        <span *ngIf="emittedInvoice.balance > 0">
+          (Saldo:
+          {{ emittedInvoice.balance | currency:'USD':'symbol':'1.2-2' }})
+        </span>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="primary" (click)="goToPayment()">
+        Registrar pago
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+

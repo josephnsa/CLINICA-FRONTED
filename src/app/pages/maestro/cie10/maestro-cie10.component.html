@@ -1,0 +1,48 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-end gap-4" [formGroup]="filtersForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Código</mat-label>
+      <input
+        matInput
+        placeholder="Ej. I10"
+        formControlName="code"
+        (keyup.enter)="onSearch()"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="grow">
+      <mat-label>Descripción</mat-label>
+      <input
+        matInput
+        placeholder="Hipertensión, diabetes..."
+        formControlName="q"
+        (keyup.enter)="onSearch()"
+      />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" (click)="onSearch()">
+      Buscar
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="diagnoses" class="w-full">
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef>Código</th>
+      <td mat-cell *matCellDef="let row">{{ row.code }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Descripción</th>
+      <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Categoría</th>
+      <td mat-cell *matCellDef="let row">{{ row.category }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
+

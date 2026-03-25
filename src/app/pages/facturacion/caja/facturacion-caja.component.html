@@ -1,0 +1,77 @@
+<div class="flex flex-col gap-4">
+  <mat-card class="cardWithShadow">
+    <mat-card-title>Cierre de caja</mat-card-title>
+    <mat-card-content class="mt-4" [formGroup]="filtersForm">
+      <div class="flex flex-wrap items-center gap-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Sede</mat-label>
+          <mat-select formControlName="sedeId">
+            <mat-option value="">Seleccione sede</mat-option>
+            <mat-option *ngFor="let s of sedes" [value]="s.id">
+              {{ s.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="button" (click)="search()">
+          Consultar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="summary" class="cardWithShadow">
+    <mat-card-title>Resumen del día</mat-card-title>
+    <mat-card-content class="mt-4 text-sm space-y-1">
+      <div>
+        <strong>Fecha:</strong>
+        {{ summary.date }}
+      </div>
+      <div>
+        <strong>Sede:</strong>
+        {{ summary.sedeName || selectedSedeName }}
+      </div>
+      <div>
+        <strong>Monto total:</strong>
+        {{ summary.totalAmount | currency:'USD':'symbol':'1.2-2' }}
+      </div>
+      <div>
+        <strong>Comprobantes emitidos:</strong>
+        {{ summary.totalInvoices }}
+      </div>
+
+      <div class="mt-4">
+        <h3 class="text-sm font-semibold mb-2">Por método de pago</h3>
+        <table mat-table [dataSource]="summary.byMethod" class="w-full">
+          <ng-container matColumnDef="method">
+            <th mat-header-cell *matHeaderCellDef>Método</th>
+            <td mat-cell *matCellDef="let row">{{ row.method }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.amount | currency:'USD':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+            <td mat-cell *matCellDef="let row">{{ row.count }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

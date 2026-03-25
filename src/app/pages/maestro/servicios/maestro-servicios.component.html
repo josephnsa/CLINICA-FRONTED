@@ -1,0 +1,78 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-center gap-4" [formGroup]="filtersForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar servicio</mat-label>
+      <input matInput placeholder="Código o nombre" formControlName="search" (keyup.enter)="onSearch()" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Especialidad</mat-label>
+      <mat-select formControlName="specialtyId" (selectionChange)="onSearch()">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let sp of specialties" [value]="sp.id">
+          {{ sp.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="active" (change)="onSearch()">Solo activos</mat-checkbox>
+
+    <span class="flex-auto"></span>
+
+    <button mat-flat-button color="primary" (click)="newService()">
+      Nuevo servicio
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="services" class="w-full">
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef>Código</th>
+      <td mat-cell *matCellDef="let row">{{ row.code }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="specialtyName">
+      <th mat-header-cell *matHeaderCellDef>Especialidad</th>
+      <td mat-cell *matCellDef="let row">{{ row.specialtyName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="durationMin">
+      <th mat-header-cell *matHeaderCellDef>Duración (min)</th>
+      <td mat-cell *matCellDef="let row">{{ row.durationMin }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Precio base</th>
+      <td mat-cell *matCellDef="let row">{{ row.price | currency:'USD':'symbol':'1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let row">
+        <span [ngClass]="row.isActive ? 'text-green-600' : 'text-red-600'">
+          {{ row.isActive ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="primary" (click)="editService(row)">
+          Editar
+        </button>
+        <button mat-button color="warn" (click)="toggleActive(row)">
+          {{ row.isActive ? 'Desactivar' : 'Activar' }}
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
+
