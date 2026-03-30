@@ -39,6 +39,20 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'pacientes',
+        loadChildren: () =>
+          import('./pages/pacientes/pacientes.routes').then(
+            (m) => m.PacientesRoutes
+          ),
+      },
+      {
+        path: 'prescripciones',
+        loadChildren: () =>
+          import('./pages/prescription/prescription.routes').then(
+            (m) => m.PrescriptionRoutes
+          ),
+      },
+      {
         path: 'ui-components',
         loadChildren: () =>
           import('./pages/ui-components/ui-components.routes').then(

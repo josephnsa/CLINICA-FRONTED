@@ -1,0 +1,115 @@
+<div class="flex flex-col gap-4">
+
+  <!-- Buscar paciente -->
+  <div class="flex flex-wrap items-center gap-4" [formGroup]="searchForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar paciente</mat-label>
+      <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
+    </mat-form-field>
+    <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+  </div>
+
+  <!-- Tabla de pacientes -->
+  <p class="text-sm text-gray-500">Selecciona un paciente para ver sus consentimientos</p>
+  <table mat-table [dataSource]="patients" class="w-full">
+
+    <ng-container matColumnDef="docNumber">
+      <th mat-header-cell *matHeaderCellDef>N° Documento</th>
+      <td mat-cell *matCellDef="let row">{{ row.docType }} {{ row.docNumber }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef>Paciente</th>
+      <td mat-cell *matCellDef="let row">{{ row.firstName }} {{ row.lastName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="primary" (click)="selectPatient(row)">
+          Ver consentimientos
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['docNumber','fullName','select']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['docNumber','fullName','select']"></tr>
+  </table>
+
+  <!-- Consentimientos del paciente seleccionado -->
+  <ng-container *ngIf="selectedPatient">
+    <div class="flex items-center justify-between mt-4">
+      <h3 class="text-lg font-medium">
+        Consentimientos de {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
+      </h3>
+      <button mat-flat-button color="primary" (click)="openForm()">
+        + Agregar consentimiento
+      </button>
+    </div>
+
+    <table mat-table [dataSource]="consents" class="w-full">
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Tipo</th>
+        <td mat-cell *matCellDef="let row">{{ row.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="signedAt">
+        <th mat-header-cell *matHeaderCellDef>Fecha firma</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.signedAt ? (row.signedAt | date:'dd/MM/yyyy HH:mm') : '—' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fileUrl">
+        <th mat-header-cell *matHeaderCellDef>Documento</th>
+        <td mat-cell *matCellDef="let row">
+          <a *ngIf="row.fileUrl" [href]="row.fileUrl" target="_blank" class="text-blue-600 underline">
+            Ver documento
+          </a>
+          <span *ngIf="!row.fileUrl">—</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-button color="warn" (click)="delete(row)">Eliminar</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <!-- Formulario nuevo consentimiento -->
+    <mat-card *ngIf="showForm" class="mt-4">
+      <mat-card-title>Nuevo consentimiento</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="consentForm" class="flex flex-col gap-4 mt-4">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de consentimiento</mat-label>
+            <mat-select formControlName="type">
+              <mat-option *ngFor="let t of consentTypes" [value]="t">{{ t }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>URL del documento firmado</mat-label>
+            <input matInput formControlName="fileUrl" placeholder="https://..." />
+          </mat-form-field>
+
+        </form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button (click)="cancel()">Cancelar</button>
+        <button mat-flat-button color="primary" (click)="save()" [disabled]="consentForm.invalid">
+          Guardar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,100 @@
+<div class="flex flex-col gap-4">
+
+  <div class="flex flex-wrap items-center gap-4" [formGroup]="searchForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar paciente</mat-label>
+      <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
+    </mat-form-field>
+    <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+  </div>
+
+  <table mat-table [dataSource]="patients" class="w-full">
+    <ng-container matColumnDef="docNumber">
+      <th mat-header-cell *matHeaderCellDef>N° Documento</th>
+      <td mat-cell *matCellDef="let row">{{ row.docType }} {{ row.docNumber }}</td>
+    </ng-container>
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef>Paciente</th>
+      <td mat-cell *matCellDef="let row">{{ row.firstName }} {{ row.lastName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="primary" (click)="selectPatient(row)">Ver evoluciones</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['docNumber','fullName','select']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['docNumber','fullName','select']"></tr>
+  </table>
+
+  <ng-container *ngIf="selectedPatient">
+    <div class="flex items-center justify-between mt-4">
+      <h3 class="text-lg font-medium">
+        Evoluciones — {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
+      </h3>
+      <button mat-flat-button color="primary" (click)="openForm()">+ Nueva evolución</button>
+    </div>
+
+    <table mat-table [dataSource]="evoluciones" class="w-full">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let row">{{ row.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="diagnosis">
+        <th mat-header-cell *matHeaderCellDef>Diagnóstico</th>
+        <td mat-cell *matCellDef="let row">{{ row.diagnosis }}</td>
+      </ng-container>
+      <ng-container matColumnDef="notes">
+        <th mat-header-cell *matHeaderCellDef>Notas</th>
+        <td mat-cell *matCellDef="let row">{{ row.notes }}</td>
+      </ng-container>
+      <ng-container matColumnDef="createdBy">
+        <th mat-header-cell *matHeaderCellDef>Registrado por</th>
+        <td mat-cell *matCellDef="let row">{{ row.createdBy ?? '—' }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-card *ngIf="showForm" class="mt-4">
+      <mat-card-title>Nueva evolución</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="evolucionForm" class="flex flex-col gap-4 mt-4">
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Appointment ID</mat-label>
+    <input matInput formControlName="appointmentId" placeholder="UUID de la cita" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Código CIE-10</mat-label>
+    <input matInput formControlName="diagnosisCode" placeholder="Ej: J06.9" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Motivo de consulta</mat-label>
+    <input matInput formControlName="reason" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Plan de tratamiento</mat-label>
+    <textarea matInput formControlName="treatmentPlan" rows="3"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Notas clínicas</mat-label>
+    <textarea matInput formControlName="notes" rows="4"></textarea>
+  </mat-form-field>
+
+</form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button (click)="cancel()">Cancelar</button>
+        <button mat-flat-button color="primary" (click)="save()" [disabled]="evolucionForm.invalid">
+          Guardar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+
+</div>

@@ -1,0 +1,48 @@
+<div class="flex flex-col gap-4">
+
+  <div class="flex justify-between items-center">
+    <h2 class="text-xl font-semibold">Control de Dispensación</h2>
+  </div>
+<div class="flex gap-3 items-center mb-4" [formGroup]="searchForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Patient ID</mat-label>
+    <input matInput formControlName="patientId" placeholder="UUID del paciente" />
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+</div>
+  <table mat-table [dataSource]="prescriptions" class="w-full">
+    <ng-container matColumnDef="patientName">
+      <th mat-header-cell *matHeaderCellDef>Paciente</th>
+      <td mat-cell *matCellDef="let row">{{ row.patientName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let row">{{ row.createdAt | date:'dd/MM/yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let row">
+        <span class="text-sm px-2 py-1 rounded bg-green-100 text-green-700">
+          {{ row.status }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acción</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-flat-button color="primary"
+          (click)="dispense(row)"
+          [disabled]="isDispensing === row.id">
+          {{ isDispensing === row.id ? 'Dispensando...' : 'Dispensar' }}
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <div *ngIf="prescriptions.length === 0" class="text-center text-gray-500 py-8">
+    No hay recetas activas pendientes de dispensar.
+  </div>
+
+</div>
