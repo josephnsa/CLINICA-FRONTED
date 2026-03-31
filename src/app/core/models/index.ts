@@ -6,3 +6,4 @@ export * from './security.model';
 export * from './billing.model';
 export * from './patient.model';
 export * from './prescription.model';
+export * from './agenda.model';

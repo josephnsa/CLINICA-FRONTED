@@ -35,32 +35,32 @@
     <form [formGroup]="profileForm" class="flex flex-col gap-4">
       <mat-form-field appearance="outline">
         <mat-label>Alergias</mat-label>
-        <textarea matInput formControlName="allergies" rows="2"></textarea>
+        <textarea matInput formControlName="allergies" rows="2" readonly></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Antecedentes personales</mat-label>
-        <textarea matInput formControlName="personalHistory" rows="2"></textarea>
+        <textarea matInput formControlName="personalHistory" rows="2" readonly></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Antecedentes familiares</mat-label>
-        <textarea matInput formControlName="familyHistory" rows="2"></textarea>
+        <textarea matInput formControlName="familyHistory" rows="2" readonly></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Antecedentes quirúrgicos</mat-label>
-        <textarea matInput formControlName="surgicalHistory" rows="2"></textarea>
+        <textarea matInput formControlName="surgicalHistory" rows="2" readonly></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Medicamentos actuales</mat-label>
-        <textarea matInput formControlName="currentMeds" rows="2"></textarea>
+        <textarea matInput formControlName="currentMeds" rows="2" readonly></textarea>
       </mat-form-field>
 
-      <div class="flex justify-end">
+      <!-- <div class="flex justify-end">
         <button mat-flat-button color="primary" (click)="save()">Guardar cambios</button>
-      </div>
+      </div> -->
     </form>
   </ng-container>
 

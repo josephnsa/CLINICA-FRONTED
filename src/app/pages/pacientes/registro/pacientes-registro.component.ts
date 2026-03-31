@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { PatientService } from 'src/app/core/services/patient.service';
 import { Patient, CreatePatientDto, PageResponse, ApiResponse } from 'src/app/core/models';
@@ -14,6 +14,23 @@ import { Patient, CreatePatientDto, PageResponse, ApiResponse } from 'src/app/co
 export class PacientesRegistroComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly patientService = inject(PatientService);
+
+  private static phoneValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const phone = control.value.replace(/\D/g, '');
+    if (phone.length === 0) return null;
+    if (!phone.startsWith('9')) return { phoneStart: true };
+    if (phone.length > 9) return { phoneMax: true };
+    return null;
+  }
+
+  private static dniValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const dni = control.value.replace(/\D/g, '');
+    if (dni.length === 0) return null;
+    if (dni.length > 8) return { dniMax: true };
+    return null;
+  }
 
   patients: Patient[] = [];
   filteredPatients: Patient[] = [];
@@ -32,17 +49,17 @@ export class PacientesRegistroComponent implements OnInit {
 
   patientForm = this.fb.group({
     docType:        ['DNI', Validators.required],
-    docNumber:      ['', Validators.required],
+    docNumber:      ['', [Validators.required, PacientesRegistroComponent.dniValidator]],
     firstName:      ['', Validators.required],
     lastName:       ['', Validators.required],
     birthDate:      ['', Validators.required],
     gender:         ['F', Validators.required],
     bloodType:      [''],
-    email:          [''],
-    phone:          [''],
+    email:          ['', Validators.email],
+    phone:          ['', PacientesRegistroComponent.phoneValidator],
     address:        [''],
     emergencyName:  [''],
-    emergencyPhone: [''],
+    emergencyPhone: ['', PacientesRegistroComponent.phoneValidator],
   });
 
   ngOnInit(): void {
@@ -98,5 +115,49 @@ export class PacientesRegistroComponent implements OnInit {
 
   onSearch(): void {
     this.loadPatients();
+  }
+
+  // ─── Filtros de entrada para campos numéricos ───
+  onDniInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 8) {
+      value = value.slice(0, 8);
+    }
+    this.patientForm.patchValue({ docNumber: value });
+  }
+
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    
+    // Si se intenta escribir algo que no comienza con 9
+    if (value && !value.startsWith('9')) {
+      value = '';
+    }
+    
+    // Máximo de 9 dígitos
+    if (value.length > 9) {
+      value = value.slice(0, 9);
+    }
+    
+    this.patientForm.patchValue({ phone: value });
+  }
+
+  onEmergencyPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    
+    // Si se intenta escribir algo que no comienza con 9
+    if (value && !value.startsWith('9')) {
+      value = '';
+    }
+    
+    // Máximo de 9 dígitos
+    if (value.length > 9) {
+      value = value.slice(0, 9);
+    }
+    
+    this.patientForm.patchValue({ emergencyPhone: value });
   }
 }

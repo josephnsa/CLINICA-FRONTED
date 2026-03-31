@@ -77,6 +77,13 @@ export class PatientService {
   );
 }
 
+  updateClinicalProfile(patientId: string, body: Partial<ClinicalProfile>) {
+    return this.http.put<ApiResponse<ClinicalProfile>>(
+      `${this.baseUrl}/patients/${patientId}/clinical-profile`,
+      body
+    );
+  }
+
   createClinicalNote(patientId: string, body: {
   appointmentId: string;
   diagnosisCode: string;

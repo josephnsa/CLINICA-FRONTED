@@ -61,11 +61,8 @@ export class PacientesFichaClinicaComponent implements OnInit {
   });
 }
 
-  save(): void {
-    if (!this.selectedPatient) return;
-    // PUT /api/patients/{id}/clinical-profile
-    // por ahora solo muestra los datos
-  }
+  save(): void {/*no existe un endpoint para guardar la ficha clinica o soy wbon una de dos, creo que mas probable es lo segundo xd*/}
+  
 
   onSearch(): void {
     this.loadPatients();

@@ -70,55 +70,85 @@
   </table>
 
   <!-- Formulario crear / editar -->
-  <mat-card *ngIf="showForm" class="mt-4">
-    <mat-card-title>{{ editingId ? 'Editar paciente' : 'Nuevo paciente' }}</mat-card-title>
+  <mat-card *ngIf="showForm" class="mt-4 shadow-lg">
+    <mat-card-header class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 mb-4">
+      <mat-card-title class="text-2xl font-bold text-blue-900">
+        {{ editingId ? 'Editar paciente' : 'Nuevo paciente' }}
+      </mat-card-title>
+    </mat-card-header>
+    
     <mat-card-content>
-      <form [formGroup]="patientForm" class="flex flex-col gap-4 mt-4">
+      <form [formGroup]="patientForm" class="flex flex-col gap-6 pt-4">
 
-        <div class="flex flex-wrap gap-4">
-          <mat-form-field appearance="outline">
+        <!-- Documento -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Tipo Doc.</mat-label>
             <mat-select formControlName="docType">
               <mat-option value="DNI">DNI</mat-option>
               <mat-option value="PASAPORTE">Pasaporte</mat-option>
               <mat-option value="CE">C. Extranjería</mat-option>
             </mat-select>
+            <mat-error *ngIf="patientForm.get('docType')?.hasError('required')">
+              Tipo de documento requerido
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>N° Documento</mat-label>
-            <input matInput formControlName="docNumber" />
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>N° Documento (máx 8 dígitos)</mat-label>
+            <input matInput formControlName="docNumber" type="number" inputmode="numeric" 
+                   (input)="onDniInput($event)" />
+            <mat-error *ngIf="patientForm.get('docNumber')?.hasError('required')">
+              Número de documento requerido
+            </mat-error>
+            <mat-error *ngIf="patientForm.get('docNumber')?.hasError('dniMax')">
+              El DNI no puede exceder 8 dígitos
+            </mat-error>
           </mat-form-field>
         </div>
 
-        <div class="flex flex-wrap gap-4">
-          <mat-form-field appearance="outline">
+        <!-- Nombres y Apellidos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Nombres</mat-label>
             <input matInput formControlName="firstName" />
+            <mat-error *ngIf="patientForm.get('firstName')?.hasError('required')">
+              Nombres requeridos
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Apellidos</mat-label>
             <input matInput formControlName="lastName" />
+            <mat-error *ngIf="patientForm.get('lastName')?.hasError('required')">
+              Apellidos requeridos
+            </mat-error>
           </mat-form-field>
         </div>
 
-        <div class="flex flex-wrap gap-4">
-          <mat-form-field appearance="outline">
+        <!-- Fecha, Sexo, Grupo Sanguíneo -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Fecha de Nacimiento</mat-label>
             <input matInput type="date" formControlName="birthDate" />
+            <mat-error *ngIf="patientForm.get('birthDate')?.hasError('required')">
+              Fecha requerida
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Sexo</mat-label>
             <mat-select formControlName="gender">
               <mat-option value="F">Femenino</mat-option>
               <mat-option value="M">Masculino</mat-option>
               <mat-option value="OTHER">Otro</mat-option>
             </mat-select>
+            <mat-error *ngIf="patientForm.get('gender')?.hasError('required')">
+              Sexo requerido
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Grupo Sanguíneo</mat-label>
             <mat-select formControlName="bloodType">
               <mat-option value="">—</mat-option>
@@ -134,42 +164,62 @@
           </mat-form-field>
         </div>
 
-        <div class="flex flex-wrap gap-4">
-          <mat-form-field appearance="outline">
-            <mat-label>Correo</mat-label>
+        <!-- Correo y Teléfono -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Correo electrónico</mat-label>
             <input matInput type="email" formControlName="email" />
+            <mat-error *ngIf="patientForm.get('email')?.hasError('email')">
+              Correo electrónico inválido
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Teléfono</mat-label>
-            <input matInput formControlName="phone" />
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Teléfono (ej: 912345678)</mat-label>
+            <input matInput formControlName="phone" type="tel" inputmode="numeric" 
+                   (input)="onPhoneInput($event)"
+                   [class.border-red-500]="patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched" />
+           
+            
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline">
+        <!-- Dirección -->
+        <mat-form-field appearance="outline" class="w-full">
           <mat-label>Dirección</mat-label>
           <input matInput formControlName="address" />
         </mat-form-field>
 
-        <div class="flex flex-wrap gap-4">
-          <mat-form-field appearance="outline">
-            <mat-label>Contacto emergencia</mat-label>
-            <input matInput formControlName="emergencyName" />
-          </mat-form-field>
+        <!-- Contacto de emergencia -->
+        <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+          <h4 class="font-semibold text-bl ue-900 mb-3">Contacto de Emergencia</h4>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nombre de contacto</mat-label>
+              <input matInput formControlName="emergencyName" />
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Teléfono emergencia</mat-label>
-            <input matInput formControlName="emergencyPhone" />
-          </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Teléfono de emergencia (ej: 912345678)</mat-label>
+              <input matInput formControlName="emergencyPhone" type="tel" inputmode="numeric"
+                     (input)="onEmergencyPhoneInput($event)"
+                     [class.border-red-500]="patientForm.get('emergencyPhone')?.invalid && patientForm.get('emergencyPhone')?.touched" />
+          
+             
+            </mat-form-field>
+          </div>
         </div>
 
       </form>
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-button (click)="cancel()">Cancelar</button>
+    <mat-card-actions align="end" class="p-6 border-t">
+      <button mat-stroked-button (click)="cancel()" color="primary">
+        Cancelar
+      </button>
       <button mat-flat-button color="primary" (click)="save()" [disabled]="patientForm.invalid">
-        Guardar
+        {{ editingId ? 'Actualizar' : 'Crear' }} paciente
       </button>
     </mat-card-actions>
   </mat-card>

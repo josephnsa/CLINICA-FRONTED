@@ -1,0 +1,40 @@
+<div class="flex flex-col gap-4">
+  <h2 class="text-xl font-semibold">Calendarios por Especialidad</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-3" [formGroup]="searchForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Doctor ID</mat-label>
+      <input matInput formControlName="doctorId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Sede ID</mat-label>
+      <input matInput formControlName="sedeId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha</mat-label>
+      <input matInput formControlName="date" placeholder="YYYY-MM-DD" />
+    </mat-form-field>
+    <div class="flex items-center">
+      <button mat-flat-button color="primary" (click)="onSearch()" [disabled]="isLoading">
+        Buscar slots
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="slots.length" class="text-sm text-gray-600">
+    Total: {{ slots.length }} slots — {{ availableCount }} disponibles
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+    <div *ngFor="let slot of slots"
+      class="p-3 rounded border text-center text-sm"
+      [ngClass]="slot.available ? 'bg-green-50 border-green-300 text-green-700' : 'bg-gray-100 border-gray-300 text-gray-400'">
+      {{ slot.startTime | date:'HH:mm' }} - {{ slot.endTime | date:'HH:mm' }}
+      <div class="font-medium">{{ slot.available ? 'Disponible' : 'Ocupado' }}</div>
+    </div>
+  </div>
+
+  <div *ngIf="slots.length === 0 && !isLoading" class="text-center text-gray-500 py-8">
+    Ingresa los filtros para ver los slots disponibles.
+  </div>
+</div>

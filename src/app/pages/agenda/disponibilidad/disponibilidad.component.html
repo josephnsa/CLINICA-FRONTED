@@ -1,0 +1,135 @@
+<div class="flex flex-col gap-6">
+  <h2 class="text-xl font-semibold">Reglas de Disponibilidad</h2>
+
+  <div class="flex justify-end">
+    <button mat-flat-button color="primary" (click)="showRuleForm = !showRuleForm">
+      + Nueva regla
+    </button>
+  </div>
+
+  <mat-card *ngIf="showRuleForm">
+    <mat-card-title>Nueva regla semanal</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="ruleForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Doctor ID</mat-label>
+          <input matInput formControlName="doctorId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Sede ID</mat-label>
+          <input matInput formControlName="sedeId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Día (1=Lun, 7=Dom)</mat-label>
+          <input matInput type="number" formControlName="dayOfWeek" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hora inicio</mat-label>
+          <input matInput formControlName="startTime" placeholder="HH:mm" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hora fin</mat-label>
+          <input matInput formControlName="endTime" placeholder="HH:mm" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="showRuleForm = false">Cancelar</button>
+      <button mat-flat-button color="primary" (click)="saveRule()">Guardar</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <table mat-table [dataSource]="rules" class="w-full">
+    <ng-container matColumnDef="doctorId">
+      <th mat-header-cell *matHeaderCellDef>Doctor</th>
+      <td mat-cell *matCellDef="let row">{{ row.doctorId }}</td>
+    </ng-container>
+    <ng-container matColumnDef="dayOfWeek">
+      <th mat-header-cell *matHeaderCellDef>Día</th>
+      <td mat-cell *matCellDef="let row">{{ row.dayOfWeek }}</td>
+    </ng-container>
+    <ng-container matColumnDef="startTime">
+      <th mat-header-cell *matHeaderCellDef>Inicio</th>
+      <td mat-cell *matCellDef="let row">{{ row.startTime }}</td>
+    </ng-container>
+    <ng-container matColumnDef="endTime">
+      <th mat-header-cell *matHeaderCellDef>Fin</th>
+      <td mat-cell *matCellDef="let row">{{ row.endTime }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="warn" (click)="deleteRule(row.id)">Eliminar</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="ruleColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: ruleColumns"></tr>
+  </table>
+
+  <h2 class="text-xl font-semibold mt-4">Bloqueos</h2>
+
+  <div class="flex justify-end">
+    <button mat-flat-button color="primary" (click)="showBlockForm = !showBlockForm">
+      + Nuevo bloqueo
+    </button>
+  </div>
+
+  <mat-card *ngIf="showBlockForm">
+    <mat-card-title>Nuevo bloqueo</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="blockForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Doctor ID</mat-label>
+          <input matInput formControlName="doctorId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Sede ID</mat-label>
+          <input matInput formControlName="sedeId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Inicio</mat-label>
+          <input matInput formControlName="startDt" placeholder="YYYY-MM-DDTHH:mm:ss" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Fin</mat-label>
+          <input matInput formControlName="endDt" placeholder="YYYY-MM-DDTHH:mm:ss" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="md:col-span-2">
+          <mat-label>Motivo</mat-label>
+          <input matInput formControlName="reason" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="showBlockForm = false">Cancelar</button>
+      <button mat-flat-button color="primary" (click)="saveBlock()">Guardar</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <table mat-table [dataSource]="blocks" class="w-full">
+    <ng-container matColumnDef="doctorId">
+      <th mat-header-cell *matHeaderCellDef>Doctor</th>
+      <td mat-cell *matCellDef="let row">{{ row.doctorId }}</td>
+    </ng-container>
+    <ng-container matColumnDef="startDt">
+      <th mat-header-cell *matHeaderCellDef>Inicio</th>
+      <td mat-cell *matCellDef="let row">{{ row.startDt | date:'dd/MM/yyyy HH:mm' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="endDt">
+      <th mat-header-cell *matHeaderCellDef>Fin</th>
+      <td mat-cell *matCellDef="let row">{{ row.endDt | date:'dd/MM/yyyy HH:mm' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="reason">
+      <th mat-header-cell *matHeaderCellDef>Motivo</th>
+      <td mat-cell *matCellDef="let row">{{ row.reason }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="warn" (click)="deleteBlock(row.id)">Eliminar</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="blockColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: blockColumns"></tr>
+  </table>
+</div>

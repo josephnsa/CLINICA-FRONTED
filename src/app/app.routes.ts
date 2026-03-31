@@ -53,6 +53,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'agenda',
+        loadChildren: () =>
+          import('./pages/agenda/agenda.routes').then(
+            (m) => m.AgendaRoutes
+          ),
+      },
+      {
         path: 'ui-components',
         loadChildren: () =>
           import('./pages/ui-components/ui-components.routes').then(
