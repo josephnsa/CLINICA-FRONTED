@@ -1,21 +1,28 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-5">
 
   <!-- Barra de búsqueda -->
-  <div class="flex flex-wrap items-center gap-4" [formGroup]="searchForm">
-    <mat-form-field appearance="outline">
+  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="mb-3">
+      <h2 class="text-xl font-semibold text-gray-900">Pacientes</h2>
+      <p class="text-sm text-gray-500">Gestiona el padrón de pacientes y sus datos demograficos.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-4" [formGroup]="searchForm">
+      <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
       <mat-label>Buscar paciente</mat-label>
       <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
-    </mat-form-field>
+      </mat-form-field>
 
-    <span class="flex-auto"></span>
+      <span class="flex-auto"></span>
 
-    <button mat-flat-button color="primary" (click)="openCreate()">
-      Nuevo paciente
-    </button>
+      <button mat-flat-button color="primary" (click)="openCreate()">
+        Nuevo paciente
+      </button>
+    </div>
   </div>
 
   <!-- Tabla -->
-  <table mat-table [dataSource]="filteredPatients" class="w-full">
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table mat-table [dataSource]="filteredPatients" class="w-full">
 
     <ng-container matColumnDef="docType">
       <th mat-header-cell *matHeaderCellDef>Tipo Doc.</th>
@@ -59,15 +66,16 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let row">
-        <button mat-button color="primary" (click)="openEdit(row)">
+        <button mat-stroked-button color="primary" (click)="openEdit(row)">
           Editar
         </button>
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
 
   <!-- Formulario crear / editar -->
   <mat-card *ngIf="showForm" class="mt-4 shadow-lg">
@@ -191,8 +199,8 @@
         </mat-form-field>
 
         <!-- Contacto de emergencia -->
-        <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-          <h4 class="font-semibold text-bl ue-900 mb-3">Contacto de Emergencia</h4>
+        <div class="rounded-lg border border-blue-100 bg-blue-50 p-4">
+          <h4 class="mb-3 font-semibold text-blue-900">Contacto de Emergencia</h4>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <mat-form-field appearance="outline" class="w-full">
