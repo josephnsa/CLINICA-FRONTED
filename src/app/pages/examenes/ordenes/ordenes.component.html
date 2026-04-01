@@ -1,14 +1,21 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-5">
 
-  <div class="flex flex-wrap items-center gap-4" [formGroup]="searchForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Buscar paciente</mat-label>
-      <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
-    </mat-form-field>
-    <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="mb-3">
+      <h2 class="text-xl font-semibold text-gray-900">Examenes - Ordenes</h2>
+      <p class="text-sm text-gray-500">Busca pacientes y gestiona sus ordenes de examen.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3" [formGroup]="searchForm">
+      <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
+        <mat-label>Buscar paciente</mat-label>
+        <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+    </div>
   </div>
 
-  <table mat-table [dataSource]="patients" class="w-full">
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table mat-table [dataSource]="patients" class="w-full">
     <ng-container matColumnDef="docNumber">
       <th mat-header-cell *matHeaderCellDef>N° Documento</th>
       <td mat-cell *matCellDef="let row">{{ row.docType }} {{ row.docNumber }}</td>
@@ -20,51 +27,59 @@
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row">
-        <button mat-button color="primary" (click)="selectPatient(row)">Ver órdenes</button>
+        <button mat-stroked-button color="primary" (click)="selectPatient(row)">Ver ordenes</button>
       </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['docNumber','fullName','select']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['docNumber','fullName','select']"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="['docNumber','fullName','select']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['docNumber','fullName','select']"></tr>
+    </table>
+  </div>
 
   <ng-container *ngIf="selectedPatient">
-    <div class="flex items-center justify-between mt-4">
-      <h3 class="text-lg font-medium">
-        Órdenes — {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
+    <div class="mt-1 flex items-center justify-between rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+      <h3 class="text-lg font-medium text-blue-900">
+        Ordenes - {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
       </h3>
       <button mat-flat-button color="primary" (click)="openForm()">+ Nueva orden</button>
     </div>
 
-    <table mat-table [dataSource]="orders" class="w-full">
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Estado</th>
-        <td mat-cell *matCellDef="let row">
-          <span [ngClass]="{
-            'text-yellow-600': row.status === 'PENDIENTE',
-            'text-blue-600':   row.status === 'EN_PROCESO',
-            'text-green-600':  row.status === 'LISTO',
-            'text-gray-600':   row.status === 'ENTREGADO'
-          }">{{ row.status }}</span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef>Fecha</th>
-        <td mat-cell *matCellDef="let row">{{ row.createdAt | date:'dd/MM/yyyy' }}</td>
-      </ng-container>
-      <ng-container matColumnDef="notes">
-        <th mat-header-cell *matHeaderCellDef>Notas</th>
-        <td mat-cell *matCellDef="let row">{{ row.notes ?? '—' }}</td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <table mat-table [dataSource]="orders" class="w-full">
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span [ngClass]="{
+              'text-yellow-600': row.status === 'PENDIENTE',
+              'text-blue-600':   row.status === 'EN_PROCESO',
+              'text-green-600':  row.status === 'LISTO',
+              'text-gray-600':   row.status === 'ENTREGADO'
+            }">{{ row.status }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let row">{{ row.createdAt | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="notes">
+          <th mat-header-cell *matHeaderCellDef>Notas</th>
+          <td mat-cell *matCellDef="let row">{{ row.notes ?? '—' }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <div *ngIf="!orders?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+        Aun no hay ordenes de examen para este paciente.
+      </div>
+    </div>
 
-    <mat-card *ngIf="showForm" class="mt-4">
-      <mat-card-title>Nueva orden de examen</mat-card-title>
+    <mat-card *ngIf="showForm" class="mt-4 rounded-xl border border-blue-100 shadow-sm">
+      <mat-card-header class="bg-blue-50">
+        <mat-card-title class="text-blue-900">Nueva orden de examen</mat-card-title>
+      </mat-card-header>
       <mat-card-content>
-        <form [formGroup]="orderForm" class="flex flex-col gap-4 mt-4">
+        <form [formGroup]="orderForm" class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="md:col-span-2">
             <mat-label>ID de la cita</mat-label>
             <input matInput formControlName="appointmentId"
               placeholder="UUID de la cita (desde módulo Agenda)" />

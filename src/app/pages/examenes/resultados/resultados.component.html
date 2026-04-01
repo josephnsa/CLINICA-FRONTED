@@ -1,14 +1,21 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-5">
 
-  <div class="flex flex-wrap items-center gap-4" [formGroup]="searchForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Buscar paciente</mat-label>
-      <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
-    </mat-form-field>
-    <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="mb-3">
+      <h2 class="text-xl font-semibold text-gray-900">Resultados de examenes</h2>
+      <p class="text-sm text-gray-500">Selecciona un paciente y registra resultados por orden.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3" [formGroup]="searchForm">
+      <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
+        <mat-label>Buscar paciente</mat-label>
+        <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+    </div>
   </div>
 
-  <table mat-table [dataSource]="patients" class="w-full">
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table mat-table [dataSource]="patients" class="w-full">
     <ng-container matColumnDef="docNumber">
       <th mat-header-cell *matHeaderCellDef>N° Documento</th>
       <td mat-cell *matCellDef="let row">{{ row.docType }} {{ row.docNumber }}</td>
@@ -20,49 +27,59 @@
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row">
-        <button mat-button color="primary" (click)="selectPatient(row)">Ver órdenes</button>
+        <button mat-stroked-button color="primary" (click)="selectPatient(row)">Ver ordenes</button>
       </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['docNumber','fullName','select']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['docNumber','fullName','select']"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="['docNumber','fullName','select']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['docNumber','fullName','select']"></tr>
+    </table>
+  </div>
 
   <ng-container *ngIf="selectedPatient">
-    <h3 class="text-lg font-medium mt-4">
-      Resultados — {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
-    </h3>
+    <div class="mt-1 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+      <h3 class="text-lg font-medium text-blue-900">
+        Resultados - {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
+      </h3>
+    </div>
 
-    <table mat-table [dataSource]="orders" class="w-full">
-      <ng-container matColumnDef="examType">
-        <th mat-header-cell *matHeaderCellDef>Tipo de examen</th>
-        <td mat-cell *matCellDef="let row">{{ row.examType }}</td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Estado</th>
-        <td mat-cell *matCellDef="let row">
-          <span [ngClass]="{
-            'text-yellow-600': row.status === 'PENDIENTE',
-            'text-blue-600':   row.status === 'EN_PROCESO',
-            'text-green-600':  row.status === 'LISTO',
-            'text-gray-600':   row.status === 'ENTREGADO'
-          }">{{ row.status }}</span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-button color="primary" (click)="selectOrder(row)"
-            [disabled]="row.status !== 'EN_PROCESO'">
-            Registrar resultado
-          </button>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <table mat-table [dataSource]="orders" class="w-full">
+        <ng-container matColumnDef="examType">
+          <th mat-header-cell *matHeaderCellDef>Tipo de examen</th>
+          <td mat-cell *matCellDef="let row">{{ row.examType }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span [ngClass]="{
+              'text-yellow-600': row.status === 'PENDIENTE',
+              'text-blue-600':   row.status === 'EN_PROCESO',
+              'text-green-600':  row.status === 'LISTO',
+              'text-gray-600':   row.status === 'ENTREGADO'
+            }">{{ row.status }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-stroked-button color="primary" (click)="selectOrder(row)"
+              [disabled]="row.status !== 'EN_PROCESO'">
+              Registrar resultado
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <div *ngIf="!orders?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+        Aun no hay examenes para registrar resultados.
+      </div>
+    </div>
 
-    <mat-card *ngIf="showForm" class="mt-4">
-      <mat-card-title>Resultado — {{ selectedOrder?.examType }}</mat-card-title>
+    <mat-card *ngIf="showForm" class="mt-4 rounded-xl border border-blue-100 shadow-sm">
+      <mat-card-header class="bg-blue-50">
+        <mat-card-title class="text-blue-900">Resultado - {{ selectedOrder?.examType }}</mat-card-title>
+      </mat-card-header>
       <mat-card-content>
         <form [formGroup]="resultForm" class="flex flex-col gap-4 mt-4">
           <mat-form-field appearance="outline">
