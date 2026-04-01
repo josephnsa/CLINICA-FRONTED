@@ -1,0 +1,74 @@
+<div class="flex flex-col gap-4">
+  <h2 class="text-xl font-semibold">Reportes Operativos</h2>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Sede ID</mat-label>
+          <input matInput formControlName="sedeId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha inicio</mat-label>
+          <input matInput formControlName="startDate" placeholder="YYYY-MM-DD" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha fin</mat-label>
+          <input matInput formControlName="endDate" placeholder="YYYY-MM-DD" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" (click)="generate()" [disabled]="isLoading">
+        {{ isLoading ? 'Generando...' : 'Generar reporte' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div *ngIf="report" class="flex flex-col gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <mat-card class="text-center">
+        <mat-card-content>
+          <div class="text-3xl font-bold text-blue-600">{{ report.totalAppointments }}</div>
+          <div class="text-sm text-gray-500 mt-1">Total citas</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="text-center">
+        <mat-card-content>
+          <div class="text-3xl font-bold text-green-600">{{ report.attendedAppointments }}</div>
+          <div class="text-sm text-gray-500 mt-1">Atendidas</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="text-center">
+        <mat-card-content>
+          <div class="text-3xl font-bold text-red-600">{{ report.cancelledAppointments }}</div>
+          <div class="text-sm text-gray-500 mt-1">Canceladas</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="text-center">
+        <mat-card-content>
+          <div class="text-3xl font-bold text-yellow-600">{{ report.noShowAppointments }}</div>
+          <div class="text-sm text-gray-500 mt-1">No show</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card>
+      <mat-card-title class="p-4">Top Servicios</mat-card-title>
+      <mat-card-content>
+        <table mat-table [dataSource]="report.topServices" class="w-full">
+          <ng-container matColumnDef="serviceName">
+            <th mat-header-cell *matHeaderCellDef>Servicio</th>
+            <td mat-cell *matCellDef="let row">{{ row.serviceName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+            <td mat-cell *matCellDef="let row">{{ row.count }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="['serviceName','count']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['serviceName','count']"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
