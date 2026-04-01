@@ -1,0 +1,81 @@
+<div class="p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Encuestas de Satisfacción</h1>
+      <p class="text-sm text-gray-500">Registrar valoración post-consulta del paciente</p>
+    </div>
+    @if (!showForm()) {
+      <button mat-flat-button color="primary" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Nueva encuesta
+      </button>
+    }
+  </div>
+
+  <!-- Formulario -->
+  @if (showForm()) {
+    <mat-card class="!p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Registrar encuesta</h2>
+      <form [formGroup]="form" class="space-y-4">
+
+        <div class="grid grid-cols-2 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>ID del Paciente</mat-label>
+            <input matInput formControlName="patientId" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>ID de la Cita</mat-label>
+            <input matInput formControlName="appointmentId" />
+          </mat-form-field>
+        </div>
+
+        <!-- Score -->
+        <div class="space-y-2">
+          <p class="text-sm font-medium text-gray-700">Puntuación <span class="text-red-500">*</span></p>
+          <div class="flex gap-3">
+            @for (s of scores; track s.value) {
+              <button type="button"
+                class="flex-1 flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all cursor-pointer"
+                [ngClass]="selectedScore() === s.value
+                  ? 'border-indigo-500 bg-indigo-50'
+                  : 'border-gray-200 hover:border-indigo-300'"
+                (click)="selectScore(s.value)">
+                <span class="text-2xl">{{ s.icon }}</span>
+                <span class="text-xs text-gray-600 font-medium">{{ s.label }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Comentario (opcional)</mat-label>
+          <textarea matInput formControlName="comment" rows="3"
+            placeholder="¿Qué podemos mejorar?"></textarea>
+        </mat-form-field>
+
+        <div class="flex justify-end gap-3">
+          <button mat-stroked-button type="button" (click)="cancelForm()">Cancelar</button>
+          <button mat-flat-button color="primary"
+            [disabled]="form.invalid || !selectedScore() || saving()"
+            (click)="submit()">
+            <mat-icon>send</mat-icon>
+            {{ saving() ? 'Enviando...' : 'Enviar encuesta' }}
+          </button>
+        </div>
+
+      </form>
+    </mat-card>
+  }
+
+  <!-- Placeholder lista -->
+  @if (!showForm()) {
+    <div class="text-center py-16 text-gray-400">
+      <mat-icon class="!text-5xl">sentiment_satisfied</mat-icon>
+      <p class="mt-2">No hay encuestas registradas</p>
+    </div>
+  }
+
+</div>

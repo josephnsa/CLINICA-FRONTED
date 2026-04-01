@@ -1,0 +1,133 @@
+<div class="p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Reclamos e Incidencias</h1>
+      <p class="text-sm text-gray-500">Gestión y seguimiento de reclamos de pacientes</p>
+    </div>
+    @if (!showForm()) {
+      <button mat-flat-button color="primary" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Nuevo reclamo
+      </button>
+    }
+  </div>
+
+  <!-- Formulario nuevo reclamo -->
+  @if (showForm()) {
+    <mat-card class="!p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Registrar nuevo reclamo</h2>
+      <form [formGroup]="createForm" class="space-y-4">
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>ID del Paciente</mat-label>
+          <input matInput formControlName="patientId" placeholder="UUID del paciente" />
+        </mat-form-field>
+
+        <div class="grid grid-cols-2 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tipo de reclamo</mat-label>
+            <mat-select formControlName="type">
+              @for (opt of typeOptions; track opt[0]) {
+                <mat-option [value]="opt[0]">{{ opt[1] }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Prioridad</mat-label>
+            <mat-select formControlName="priority">
+              @for (opt of priorityOptions; track opt[0]) {
+                <mat-option [value]="opt[0]">{{ opt[1] }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" rows="4"
+            placeholder="Describa el reclamo detalladamente..."></textarea>
+          <mat-hint>Mínimo 10 caracteres</mat-hint>
+        </mat-form-field>
+
+        <div class="flex justify-end gap-3">
+          <button mat-stroked-button type="button" (click)="cancelForm()">Cancelar</button>
+          <button mat-flat-button color="primary" [disabled]="createForm.invalid || saving()" (click)="submitCreate()">
+            <mat-icon>save</mat-icon>
+            {{ saving() ? 'Guardando...' : 'Registrar reclamo' }}
+          </button>
+        </div>
+
+      </form>
+    </mat-card>
+  }
+
+  <!-- Lista -->
+  @if (loading()) {
+    <div class="flex justify-center py-10">
+      <mat-icon class="animate-spin text-indigo-400">refresh</mat-icon>
+    </div>
+  } @else if (complaints().length === 0) {
+    <div class="text-center py-16 text-gray-400">
+      <mat-icon class="!text-5xl">inbox</mat-icon>
+      <p class="mt-2">No hay reclamos registrados</p>
+    </div>
+  } @else {
+    <div class="space-y-3">
+      @for (c of complaints(); track c.id) {
+        <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3">
+
+          <div class="flex items-start justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-semibold text-gray-800">{{ typeLabels[c.type] }}</span>
+                <span class="text-xs px-2 py-0.5 rounded-full font-medium" [ngClass]="statusColor(c.status)">
+                  {{ statusLabels[c.status] }}
+                </span>
+                @if (c.priority === 'HIGH' || c.priority === 'CRITICAL') {
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-semibold">
+                    {{ priorityLabels[c.priority] }}
+                  </span>
+                }
+              </div>
+              <p class="text-sm text-gray-600">{{ c.description }}</p>
+              <p class="text-xs text-gray-400">{{ c.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+
+            @if (c.status === 'PENDING' || c.status === 'IN_PROGRESS') {
+              <button mat-stroked-button color="primary" (click)="openResolve(c.id)">
+                <mat-icon>check_circle</mat-icon>
+                Resolver
+              </button>
+            }
+          </div>
+
+          @if (c.resolution) {
+            <div class="bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-sm text-green-800">
+              <span class="font-semibold">Resolución:</span> {{ c.resolution }}
+            </div>
+          }
+
+          @if (resolvingId() === c.id) {
+            <div class="border-t pt-3 space-y-3">
+              <mat-form-field appearance="outline" class="w-full !mb-0">
+                <mat-label>Descripción de la resolución</mat-label>
+                <textarea matInput [formControl]="resolveForm.controls.resolution" rows="2"></textarea>
+              </mat-form-field>
+              <div class="flex gap-2">
+                <button mat-flat-button color="primary" [disabled]="resolveForm.invalid" (click)="submitResolve()">
+                  Confirmar
+                </button>
+                <button mat-stroked-button (click)="cancelResolve()">Cancelar</button>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+  }
+
+</div>
