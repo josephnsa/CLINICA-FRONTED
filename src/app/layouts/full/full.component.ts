@@ -187,10 +187,11 @@ export class FullComponent implements OnInit {
 
   private mapChildren(children: MenuItemDto[]): NavItem[] {
     return children.map((item: MenuItemDto) => {
+      const normalizedRoute = this.normalizeMenuRoute(item.route);
       const navItem: NavItem = {
         displayName: item.label,
         // se puede mejorar el mapeo de iconos más adelante
-        route: item.route ?? undefined,
+        route: normalizedRoute ?? undefined,
       };
 
       if (item.children && item.children.length > 0) {
@@ -199,5 +200,25 @@ export class FullComponent implements OnInit {
 
       return navItem;
     });
+  }
+
+  private normalizeMenuRoute(route?: string | null): string | null {
+    if (!route) return null;
+
+    const cleanRoute = route.replace(/^\/+/, '');
+
+    // Mapeo defensivo para rutas legacy enviadas por auth/menu
+    const routeAliases: Record<string, string> = {
+      'atencion/reclamos': 'atencion-cliente/reclamos',
+      'atencion/encuestas': 'atencion-cliente/encuestas',
+      'seleccion/reclamos': 'atencion-cliente/reclamos',
+      'seleccion/encuestas': 'atencion-cliente/encuestas',
+      'seguimiento/reclamos': 'atencion-cliente/reclamos',
+      'seguimiento/encuestas': 'atencion-cliente/encuestas',
+      'hrm/empleados': 'rrhh/empleados',
+      'hrm/horarios': 'rrhh/horarios',
+    };
+
+    return routeAliases[cleanRoute] ?? cleanRoute;
   }
 }
