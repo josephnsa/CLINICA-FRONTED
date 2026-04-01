@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MaterialModule } from 'src/app/material.module';
 import { PatientService } from 'src/app/core/services/patient.service';
 import { Patient, PatientConsent, ApiResponse, PageResponse } from 'src/app/core/models';
@@ -14,6 +15,7 @@ import { Patient, PatientConsent, ApiResponse, PageResponse } from 'src/app/core
 export class PacientesConsentimientosComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly patientService = inject(PatientService);
+  private readonly sanitizer = inject(DomSanitizer);
 
   // Lista de pacientes para buscar
   patients: Patient[] = [];
@@ -24,6 +26,8 @@ export class PacientesConsentimientosComponent implements OnInit {
   displayedColumns = ['type', 'signedAt', 'fileUrl', 'actions'];
 
   showForm = false;
+  selectedPdfPreviewUrl: SafeResourceUrl | null = null;
+  private selectedPdfObjectUrl: string | null = null;
 
   searchForm = this.fb.group({
     search: [''],
@@ -31,7 +35,7 @@ export class PacientesConsentimientosComponent implements OnInit {
 
   consentForm = this.fb.group({
     type:    ['TRATAMIENTO', Validators.required],
-    fileUrl: [''],
+    file:    [null as File | null, Validators.required],
   });
 
   consentTypes = [
@@ -69,20 +73,56 @@ export class PacientesConsentimientosComponent implements OnInit {
   }
 
   openForm(): void {
-    this.consentForm.reset({ type: 'TRATAMIENTO' });
+    this.consentForm.reset({ type: 'TRATAMIENTO', file: null });
+    this.clearSelectedPdfPreview();
     this.showForm = true;
   }
 
   save(): void {
-    if (this.consentForm.invalid || !this.selectedPatient) return;
-    const { type, fileUrl } = this.consentForm.value;
+    if (this.consentForm.invalid || !this.selectedPatient) {
+      this.consentForm.markAllAsTouched();
+      return;
+    }
+    const { type, file } = this.consentForm.value;
+    if (!file) return;
     this.patientService.createConsent(this.selectedPatient.id, {
       type: type!,
-      fileUrl: fileUrl ?? undefined,
+      file,
     }).subscribe({
-      next: () => { this.showForm = false; this.loadConsents(); },
+      next: () => {
+        this.showForm = false;
+        this.clearSelectedPdfPreview();
+        this.loadConsents();
+      },
       error: () => {},
     });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    if (!file) {
+      this.consentForm.patchValue({ file: null });
+      return;
+    }
+
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
+      this.consentForm.patchValue({ file: null });
+      this.consentForm.get('file')?.setErrors({ invalidType: true });
+      this.clearSelectedPdfPreview();
+      input.value = '';
+      return;
+    }
+
+    this.consentForm.patchValue({ file });
+    this.consentForm.get('file')?.setErrors(null);
+
+    this.clearSelectedPdfPreview();
+    const objectUrl = URL.createObjectURL(file);
+    this.selectedPdfObjectUrl = objectUrl;
+    this.selectedPdfPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
   }
 
   delete(consent: PatientConsent): void {
@@ -95,9 +135,18 @@ export class PacientesConsentimientosComponent implements OnInit {
 
   cancel(): void {
     this.showForm = false;
+    this.clearSelectedPdfPreview();
   }
 
   onSearch(): void {
     this.loadPatients();
+  }
+
+  private clearSelectedPdfPreview(): void {
+    if (this.selectedPdfObjectUrl) {
+      URL.revokeObjectURL(this.selectedPdfObjectUrl);
+      this.selectedPdfObjectUrl = null;
+    }
+    this.selectedPdfPreviewUrl = null;
   }
 }

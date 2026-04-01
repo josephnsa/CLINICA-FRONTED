@@ -95,10 +95,45 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>URL del documento firmado</mat-label>
-            <input matInput formControlName="fileUrl" placeholder="https://..." />
-          </mat-form-field>
+          <div class="flex flex-col gap-2">
+            <input
+              id="consent-pdf-file"
+              class="hidden"
+              type="file"
+              accept="application/pdf,.pdf"
+              (change)="onFileSelected($event)"
+            />
+            <label
+              for="consent-pdf-file"
+              class="inline-flex w-fit cursor-pointer items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+            >
+              Seleccionar archivo PDF
+            </label>
+            <span class="text-xs text-gray-500" *ngIf="consentForm.value.file">
+              Archivo seleccionado: {{ consentForm.value.file?.name }}
+            </span>
+
+            <div *ngIf="selectedPdfPreviewUrl" class="mt-1 w-fit rounded-lg border border-gray-300 bg-gray-50 p-3">
+              <div class="h-44 w-32 overflow-hidden rounded-md border border-gray-200 bg-white shadow-sm">
+                <object
+                  [data]="selectedPdfPreviewUrl"
+                  type="application/pdf"
+                  class="h-full w-full"
+                >
+                  <div class="flex h-full items-center justify-center p-2 text-center text-xs text-gray-500">
+                    Vista previa no disponible
+                  </div>
+                </object>
+              </div>
+            </div>
+
+            <span class="text-xs text-red-600" *ngIf="consentForm.get('file')?.hasError('required') && consentForm.get('file')?.touched">
+              Debes seleccionar un archivo PDF.
+            </span>
+            <span class="text-xs text-red-600" *ngIf="consentForm.get('file')?.hasError('invalidType')">
+              Solo se permiten archivos PDF.
+            </span>
+          </div>
 
         </form>
       </mat-card-content>

@@ -60,10 +60,14 @@ export class PatientService {
     );
   }
 
-  createConsent(patientId: string, body: { type: string; fileUrl?: string }) {
+  createConsent(patientId: string, body: { type: string; file: File }) {
+    const formData = new FormData();
+    formData.append('type', body.type);
+    formData.append('file', body.file);
+
     return this.http.post<ApiResponse<PatientConsent>>(
       `${this.baseUrl}/patients/${patientId}/consents`,
-      body
+      formData
     );
   }
 
