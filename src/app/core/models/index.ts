@@ -7,3 +7,8 @@ export * from './billing.model';
 export * from './patient.model';
 export * from './prescription.model';
 export * from './agenda.model';
+export * from './exam.model';
+export * from './inventory.model';
+export * from './reports.model';
+export * from './hrm.model';
+export * from './customer-service.model';
