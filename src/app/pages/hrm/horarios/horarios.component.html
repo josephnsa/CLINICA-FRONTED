@@ -1,0 +1,75 @@
+<div class="p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center gap-4">
+    <button mat-icon-button routerLink="/hrm/empleados">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Horario semanal</h1>
+      <p class="text-sm text-gray-500">Turnos habituales del empleado</p>
+    </div>
+  </div>
+
+  <!-- Grilla -->
+  <div class="grid gap-3">
+    @for (day of days; track day) {
+      @let schedule = getScheduleForDay(day);
+      <div class="flex items-center gap-4 p-4 rounded-xl border transition-all"
+        [ngClass]="schedule ? 'bg-white border-indigo-200 shadow-sm' : 'bg-gray-50 border-dashed border-gray-300'">
+
+        <div class="w-28 shrink-0">
+          <span class="font-semibold text-gray-700">{{ dayNames[day] }}</span>
+        </div>
+
+        @if (schedule) {
+          <div class="flex-1 flex items-center gap-4">
+            <div class="flex items-center gap-2 text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg">
+              <mat-icon class="!text-base">schedule</mat-icon>
+              <span class="font-mono font-semibold text-sm">
+                {{ schedule.startTime | slice:0:5 }} — {{ schedule.endTime | slice:0:5 }}
+              </span>
+            </div>
+            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
+              {{ formatDuration(schedule.durationMinutes) }}
+            </span>
+          </div>
+          <button mat-icon-button color="warn" matTooltip="Eliminar turno" (click)="deleteTurno(schedule)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+
+        } @else if (addingDay() === day) {
+          <form [formGroup]="form" class="flex-1 flex items-center gap-3">
+            <mat-form-field appearance="outline" class="w-32 !mb-0">
+              <mat-label>Entrada</mat-label>
+              <input matInput type="time" formControlName="startTime" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-32 !mb-0">
+              <mat-label>Salida</mat-label>
+              <input matInput type="time" formControlName="endTime" />
+            </mat-form-field>
+            <button mat-flat-button color="primary" [disabled]="form.invalid || saving()" (click)="submit()">
+              {{ saving() ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button mat-stroked-button (click)="cancelAdd()">Cancelar</button>
+          </form>
+
+        } @else {
+          <div class="flex-1 text-gray-400 text-sm italic">Sin turno asignado</div>
+          <button mat-stroked-button color="primary" (click)="openAdd(day)">
+            <mat-icon>add</mat-icon>
+            Agregar turno
+          </button>
+        }
+
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-6">
+      <mat-icon class="animate-spin text-indigo-400">refresh</mat-icon>
+    </div>
+  }
+
+</div>
