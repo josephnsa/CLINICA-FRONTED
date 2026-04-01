@@ -1,14 +1,20 @@
-<div class="flex flex-col gap-6">
-  <h2 class="text-xl font-semibold">Reglas de Disponibilidad</h2>
-
-  <div class="flex justify-end">
-    <button mat-flat-button color="primary" (click)="showRuleForm = !showRuleForm">
-      + Nueva regla
-    </button>
+<div class="flex flex-col gap-5">
+  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="mb-3">
+      <h2 class="text-xl font-semibold text-gray-900">Disponibilidad medica</h2>
+      <p class="text-sm text-gray-500">Configura reglas semanales y bloqueos del doctor por sede.</p>
+    </div>
+    <div class="flex justify-end">
+      <button mat-flat-button color="primary" (click)="showRuleForm = !showRuleForm">
+        + Nueva regla
+      </button>
+    </div>
   </div>
 
-  <mat-card *ngIf="showRuleForm">
-    <mat-card-title>Nueva regla semanal</mat-card-title>
+  <mat-card *ngIf="showRuleForm" class="rounded-xl border border-blue-100 shadow-sm">
+    <mat-card-header class="bg-blue-50">
+      <mat-card-title class="text-blue-900">Nueva regla semanal</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <form [formGroup]="ruleForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
         <mat-form-field appearance="outline">
@@ -39,43 +45,51 @@
     </mat-card-actions>
   </mat-card>
 
-  <table mat-table [dataSource]="rules" class="w-full">
-    <ng-container matColumnDef="doctorId">
-      <th mat-header-cell *matHeaderCellDef>Doctor</th>
-      <td mat-cell *matCellDef="let row">{{ row.doctorId }}</td>
-    </ng-container>
-    <ng-container matColumnDef="dayOfWeek">
-      <th mat-header-cell *matHeaderCellDef>Día</th>
-      <td mat-cell *matCellDef="let row">{{ row.dayOfWeek }}</td>
-    </ng-container>
-    <ng-container matColumnDef="startTime">
-      <th mat-header-cell *matHeaderCellDef>Inicio</th>
-      <td mat-cell *matCellDef="let row">{{ row.startTime }}</td>
-    </ng-container>
-    <ng-container matColumnDef="endTime">
-      <th mat-header-cell *matHeaderCellDef>Fin</th>
-      <td mat-cell *matCellDef="let row">{{ row.endTime }}</td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-button color="warn" (click)="deleteRule(row.id)">Eliminar</button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="ruleColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: ruleColumns"></tr>
-  </table>
-
-  <h2 class="text-xl font-semibold mt-4">Bloqueos</h2>
-
-  <div class="flex justify-end">
-    <button mat-flat-button color="primary" (click)="showBlockForm = !showBlockForm">
-      + Nuevo bloqueo
-    </button>
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table mat-table [dataSource]="rules" class="w-full">
+      <ng-container matColumnDef="doctorId">
+        <th mat-header-cell *matHeaderCellDef>Doctor</th>
+        <td mat-cell *matCellDef="let row">{{ row.doctorId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="dayOfWeek">
+        <th mat-header-cell *matHeaderCellDef>Día</th>
+        <td mat-cell *matCellDef="let row">{{ row.dayOfWeek }}</td>
+      </ng-container>
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef>Inicio</th>
+        <td mat-cell *matCellDef="let row">{{ row.startTime }}</td>
+      </ng-container>
+      <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef>Fin</th>
+        <td mat-cell *matCellDef="let row">{{ row.endTime }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-button color="warn" (click)="deleteRule(row.id)">Eliminar</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="ruleColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: ruleColumns"></tr>
+    </table>
+    <div *ngIf="!rules?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+      Aun no hay reglas registradas.
+    </div>
   </div>
 
-  <mat-card *ngIf="showBlockForm">
-    <mat-card-title>Nuevo bloqueo</mat-card-title>
+  <div class="mt-1 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-semibold text-gray-900">Bloqueos</h2>
+      <button mat-flat-button color="primary" (click)="showBlockForm = !showBlockForm">
+        + Nuevo bloqueo
+      </button>
+    </div>
+  </div>
+
+  <mat-card *ngIf="showBlockForm" class="rounded-xl border border-blue-100 shadow-sm">
+    <mat-card-header class="bg-blue-50">
+      <mat-card-title class="text-blue-900">Nuevo bloqueo</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <form [formGroup]="blockForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <mat-form-field appearance="outline">
@@ -106,30 +120,35 @@
     </mat-card-actions>
   </mat-card>
 
-  <table mat-table [dataSource]="blocks" class="w-full">
-    <ng-container matColumnDef="doctorId">
-      <th mat-header-cell *matHeaderCellDef>Doctor</th>
-      <td mat-cell *matCellDef="let row">{{ row.doctorId }}</td>
-    </ng-container>
-    <ng-container matColumnDef="startDt">
-      <th mat-header-cell *matHeaderCellDef>Inicio</th>
-      <td mat-cell *matCellDef="let row">{{ row.startDt | date:'dd/MM/yyyy HH:mm' }}</td>
-    </ng-container>
-    <ng-container matColumnDef="endDt">
-      <th mat-header-cell *matHeaderCellDef>Fin</th>
-      <td mat-cell *matCellDef="let row">{{ row.endDt | date:'dd/MM/yyyy HH:mm' }}</td>
-    </ng-container>
-    <ng-container matColumnDef="reason">
-      <th mat-header-cell *matHeaderCellDef>Motivo</th>
-      <td mat-cell *matCellDef="let row">{{ row.reason }}</td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-button color="warn" (click)="deleteBlock(row.id)">Eliminar</button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="blockColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: blockColumns"></tr>
-  </table>
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table mat-table [dataSource]="blocks" class="w-full">
+      <ng-container matColumnDef="doctorId">
+        <th mat-header-cell *matHeaderCellDef>Doctor</th>
+        <td mat-cell *matCellDef="let row">{{ row.doctorId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="startDt">
+        <th mat-header-cell *matHeaderCellDef>Inicio</th>
+        <td mat-cell *matCellDef="let row">{{ row.startDt | date:'dd/MM/yyyy HH:mm' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="endDt">
+        <th mat-header-cell *matHeaderCellDef>Fin</th>
+        <td mat-cell *matCellDef="let row">{{ row.endDt | date:'dd/MM/yyyy HH:mm' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="reason">
+        <th mat-header-cell *matHeaderCellDef>Motivo</th>
+        <td mat-cell *matCellDef="let row">{{ row.reason }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-button color="warn" (click)="deleteBlock(row.id)">Eliminar</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="blockColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: blockColumns"></tr>
+    </table>
+    <div *ngIf="!blocks?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+      Aun no hay bloqueos registrados.
+    </div>
+  </div>
 </div>
