@@ -15,7 +15,9 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox formControlName="active" (change)="onSearch()">Solo activos</mat-checkbox>
+    <mat-checkbox formControlName="onlyActive" (change)="onSearch()">
+      Solo mostrar activos
+    </mat-checkbox>
 
     <span class="flex-auto"></span>
 

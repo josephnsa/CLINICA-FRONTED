@@ -11,7 +11,7 @@
             (keyup.enter)="onSearchSpecialties()"
           />
         </mat-form-field>
-        <button mat-flat-button color="primary">
+        <button mat-flat-button color="primary" type="button" (click)="newSpecialty()">
           Nueva especialidad
         </button>
       </div>
@@ -61,7 +61,7 @@
           </mat-select>
         </mat-form-field>
 
-        <button mat-flat-button color="primary">
+        <button mat-flat-button color="primary" type="button" (click)="newDoctor()">
           Nuevo especialista
         </button>
       </div>

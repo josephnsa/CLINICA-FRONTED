@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
@@ -8,6 +9,7 @@ import {
   Cie10Diagnosis,
   PageResponse,
 } from 'src/app/core/models';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-maestro-cie10',
@@ -18,6 +20,7 @@ import {
 export class MaestroCie10Component implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly catalogService = inject(CatalogService);
+  private readonly destroyRef = inject(DestroyRef);
 
   filtersForm = this.fb.group({
     code: [''],
@@ -30,6 +33,9 @@ export class MaestroCie10Component implements OnInit {
 
   ngOnInit(): void {
     this.loadDiagnoses();
+    this.filtersForm.valueChanges
+      .pipe(debounceTime(350), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadDiagnoses(0));
   }
 
   loadDiagnoses(page = 0): void {
@@ -44,10 +50,11 @@ export class MaestroCie10Component implements OnInit {
       })
       .subscribe({
         next: (resp: ApiResponse<PageResponse<Cie10Diagnosis>>) => {
-          this.diagnoses = resp.data.content;
+          this.diagnoses = resp.data?.content ?? [];
           this.isLoading = false;
         },
         error: () => {
+          this.diagnoses = [];
           this.isLoading = false;
         },
       });

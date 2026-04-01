@@ -13,6 +13,22 @@ export interface UserListResponse {
   items: UserSummary[];
 }
 
+/** Cuerpo para actualizar usuario (email no se modifica desde esta pantalla). */
+export interface UserUpdateRequest {
+  fullName: string;
+  roleId: string;
+  active: boolean;
+}
+
+/** Cuerpo para crear usuario (contraseña en claro; el backend la hashea). */
+export interface UserCreateRequest {
+  email: string;
+  password: string;
+  fullName: string;
+  roleId: string;
+  active: boolean;
+}
+
 export interface Role {
   id: string;
   code: string;

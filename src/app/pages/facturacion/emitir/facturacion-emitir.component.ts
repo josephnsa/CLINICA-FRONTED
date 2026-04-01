@@ -81,7 +81,7 @@ export class FacturacionEmitirComponent implements OnInit {
 
   loadServices(): void {
     this.catalogService
-      .getServices({ search: '', specialtyId: '', active: true, page: 0, size: 100 })
+      .getServices({ specialtyId: undefined, activeOnly: true, page: 0, size: 100 })
       .subscribe({
         next: (resp: ApiResponse<ClinicalService[]>) => {
           this.services = resp.data;

@@ -3,9 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import {
   ApiResponse,
-  PageResponse,
   UserSummary,
   UserListResponse,
+  UserCreateRequest,
+  UserUpdateRequest,
   Role,
   Permission,
   AuditLog,
@@ -37,6 +38,20 @@ export class SecurityService {
     return this.http.get<ApiResponse<UserListResponse>>(
       `${this.baseUrl}/security/users`,
       { params: httpParams }
+    );
+  }
+
+  createUser(body: UserCreateRequest) {
+    return this.http.post<ApiResponse<UserSummary>>(
+      `${this.baseUrl}/security/users`,
+      body
+    );
+  }
+
+  updateUser(userId: string, body: UserUpdateRequest) {
+    return this.http.put<ApiResponse<UserSummary>>(
+      `${this.baseUrl}/security/users/${userId}`,
+      body
     );
   }
 
