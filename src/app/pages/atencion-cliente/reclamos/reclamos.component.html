@@ -1,10 +1,8 @@
 <div class="p-6 space-y-6">
-
-  <!-- Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold text-gray-800">Reclamos e Incidencias</h1>
-      <p class="text-sm text-gray-500">Gestión y seguimiento de reclamos de pacientes</p>
+      <p class="text-sm text-gray-500">Gestiona, prioriza y resuelve reclamos de pacientes.</p>
     </div>
     @if (!showForm()) {
       <button mat-flat-button color="primary" (click)="openForm()">
@@ -14,10 +12,10 @@
     }
   </div>
 
-  <!-- Formulario nuevo reclamo -->
   @if (showForm()) {
-    <mat-card class="!p-6">
-      <h2 class="text-lg font-semibold text-gray-700 mb-4">Registrar nuevo reclamo</h2>
+    <mat-card class="!p-6 !shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-700 mb-1">Registrar nuevo reclamo</h2>
+      <p class="text-sm text-gray-500 mb-4">Completa los datos para iniciar el seguimiento del caso.</p>
       <form [formGroup]="createForm" class="space-y-4">
 
         <mat-form-field appearance="outline" class="w-full">
@@ -25,7 +23,7 @@
           <input matInput formControlName="patientId" placeholder="UUID del paciente" />
         </mat-form-field>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Tipo de reclamo</mat-label>
             <mat-select formControlName="type">
@@ -64,20 +62,20 @@
     </mat-card>
   }
 
-  <!-- Lista -->
   @if (loading()) {
     <div class="flex justify-center py-10">
       <mat-icon class="animate-spin text-indigo-400">refresh</mat-icon>
     </div>
   } @else if (complaints().length === 0) {
-    <div class="text-center py-16 text-gray-400">
+    <div class="text-center py-16 text-gray-400 border border-dashed rounded-xl bg-white">
       <mat-icon class="!text-5xl">inbox</mat-icon>
       <p class="mt-2">No hay reclamos registrados</p>
+      <p class="text-xs mt-1">Usa "Nuevo reclamo" para crear el primero.</p>
     </div>
   } @else {
     <div class="space-y-3">
       @for (c of complaints(); track c.id) {
-        <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3">
+        <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3 hover:shadow-md transition-shadow">
 
           <div class="flex items-start justify-between gap-4">
             <div class="space-y-1">

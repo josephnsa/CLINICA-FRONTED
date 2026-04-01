@@ -1,10 +1,8 @@
 <div class="p-6 space-y-6">
-
-  <!-- Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold text-gray-800">Encuestas de Satisfacción</h1>
-      <p class="text-sm text-gray-500">Registrar valoración post-consulta del paciente</p>
+      <p class="text-sm text-gray-500">Registra y da seguimiento a la experiencia del paciente.</p>
     </div>
     @if (!showForm()) {
       <button mat-flat-button color="primary" (click)="openForm()">
@@ -14,28 +12,26 @@
     }
   </div>
 
-  <!-- Formulario -->
   @if (showForm()) {
-    <mat-card class="!p-6">
-      <h2 class="text-lg font-semibold text-gray-700 mb-4">Registrar encuesta</h2>
+    <mat-card class="!p-6 !shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-700 mb-1">Registrar encuesta</h2>
+      <p class="text-sm text-gray-500 mb-4">Ingresa los datos de la cita y la valoración del paciente.</p>
       <form [formGroup]="form" class="space-y-4">
-
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>ID del Paciente</mat-label>
-            <input matInput formControlName="patientId" />
+            <input matInput formControlName="patientId" placeholder="UUID del paciente" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>ID de la Cita</mat-label>
-            <input matInput formControlName="appointmentId" />
+            <input matInput formControlName="appointmentId" placeholder="UUID de la cita" />
           </mat-form-field>
         </div>
 
-        <!-- Score -->
         <div class="space-y-2">
           <p class="text-sm font-medium text-gray-700">Puntuación <span class="text-red-500">*</span></p>
-          <div class="flex gap-3">
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
             @for (s of scores; track s.value) {
               <button type="button"
                 class="flex-1 flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all cursor-pointer"
@@ -52,30 +48,25 @@
 
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Comentario (opcional)</mat-label>
-          <textarea matInput formControlName="comment" rows="3"
-            placeholder="¿Qué podemos mejorar?"></textarea>
+          <textarea matInput formControlName="comment" rows="3" placeholder="¿Qué podemos mejorar?"></textarea>
         </mat-form-field>
 
         <div class="flex justify-end gap-3">
           <button mat-stroked-button type="button" (click)="cancelForm()">Cancelar</button>
-          <button mat-flat-button color="primary"
-            [disabled]="form.invalid || !selectedScore() || saving()"
-            (click)="submit()">
+          <button mat-flat-button color="primary" [disabled]="form.invalid || !selectedScore() || saving()" (click)="submit()">
             <mat-icon>send</mat-icon>
             {{ saving() ? 'Enviando...' : 'Enviar encuesta' }}
           </button>
         </div>
-
       </form>
     </mat-card>
   }
 
-  <!-- Placeholder lista -->
   @if (!showForm()) {
-    <div class="text-center py-16 text-gray-400">
-      <mat-icon class="!text-5xl">sentiment_satisfied</mat-icon>
-      <p class="mt-2">No hay encuestas registradas</p>
+    <div class="text-center py-16 text-gray-400 border border-dashed rounded-xl bg-white">
+      <mat-icon class="!text-5xl">rate_review</mat-icon>
+      <p class="mt-2">Aún no hay encuestas para mostrar.</p>
+      <p class="text-xs mt-1">Haz clic en "Nueva encuesta" para registrar la primera.</p>
     </div>
   }
-
 </div>
