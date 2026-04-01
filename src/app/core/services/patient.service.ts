@@ -18,14 +18,17 @@ export class PatientService {
   private readonly baseUrl = environment.apiUrl;
 
   // ── Pacientes ──────────────────────────────────────
-  getPatients(params: { search?: string; page?: number; size?: number }) {
+ getPatients(params: { search?: string; page?: number; size?: number }) {
   let httpParams = new HttpParams()
-    .set('search', params.search ?? '')
     .set('page', String(params.page ?? 0))
     .set('size', String(params.size ?? 20));
 
+  if (params.search) {
+    httpParams = httpParams.set('query', params.search);
+  }
+
   return this.http.get<ApiResponse<PageResponse<Patient>>>(
-    `${this.baseUrl}/patients/search`,   // ← cambia aquí
+    `${this.baseUrl}/patients/search`,
     { params: httpParams }
   );
 }
