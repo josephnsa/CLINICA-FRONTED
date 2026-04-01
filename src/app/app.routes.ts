@@ -60,6 +60,35 @@ export const routes: Routes = [
           ),
       },
       {
+  path: 'examenes',
+  loadChildren: () =>
+    import('./pages/examenes/examenes.routes').then(
+      (m) => m.ExamenesRoutes
+    ),
+},
+{
+  path: 'inventario',
+  loadChildren: () =>
+    import('./pages/inventario/inventario.routes').then(
+      (m) => m.InventarioRoutes
+    ),
+},
+{
+  path: 'reportes',
+  loadChildren: () =>
+    import('./pages/reportes/reportes.routes').then(m => m.ReportesRoutes),
+},
+{
+  path: 'rrhh',
+  loadChildren: () => import('./pages/hrm/hrm.routes').then(m => m.HRM_ROUTES),
+},
+{
+  path: 'atencion-cliente',
+  loadChildren: () =>
+    import('./pages/atencion-cliente/atencion-cliente.routes')
+      .then(m => m.ATENCION_CLIENTE_ROUTES),
+},
+      {
         path: 'ui-components',
         loadChildren: () =>
           import('./pages/ui-components/ui-components.routes').then(
