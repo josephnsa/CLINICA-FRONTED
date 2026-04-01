@@ -1,11 +1,17 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-5">
 
-  <div class="flex items-center justify-between">
-    <h3 class="text-lg font-medium">Compras a proveedores</h3>
-    <button mat-flat-button color="primary" (click)="openForm()">+ Nueva orden</button>
+  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900">Inventario - Compras</h2>
+        <p class="text-sm text-gray-500">Gestiona ordenes de compra a proveedores.</p>
+      </div>
+      <button mat-flat-button color="primary" (click)="openForm()">+ Nueva orden</button>
+    </div>
   </div>
 
-  <table mat-table [dataSource]="orders" class="w-full">
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table mat-table [dataSource]="orders" class="w-full">
 
     <ng-container matColumnDef="supplierName">
       <th mat-header-cell *matHeaderCellDef>Proveedor</th>
@@ -50,12 +56,18 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div *ngIf="!orders?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+      No hay ordenes de compra registradas.
+    </div>
+  </div>
 
-  <mat-card *ngIf="showForm" class="mt-4">
-    <mat-card-title>Nueva orden de compra</mat-card-title>
+  <mat-card *ngIf="showForm" class="mt-1 rounded-xl border border-blue-100 shadow-sm">
+    <mat-card-header class="bg-blue-50">
+      <mat-card-title class="text-blue-900">Nueva orden de compra</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <form [formGroup]="orderForm" class="flex flex-col gap-4 mt-4">
         <mat-form-field appearance="outline">
