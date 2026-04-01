@@ -1,12 +1,17 @@
-<div class="flex flex-col gap-4">
-  <h2 class="text-xl font-semibold">Reportes Financieros</h2>
+<div class="p-6 space-y-6">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Reportes Financieros</h2>
+      <p class="text-sm text-gray-500 mt-1">Evalua ingresos, facturación y reembolsos por sede y rango de fechas.</p>
+    </div>
+  </div>
 
-  <mat-card>
-    <mat-card-content>
-      <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+  <mat-card class="!shadow-sm">
+    <mat-card-content class="!pt-6">
+      <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field appearance="outline">
           <mat-label>Sede ID</mat-label>
-          <input matInput formControlName="sedeId" />
+          <input matInput formControlName="sedeId" placeholder="Ej. sede-centro" />
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Fecha inicio</mat-label>
@@ -18,15 +23,20 @@
         </mat-form-field>
       </form>
     </mat-card-content>
-    <mat-card-actions align="end">
+    <mat-card-actions align="end" class="!px-6 !pb-5">
       <button mat-flat-button color="primary" (click)="generate()" [disabled]="isLoading">
+        <mat-icon>paid</mat-icon>
         {{ isLoading ? 'Generando...' : 'Generar reporte' }}
       </button>
     </mat-card-actions>
   </mat-card>
 
-  <div *ngIf="report" class="flex flex-col gap-4">
-    <div class="grid grid-cols-3 gap-4">
+  <div *ngIf="isLoading" class="text-center py-8 text-gray-500">
+    Generando reporte financiero...
+  </div>
+
+  <div *ngIf="report; else emptyState" class="flex flex-col gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <mat-card class="text-center">
         <mat-card-content>
           <div class="text-3xl font-bold text-green-600">S/ {{ report.totalRevenue }}</div>
@@ -69,4 +79,11 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+  <ng-template #emptyState>
+    <div class="text-center py-14 text-gray-400 border border-dashed rounded-xl bg-white">
+      <mat-icon class="!text-5xl">account_balance_wallet</mat-icon>
+      <p class="mt-2">Completa los filtros y genera un reporte financiero.</p>
+    </div>
+  </ng-template>
 </div>
