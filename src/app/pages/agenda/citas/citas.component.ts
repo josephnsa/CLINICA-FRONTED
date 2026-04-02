@@ -4,11 +4,20 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { AgendaService } from 'src/app/core/services/agenda.service';
 import { AppointmentResponse, AppointmentStatus } from 'src/app/core/models';
+import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
+import { TimePickerFieldComponent } from 'src/app/shared/datetime/time-picker-field.component';
+import { combineDateAndTimeToLocalIso } from 'src/app/shared/datetime/datetime.utils';
 
 @Component({
   selector: 'app-citas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    DatePickerFieldComponent,
+    TimePickerFieldComponent,
+  ],
   templateUrl: './citas.component.html',
 })
 export class CitasComponent {
@@ -26,13 +35,15 @@ export class CitasComponent {
   });
 
   createForm = this.fb.group({
-    patientId:   ['', Validators.required],
-    doctorId:    ['', Validators.required],
-    serviceId:   ['', Validators.required],
-    sedeId:      ['', Validators.required],
-    startTime:   ['', Validators.required],
-    endTime:     ['', Validators.required],
-    notes:       [''],
+    patientId: ['', Validators.required],
+    doctorId: ['', Validators.required],
+    serviceId: ['', Validators.required],
+    sedeId: ['', Validators.required],
+    startDate: [null as Date | null, Validators.required],
+    startTime: ['09:00', Validators.required],
+    endDate: [null as Date | null, Validators.required],
+    endTime: ['10:00', Validators.required],
+    notes: [''],
   });
 
   cancelForm = this.fb.group({
@@ -52,7 +63,18 @@ export class CitasComponent {
   }
 
   openForm(): void {
-    this.createForm.reset();
+    const today = new Date();
+    this.createForm.reset({
+      patientId: '',
+      doctorId: '',
+      serviceId: '',
+      sedeId: '',
+      startDate: today,
+      startTime: '09:00',
+      endDate: today,
+      endTime: '10:00',
+      notes: '',
+    });
     this.showForm = true;
   }
 
@@ -61,8 +83,22 @@ export class CitasComponent {
       this.createForm.markAllAsTouched();
       return;
     }
+    const v = this.createForm.getRawValue();
+    if (!v.startDate || !v.endDate) {
+      return;
+    }
     this.isSaving = true;
-    this.agendaService.createAppointment(this.createForm.getRawValue() as any).subscribe({
+    this.agendaService
+      .createAppointment({
+        patientId: v.patientId!,
+        doctorId: v.doctorId!,
+        serviceId: v.serviceId!,
+        sedeId: v.sedeId!,
+        startTime: combineDateAndTimeToLocalIso(v.startDate, v.startTime ?? '00:00'),
+        endTime: combineDateAndTimeToLocalIso(v.endDate, v.endTime ?? '00:00'),
+        notes: v.notes ?? '',
+      })
+      .subscribe({
       next: (resp) => {
         this.isSaving = false;
         this.showForm = false;

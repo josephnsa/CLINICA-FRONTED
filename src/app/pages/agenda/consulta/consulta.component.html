@@ -54,7 +54,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div *ngIf="!appointments?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+    <div *ngIf="!appointments.length" class="px-4 py-6 text-center text-sm text-gray-500">
       No hay atenciones para mostrar con el filtro actual.
     </div>
   </div>

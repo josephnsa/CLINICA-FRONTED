@@ -75,7 +75,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <div *ngIf="!orders?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+      <div *ngIf="!orders.length" class="px-4 py-6 text-center text-sm text-gray-500">
         No hay ordenes disponibles para firma.
       </div>
     </div>

@@ -1,11 +1,10 @@
 <div class="flex flex-col gap-4">
   <div class="flex flex-wrap items-center gap-4">
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha</mat-label>
-      <input matInput [matDatepicker]="picker" />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <app-date-picker-field
+      class="min-w-[220px]"
+      label="Fecha de consulta"
+      [control]="dashboardDate"
+    />
 
     <mat-form-field appearance="outline">
       <mat-label>Sede</mat-label>

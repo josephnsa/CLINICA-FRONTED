@@ -29,14 +29,8 @@
           <mat-label>Día (1=Lun, 7=Dom)</mat-label>
           <input matInput type="number" formControlName="dayOfWeek" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Hora inicio</mat-label>
-          <input matInput formControlName="startTime" placeholder="HH:mm" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Hora fin</mat-label>
-          <input matInput formControlName="endTime" placeholder="HH:mm" />
-        </mat-form-field>
+        <app-time-picker-field label="Hora inicio" [control]="ruleForm.controls.startTime" />
+        <app-time-picker-field label="Hora fin" [control]="ruleForm.controls.endTime" />
       </form>
     </mat-card-content>
     <mat-card-actions align="end">
@@ -72,7 +66,7 @@
       <tr mat-header-row *matHeaderRowDef="ruleColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: ruleColumns"></tr>
     </table>
-    <div *ngIf="!rules?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+    <div *ngIf="!rules.length" class="px-4 py-6 text-center text-sm text-gray-500">
       Aun no hay reglas registradas.
     </div>
   </div>
@@ -100,14 +94,10 @@
           <mat-label>Sede ID</mat-label>
           <input matInput formControlName="sedeId" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Inicio</mat-label>
-          <input matInput formControlName="startDt" placeholder="YYYY-MM-DDTHH:mm:ss" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Fin</mat-label>
-          <input matInput formControlName="endDt" placeholder="YYYY-MM-DDTHH:mm:ss" />
-        </mat-form-field>
+        <app-date-picker-field label="Día de inicio" [control]="blockForm.controls.startDate" />
+        <app-time-picker-field label="Hora inicio" [control]="blockForm.controls.startTime" />
+        <app-date-picker-field label="Día de fin" [control]="blockForm.controls.endDate" />
+        <app-time-picker-field label="Hora fin" [control]="blockForm.controls.endTime" />
         <mat-form-field appearance="outline" class="md:col-span-2">
           <mat-label>Motivo</mat-label>
           <input matInput formControlName="reason" />
@@ -147,7 +137,7 @@
       <tr mat-header-row *matHeaderRowDef="blockColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: blockColumns"></tr>
     </table>
-    <div *ngIf="!blocks?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+    <div *ngIf="!blocks.length" class="px-4 py-6 text-center text-sm text-gray-500">
       Aun no hay bloqueos registrados.
     </div>
   </div>

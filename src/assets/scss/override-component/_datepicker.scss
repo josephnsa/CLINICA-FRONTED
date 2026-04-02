@@ -7,5 +7,17 @@
       var(--mat-card-elevated-container-color),
     calendar-container-touch-elevation-shadow: var(--mat-sys-level1),
     calendar-container-elevation-shadow: var(--mat-sys-level1),
+    calendar-date-selected-state-background-color: rgb(93, 135, 255),
+    calendar-date-selected-state-text-color: #ffffff,
+    calendar-date-today-outline-color: rgb(93, 135, 255),
   )
 );
+
+.app-date-picker-field.mat-mdc-form-field.mat-focused {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: rgb(93, 135, 255) !important;
+  }
+}
+

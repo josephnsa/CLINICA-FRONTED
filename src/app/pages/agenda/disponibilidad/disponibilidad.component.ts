@@ -4,11 +4,20 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { AgendaService } from 'src/app/core/services/agenda.service';
 import { AvailabilityRule, AvailabilityBlock } from 'src/app/core/models';
+import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
+import { TimePickerFieldComponent } from 'src/app/shared/datetime/time-picker-field.component';
+import { combineDateAndTimeToLocalIso } from 'src/app/shared/datetime/datetime.utils';
 
 @Component({
   selector: 'app-disponibilidad',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    DatePickerFieldComponent,
+    TimePickerFieldComponent,
+  ],
   templateUrl: './disponibilidad.component.html',
 })
 export class DisponibilidadComponent implements OnInit {
@@ -24,19 +33,21 @@ export class DisponibilidadComponent implements OnInit {
   blockColumns = ['doctorId', 'startDt', 'endDt', 'reason', 'actions'];
 
   ruleForm = this.fb.group({
-    doctorId:   ['', Validators.required],
-    sedeId:     ['', Validators.required],
-    dayOfWeek:  [1, Validators.required],
-    startTime:  ['', Validators.required],
-    endTime:    ['', Validators.required],
+    doctorId: ['', Validators.required],
+    sedeId: ['', Validators.required],
+    dayOfWeek: [1, Validators.required],
+    startTime: ['08:00', Validators.required],
+    endTime: ['17:00', Validators.required],
   });
 
   blockForm = this.fb.group({
     doctorId: ['', Validators.required],
-    sedeId:   ['', Validators.required],
-    startDt:  ['', Validators.required],
-    endDt:    ['', Validators.required],
-    reason:   ['', Validators.required],
+    sedeId: ['', Validators.required],
+    startDate: [null as Date | null, Validators.required],
+    startTime: ['09:00', Validators.required],
+    endDate: [null as Date | null, Validators.required],
+    endTime: ['18:00', Validators.required],
+    reason: ['', Validators.required],
   });
 
   ngOnInit(): void {}
@@ -84,8 +95,23 @@ loadBlocks(doctorId: string): void {
   }
 
   saveBlock(): void {
-    if (this.blockForm.invalid) { this.blockForm.markAllAsTouched(); return; }
-    this.agendaService.createBlock(this.blockForm.getRawValue() as any).subscribe({
+    if (this.blockForm.invalid) {
+      this.blockForm.markAllAsTouched();
+      return;
+    }
+    const v = this.blockForm.getRawValue();
+    if (!v.startDate || !v.endDate) {
+      return;
+    }
+    this.agendaService
+      .createBlock({
+        doctorId: v.doctorId!,
+        sedeId: v.sedeId!,
+        startDt: combineDateAndTimeToLocalIso(v.startDate, v.startTime ?? '00:00'),
+        endDt: combineDateAndTimeToLocalIso(v.endDate, v.endTime ?? '00:00'),
+        reason: v.reason!,
+      })
+      .subscribe({
       next: (resp) => {
         this.blocks = [resp.data, ...this.blocks];
         this.showBlockForm = false;

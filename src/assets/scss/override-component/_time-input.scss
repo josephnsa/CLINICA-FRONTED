@@ -1,0 +1,18 @@
+/* Entrada de hora: acento alineado con tema azul (#5d87ff) */
+.app-time-picker-field {
+  input[type="time"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="time"]:focus {
+    outline: none;
+  }
+}
+
+.app-time-picker-field.mat-mdc-form-field.mat-focused {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: rgb(93, 135, 255) !important;
+  }
+}

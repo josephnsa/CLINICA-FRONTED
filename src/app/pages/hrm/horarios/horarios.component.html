@@ -41,15 +41,17 @@
           </button>
 
         } @else if (addingDay() === day) {
-          <form [formGroup]="form" class="flex-1 flex items-center gap-3">
-            <mat-form-field appearance="outline" class="w-32 !mb-0">
-              <mat-label>Entrada</mat-label>
-              <input matInput type="time" formControlName="startTime" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-32 !mb-0">
-              <mat-label>Salida</mat-label>
-              <input matInput type="time" formControlName="endTime" />
-            </mat-form-field>
+          <form [formGroup]="form" class="flex-1 flex flex-wrap items-end gap-3">
+            <app-time-picker-field
+              class="w-40 min-w-[10rem]"
+              label="Entrada"
+              [control]="form.controls.startTime"
+            />
+            <app-time-picker-field
+              class="w-40 min-w-[10rem]"
+              label="Salida"
+              [control]="form.controls.endTime"
+            />
             <button mat-flat-button color="primary" [disabled]="form.invalid || saving()" (click)="submit()">
               {{ saving() ? 'Guardando...' : 'Guardar' }}
             </button>

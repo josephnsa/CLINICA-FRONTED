@@ -4,11 +4,13 @@ import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, Validati
 import { MaterialModule } from 'src/app/material.module';
 import { PatientService } from 'src/app/core/services/patient.service';
 import { Patient, CreatePatientDto, PageResponse, ApiResponse } from 'src/app/core/models';
+import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
+import { formatDateToYmd, parseYmdToDate } from 'src/app/shared/datetime/datetime.utils';
 
 @Component({
   selector: 'app-pacientes-registro',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, DatePickerFieldComponent],
   templateUrl: './pacientes-registro.component.html',
 })
 export class PacientesRegistroComponent implements OnInit {
@@ -24,11 +26,16 @@ export class PacientesRegistroComponent implements OnInit {
     return null;
   }
 
-  private static dniValidator(control: AbstractControl): ValidationErrors | null {
+  private static docNumberValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
-    const dni = control.value.replace(/\D/g, '');
-    if (dni.length === 0) return null;
-    if (dni.length > 8) return { dniMax: true };
+
+    const digits = String(control.value).replace(/\D/g, '');
+    if (digits.length === 0) return null;
+
+    const docType = control.parent?.get('docType')?.value as string | null | undefined;
+    const max = docType === 'DNI' ? 8 : 9;
+
+    if (digits.length > max) return { docMax: { max, actual: digits.length } };
     return null;
   }
 
@@ -49,10 +56,10 @@ export class PacientesRegistroComponent implements OnInit {
 
   patientForm = this.fb.group({
     docType:        ['DNI', Validators.required],
-    docNumber:      ['', [Validators.required, PacientesRegistroComponent.dniValidator]],
+    docNumber:      ['', [Validators.required, PacientesRegistroComponent.docNumberValidator]],
     firstName:      ['', Validators.required],
     lastName:       ['', Validators.required],
-    birthDate:      ['', Validators.required],
+    birthDate: [null as Date | null, Validators.required],
     gender:         ['F', Validators.required],
     bloodType:      [''],
     email:          ['', Validators.email],
@@ -64,6 +71,20 @@ export class PacientesRegistroComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
+
+    this.patientForm.controls.docType.valueChanges.subscribe(() => {
+      // Revalida y ajusta docNumber cuando cambia el tipo de documento
+      this.patientForm.controls.docNumber.updateValueAndValidity({ emitEvent: false });
+      const current = this.patientForm.controls.docNumber.value;
+      if (current != null && String(current).length > 0) {
+        // Normaliza y recorta si excede el nuevo max
+        this.onDocNumberInput({ target: { value: String(current) } } as unknown as Event);
+      }
+    });
+  }
+
+  get docNumberMaxLength(): number {
+    return this.patientForm.controls.docType.value === 'DNI' ? 8 : 9;
   }
 
   loadPatients(): void {
@@ -87,13 +108,35 @@ export class PacientesRegistroComponent implements OnInit {
 
   openEdit(patient: Patient): void {
     this.editingId = patient.id;
-    this.patientForm.patchValue(patient);
+    this.patientForm.patchValue({
+      ...patient,
+      birthDate: parseYmdToDate(patient.birthDate) ?? null,
+    });
     this.showForm = true;
   }
 
   save(): void {
-    if (this.patientForm.invalid) return;
-    const body = this.patientForm.value as CreatePatientDto;
+    if (this.patientForm.invalid) {
+      return;
+    }
+    const v = this.patientForm.getRawValue();
+    if (!v.birthDate) {
+      return;
+    }
+    const body: CreatePatientDto = {
+      docType: v.docType!,
+      docNumber: v.docNumber!,
+      firstName: v.firstName!,
+      lastName: v.lastName!,
+      birthDate: formatDateToYmd(v.birthDate),
+      gender: v.gender!,
+      bloodType: v.bloodType || undefined,
+      email: v.email || undefined,
+      phone: v.phone || undefined,
+      address: v.address || undefined,
+      emergencyName: v.emergencyName || undefined,
+      emergencyPhone: v.emergencyPhone || undefined,
+    };
 
     if (this.editingId) {
       this.patientService.updatePatient(this.editingId, body).subscribe({
@@ -118,13 +161,12 @@ export class PacientesRegistroComponent implements OnInit {
   }
 
   // ─── Filtros de entrada para campos numéricos ───
-  onDniInput(event: Event): void {
+  onDocNumberInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    if (value.length > 8) {
-      value = value.slice(0, 8);
-    }
-    this.patientForm.patchValue({ docNumber: value });
+    let value = (input?.value ?? '').replace(/\D/g, '');
+    const max = this.docNumberMaxLength;
+    if (value.length > max) value = value.slice(0, max);
+    this.patientForm.patchValue({ docNumber: value }, { emitEvent: false });
   }
 
   onPhoneInput(event: Event): void {

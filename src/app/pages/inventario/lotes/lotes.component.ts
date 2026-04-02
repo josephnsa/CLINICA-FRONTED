@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
+import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
+import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
 import { InventoryService } from 'src/app/core/services/inventory.service';
 import { CatalogService } from 'src/app/core/services/catalog.service';
 import { InventoryBatch, CreateBatchDto, ApiResponse, Medication, Supplier } from 'src/app/core/models';
@@ -9,7 +11,7 @@ import { InventoryBatch, CreateBatchDto, ApiResponse, Medication, Supplier } fro
 @Component({
   selector: 'app-lotes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, DatePickerFieldComponent],
   templateUrl: './lotes.component.html',
 })
 export class LotesComponent implements OnInit {
@@ -26,11 +28,11 @@ export class LotesComponent implements OnInit {
   displayedColumns = ['medicationName', 'batchNumber', 'quantity', 'expirationDate'];
 
   batchForm = this.fb.group({
-    medicationId:   ['', Validators.required],
-    batchNumber:    ['', Validators.required],
-    expirationDate: ['', Validators.required],
-    quantity:       [1, [Validators.required, Validators.min(1)]],
-    supplierId:     [''],
+    medicationId: ['', Validators.required],
+    batchNumber: ['', Validators.required],
+    expirationDate: [null as Date | null, Validators.required],
+    quantity: [1, [Validators.required, Validators.min(1)]],
+    supplierId: [''],
   });
 
   ngOnInit(): void {
@@ -74,8 +76,20 @@ export class LotesComponent implements OnInit {
   }
 
   save(): void {
-    if (this.batchForm.invalid) return;
-    const body = this.batchForm.value as CreateBatchDto;
+    if (this.batchForm.invalid) {
+      return;
+    }
+    const v = this.batchForm.getRawValue();
+    if (!v.expirationDate) {
+      return;
+    }
+    const body: CreateBatchDto = {
+      medicationId: v.medicationId!,
+      batchNumber: v.batchNumber!,
+      expirationDate: formatDateToYmd(v.expirationDate),
+      quantity: v.quantity!,
+      supplierId: v.supplierId || undefined,
+    };
     this.inventoryService.createBatch(body).subscribe({
       next: () => { this.showForm = false; this.loadBatches(); },
       error: () => {},

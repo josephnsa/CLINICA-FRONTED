@@ -10,10 +10,11 @@
       <mat-label>Sede ID</mat-label>
       <input matInput formControlName="sedeId" />
     </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha</mat-label>
-      <input matInput formControlName="date" placeholder="YYYY-MM-DD" />
-    </mat-form-field>
+    <app-date-picker-field
+      class="md:col-span-2"
+      label="Fecha"
+      [control]="searchForm.controls.date"
+    />
     <div class="flex items-center">
       <button mat-flat-button color="primary" (click)="onSearch()" [disabled]="isLoading">
         Buscar slots

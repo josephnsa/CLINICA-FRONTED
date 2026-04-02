@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { HrmService } from '../../../core/services/hrm.service';
+import { TimePickerFieldComponent } from 'src/app/shared/datetime/time-picker-field.component';
 import { EmployeeSchedule, DAY_NAMES } from '../../../core/models/hrm.model';
 
 @Component({
@@ -26,6 +27,7 @@ import { EmployeeSchedule, DAY_NAMES } from '../../../core/models/hrm.model';
     MatSnackBarModule,
     MatTooltipModule,
     MatCardModule,
+    TimePickerFieldComponent,
   ],
   templateUrl: './horarios.component.html',
 })

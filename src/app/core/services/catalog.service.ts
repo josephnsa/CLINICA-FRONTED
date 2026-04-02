@@ -149,18 +149,70 @@ export class CatalogService {
     );
   }
 
-  getMedications(params: { code?: string; q?: string; active?: boolean; page?: number; size?: number }) {
+  getMedications(params: {
+    q?: string;
+    /** true = solo activos; false = todos. */
+    activeOnly?: boolean;
+    page?: number;
+    size?: number;
+  }) {
     let httpParams = new HttpParams()
-      .set('code', params.code ?? '')
-      .set('q', params.q ?? '')
-      .set('active', String(params.active ?? true))
       .set('page', String(params.page ?? 0))
-      .set('size', String(params.size ?? 20));
+      .set('size', String(params.size ?? 20))
+      .set('activeOnly', String(params.activeOnly !== false));
+
+    const q = params.q?.trim();
+    if (q) {
+      httpParams = httpParams.set('q', q);
+    }
 
     return this.http.get<ApiResponse<PageResponse<Medication>>>(
       `${this.baseUrl}/catalog/medications`,
       { params: httpParams }
     );
+  }
+
+  createMedication(body: {
+    code: string;
+    genericName: string;
+    commercialName?: string;
+    presentation?: string;
+    unit?: string;
+    active?: boolean;
+  }) {
+    return this.http.post<ApiResponse<Medication>>(`${this.baseUrl}/catalog/medications`, {
+      code: body.code.trim(),
+      genericName: body.genericName.trim(),
+      commercialName: body.commercialName?.trim() ?? '',
+      presentation: body.presentation?.trim() ?? '',
+      unit: body.unit?.trim() ?? '',
+      active: body.active ?? true,
+    });
+  }
+
+  updateMedication(
+    id: string,
+    body: {
+      code: string;
+      genericName: string;
+      commercialName?: string;
+      presentation?: string;
+      unit?: string;
+      active: boolean;
+    }
+  ) {
+    return this.http.put<ApiResponse<Medication>>(`${this.baseUrl}/catalog/medications/${id}`, {
+      code: body.code.trim(),
+      genericName: body.genericName.trim(),
+      commercialName: body.commercialName?.trim() ?? '',
+      presentation: body.presentation?.trim() ?? '',
+      unit: body.unit?.trim() ?? '',
+      active: body.active,
+    });
+  }
+
+  deactivateMedication(id: string) {
+    return this.http.delete<ApiResponse<null>>(`${this.baseUrl}/catalog/medications/${id}`);
   }
 
   getTariffs(params: { sedeId: string; serviceId?: string; page?: number; size?: number }) {

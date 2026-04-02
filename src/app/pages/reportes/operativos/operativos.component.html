@@ -13,14 +13,8 @@
           <mat-label>Sede ID</mat-label>
           <input matInput formControlName="sedeId" placeholder="Ej. sede-centro" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Fecha inicio</mat-label>
-          <input matInput formControlName="startDate" placeholder="YYYY-MM-DD" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Fecha fin</mat-label>
-          <input matInput formControlName="endDate" placeholder="YYYY-MM-DD" />
-        </mat-form-field>
+        <app-date-picker-field label="Fecha inicio" [control]="startDateCtrl" />
+        <app-date-picker-field label="Fecha fin" [control]="endDateCtrl" />
       </form>
     </mat-card-content>
     <mat-card-actions align="end" class="!px-6 !pb-5">

@@ -87,7 +87,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <div *ngIf="!consents?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+      <div *ngIf="!consents.length" class="px-4 py-6 text-center text-sm text-gray-500">
         Aun no hay consentimientos registrados para este paciente.
       </div>
     </div>
@@ -121,8 +121,8 @@
             >
               Seleccionar archivo PDF
             </label>
-            <span class="text-xs text-gray-500" *ngIf="consentForm.value.file">
-              Archivo seleccionado: {{ consentForm.value.file?.name }}
+            <span class="text-xs text-gray-500" *ngIf="consentForm.value.file as f">
+              Archivo seleccionado: {{ f.name }}
             </span>
 
             <div *ngIf="selectedPdfPreviewUrl" class="mt-1 w-fit rounded-lg border border-gray-300 bg-gray-50 p-3">

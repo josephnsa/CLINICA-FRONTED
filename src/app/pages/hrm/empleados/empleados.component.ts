@@ -16,6 +16,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { HrmService } from '../../../core/services/hrm.service';
 import { Employee, EmployeeRole, EMPLOYEE_ROLES } from '../../../core/models/hrm.model';
+import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
 
 @Component({
   selector: 'app-empleados',
@@ -61,7 +62,7 @@ export class EmpleadosComponent implements OnInit {
     sedeId:        ['', Validators.required],
     role:          ['', Validators.required],
     licenseNumber: [''],
-    hireDate:      ['', Validators.required],
+    hireDate: [null as Date | null, Validators.required],
   });
 
   ngOnInit() {
@@ -92,9 +93,8 @@ export class EmpleadosComponent implements OnInit {
     if (this.form.invalid) return;
     this.saving.set(true);
     const v = this.form.value;
-    const hireDate = v.hireDate
-  ? new Date(v.hireDate).toISOString().split('T')[0]
-  : '';
+    const hireDate =
+      v.hireDate instanceof Date ? formatDateToYmd(v.hireDate) : '';
 
     this.hrmService.createEmployee({
       firstName:     v.firstName!,

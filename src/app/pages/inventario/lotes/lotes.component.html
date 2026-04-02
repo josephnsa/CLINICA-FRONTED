@@ -32,7 +32,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div *ngIf="!expiringBatches?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+    <div *ngIf="!expiringBatches.length" class="px-4 py-6 text-center text-sm text-gray-500">
       No hay lotes cercanos a vencer.
     </div>
   </div>
@@ -59,7 +59,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div *ngIf="!batches?.length" class="px-4 py-6 text-center text-sm text-gray-500">
+    <div *ngIf="!batches.length" class="px-4 py-6 text-center text-sm text-gray-500">
       Aun no hay lotes registrados.
     </div>
   </div>
@@ -80,10 +80,10 @@
           <mat-label>Número de lote</mat-label>
           <input matInput formControlName="batchNumber" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Fecha de vencimiento</mat-label>
-          <input matInput type="date" formControlName="expirationDate" />
-        </mat-form-field>
+        <app-date-picker-field
+          label="Fecha de vencimiento"
+          [control]="batchForm.controls.expirationDate"
+        />
         <mat-form-field appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input matInput type="number" formControlName="quantity" />

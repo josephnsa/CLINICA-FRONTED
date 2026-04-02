@@ -103,14 +103,20 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>N° Documento (máx 8 dígitos)</mat-label>
-            <input matInput formControlName="docNumber" type="number" inputmode="numeric" 
-                   (input)="onDniInput($event)" />
+            <mat-label>N° Documento (máx {{ docNumberMaxLength }} dígitos)</mat-label>
+            <input
+              matInput
+              formControlName="docNumber"
+              type="text"
+              inputmode="numeric"
+              [attr.maxlength]="docNumberMaxLength"
+              (input)="onDocNumberInput($event)"
+            />
             <mat-error *ngIf="patientForm.get('docNumber')?.hasError('required')">
               Número de documento requerido
             </mat-error>
-            <mat-error *ngIf="patientForm.get('docNumber')?.hasError('dniMax')">
-              El DNI no puede exceder 8 dígitos
+            <mat-error *ngIf="patientForm.get('docNumber')?.hasError('docMax')">
+              El número de documento no puede exceder {{ docNumberMaxLength }} dígitos
             </mat-error>
           </mat-form-field>
         </div>
@@ -136,13 +142,15 @@
 
         <!-- Fecha, Sexo, Grupo Sanguíneo -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Fecha de Nacimiento</mat-label>
-            <input matInput type="date" formControlName="birthDate" />
-            <mat-error *ngIf="patientForm.get('birthDate')?.hasError('required')">
-              Fecha requerida
-            </mat-error>
-          </mat-form-field>
+          <app-date-picker-field
+            class="w-full"
+            label="Fecha de nacimiento"
+            [control]="patientForm.controls.birthDate"
+            hint="Calendario o teclado (formato según tu navegador)"
+          />
+          @if (patientForm.get('birthDate')?.touched && patientForm.get('birthDate')?.hasError('required')) {
+            <p class="text-xs text-red-600 -mt-2">Fecha requerida</p>
+          }
 
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Sexo</mat-label>

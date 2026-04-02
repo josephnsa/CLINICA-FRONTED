@@ -66,14 +66,10 @@
           <mat-label>Sede ID</mat-label>
           <input matInput formControlName="sedeId" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Inicio</mat-label>
-          <input matInput formControlName="startTime" placeholder="YYYY-MM-DDTHH:mm:ss" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Fin</mat-label>
-          <input matInput formControlName="endTime" placeholder="YYYY-MM-DDTHH:mm:ss" />
-        </mat-form-field>
+        <app-date-picker-field label="Día de inicio" [control]="createForm.controls.startDate" />
+        <app-time-picker-field label="Hora inicio" [control]="createForm.controls.startTime" />
+        <app-date-picker-field label="Día de fin" [control]="createForm.controls.endDate" />
+        <app-time-picker-field label="Hora fin" [control]="createForm.controls.endTime" />
         <mat-form-field appearance="outline" class="md:col-span-2">
           <mat-label>Notas</mat-label>
           <input matInput formControlName="notes" />
