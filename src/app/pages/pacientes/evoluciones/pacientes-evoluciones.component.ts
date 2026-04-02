@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { PatientService } from 'src/app/core/services/patient.service';
 import { Patient, ApiResponse, PageResponse } from 'src/app/core/models';
+import { AppointmentAutocompleteFieldComponent } from 'src/app/shared/autocomplete/appointment-autocomplete-field.component';
 
 @Component({
   selector: 'app-pacientes-evoluciones',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, AppointmentAutocompleteFieldComponent],
   templateUrl: './pacientes-evoluciones.component.html',
 })
 export class PacientesEvolucionesComponent implements OnInit {

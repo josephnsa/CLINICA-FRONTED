@@ -2,10 +2,11 @@
   <h2 class="text-xl font-semibold">Admisión / Check-in</h2>
 
   <div class="flex gap-3 items-center" [formGroup]="searchForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Patient ID</mat-label>
-      <input matInput formControlName="patientId" />
-    </mat-form-field>
+    <app-patient-autocomplete-field
+      class="w-full max-w-[520px]"
+      label="Paciente"
+      [idControl]="$any(searchForm.controls.patientId)"
+    />
     <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
   </div>
 

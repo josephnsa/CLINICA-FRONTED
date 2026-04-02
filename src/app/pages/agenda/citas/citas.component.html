@@ -5,10 +5,11 @@
   </div>
 
   <div class="flex gap-3 items-center" [formGroup]="searchForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Patient ID</mat-label>
-      <input matInput formControlName="patientId" />
-    </mat-form-field>
+    <app-patient-autocomplete-field
+      class="w-full max-w-[520px]"
+      label="Paciente"
+      [idControl]="$any(searchForm.controls.patientId)"
+    />
     <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
   </div>
 
@@ -50,22 +51,22 @@
     <mat-card-title>Nueva cita</mat-card-title>
     <mat-card-content>
       <form [formGroup]="createForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <mat-form-field appearance="outline">
-          <mat-label>Patient ID</mat-label>
-          <input matInput formControlName="patientId" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Doctor ID</mat-label>
-          <input matInput formControlName="doctorId" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Service ID</mat-label>
-          <input matInput formControlName="serviceId" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Sede ID</mat-label>
-          <input matInput formControlName="sedeId" />
-        </mat-form-field>
+        <app-patient-autocomplete-field
+          label="Paciente"
+          [idControl]="$any(createForm.controls.patientId)"
+        />
+        <app-doctor-autocomplete-field
+          label="Doctor"
+          [idControl]="$any(createForm.controls.doctorId)"
+        />
+        <app-service-autocomplete-field
+          label="Servicio"
+          [idControl]="$any(createForm.controls.serviceId)"
+        />
+        <app-sede-autocomplete-field
+          label="Sede"
+          [idControl]="$any(createForm.controls.sedeId)"
+        />
         <app-date-picker-field label="Día de inicio" [control]="createForm.controls.startDate" />
         <app-time-picker-field label="Hora inicio" [control]="createForm.controls.startTime" />
         <app-date-picker-field label="Día de fin" [control]="createForm.controls.endDate" />

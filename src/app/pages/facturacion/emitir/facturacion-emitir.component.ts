@@ -20,11 +20,12 @@ import { SecurityService } from 'src/app/core/services/security.service';
 import { CatalogService } from 'src/app/core/services/catalog.service';
 import { BillingService } from 'src/app/core/services/billing.service';
 import { ToastrService } from 'ngx-toastr';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
 
 @Component({
   selector: 'app-facturacion-emitir',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, PatientAutocompleteFieldComponent],
   templateUrl: './facturacion-emitir.component.html',
 })
 export class FacturacionEmitirComponent implements OnInit {
@@ -42,7 +43,6 @@ export class FacturacionEmitirComponent implements OnInit {
   invoiceForm = this.fb.group({
     sedeId: ['', Validators.required],
     patientId: ['', Validators.required],
-    patientName: [''],
     invoiceType: ['BOLETA' as 'BOLETA' | 'FACTURA', Validators.required],
     paymentMethod: ['EFECTIVO' as PaymentMethod],
     items: this.fb.array([]),

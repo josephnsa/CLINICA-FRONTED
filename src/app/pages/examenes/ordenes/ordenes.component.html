@@ -80,9 +80,11 @@
         <form [formGroup]="orderForm" class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
 
           <mat-form-field appearance="outline" class="md:col-span-2">
-            <mat-label>ID de la cita</mat-label>
-            <input matInput formControlName="appointmentId"
-              placeholder="UUID de la cita (desde módulo Agenda)" />
+            <app-appointment-autocomplete-field
+              label="Cita"
+              [appointmentIdControl]="$any(orderForm.controls.appointmentId)"
+              [patientId]="selectedPatient ? selectedPatient.id : null"
+            />
           </mat-form-field>
 
           <mat-form-field appearance="outline">

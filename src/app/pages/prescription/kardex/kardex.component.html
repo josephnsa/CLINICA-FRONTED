@@ -5,10 +5,11 @@
       <p class="text-sm text-gray-500">Consulta historico de prescripciones y estados por paciente.</p>
     </div>
     <div class="flex flex-wrap gap-3 items-center" [formGroup]="searchForm">
-      <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
-        <mat-label>Patient ID</mat-label>
-        <input matInput formControlName="patientId" placeholder="UUID del paciente" />
-      </mat-form-field>
+      <app-patient-autocomplete-field
+        class="min-w-[280px] flex-1"
+        label="Paciente"
+        [idControl]="$any(searchForm.controls.patientId)"
+      />
       <button mat-flat-button color="primary" (click)="search()" [disabled]="isLoading">
         {{ isLoading ? 'Buscando...' : 'Buscar' }}
       </button>
@@ -54,7 +55,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div *ngIf="kardex.length === 0" class="text-center text-gray-500 py-8">
-      Ingresa un Patient ID para ver el kardex.
+      Selecciona un paciente para ver el kardex.
     </div>
   </div>
 

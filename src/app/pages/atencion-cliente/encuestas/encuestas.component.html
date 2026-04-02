@@ -18,15 +18,16 @@
       <p class="text-sm text-gray-500 mb-4">Ingresa los datos de la cita y la valoración del paciente.</p>
       <form [formGroup]="form" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>ID del Paciente</mat-label>
-            <input matInput formControlName="patientId" placeholder="UUID del paciente" />
-          </mat-form-field>
+          <app-patient-autocomplete-field
+            label="Paciente"
+            [idControl]="$any(form.controls.patientId)"
+          />
 
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>ID de la Cita</mat-label>
-            <input matInput formControlName="appointmentId" placeholder="UUID de la cita" />
-          </mat-form-field>
+          <app-appointment-autocomplete-field
+            label="Cita"
+            [appointmentIdControl]="$any(form.controls.appointmentId)"
+            [patientId]="form.controls.patientId.value"
+          />
         </div>
 
         <div class="space-y-2">

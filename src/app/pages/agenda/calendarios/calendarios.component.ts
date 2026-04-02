@@ -6,11 +6,20 @@ import { AgendaService } from 'src/app/core/services/agenda.service';
 import { AvailabilitySlot } from 'src/app/core/models';
 import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
 import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
+import { DoctorAutocompleteFieldComponent } from 'src/app/shared/autocomplete/doctor-autocomplete-field.component';
+import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede-autocomplete-field.component';
 
 @Component({
   selector: 'app-calendarios',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule, DatePickerFieldComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    DatePickerFieldComponent,
+    DoctorAutocompleteFieldComponent,
+    SedeAutocompleteFieldComponent,
+  ],
   templateUrl: './calendarios.component.html',
 })
 export class CalendariosComponent {
@@ -21,7 +30,7 @@ export class CalendariosComponent {
   isLoading = false;
 
   get availableCount(): number {
-    return this.slots?.filter(s => s.available).length ?? 0;
+    return this.slots.filter((s) => s.available).length;
   }
 
   searchForm = this.fb.group({

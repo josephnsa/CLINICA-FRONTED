@@ -7,6 +7,10 @@ import { AppointmentResponse, AppointmentStatus } from 'src/app/core/models';
 import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
 import { TimePickerFieldComponent } from 'src/app/shared/datetime/time-picker-field.component';
 import { combineDateAndTimeToLocalIso } from 'src/app/shared/datetime/datetime.utils';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
+import { DoctorAutocompleteFieldComponent } from 'src/app/shared/autocomplete/doctor-autocomplete-field.component';
+import { ServiceAutocompleteFieldComponent } from 'src/app/shared/autocomplete/service-autocomplete-field.component';
+import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede-autocomplete-field.component';
 
 @Component({
   selector: 'app-citas',
@@ -17,6 +21,10 @@ import { combineDateAndTimeToLocalIso } from 'src/app/shared/datetime/datetime.u
     MaterialModule,
     DatePickerFieldComponent,
     TimePickerFieldComponent,
+    PatientAutocompleteFieldComponent,
+    DoctorAutocompleteFieldComponent,
+    ServiceAutocompleteFieldComponent,
+    SedeAutocompleteFieldComponent,
   ],
   templateUrl: './citas.component.html',
 })

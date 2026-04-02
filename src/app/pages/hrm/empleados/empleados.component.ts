@@ -17,6 +17,8 @@ import { MatCardModule } from '@angular/material/card';
 import { HrmService } from '../../../core/services/hrm.service';
 import { Employee, EmployeeRole, EMPLOYEE_ROLES } from '../../../core/models/hrm.model';
 import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
+import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede-autocomplete-field.component';
+import { UserAutocompleteFieldComponent } from 'src/app/shared/autocomplete/user-autocomplete-field.component';
 
 @Component({
   selector: 'app-empleados',
@@ -36,6 +38,8 @@ import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
     MatTooltipModule,
     MatSnackBarModule,
     MatCardModule,
+    SedeAutocompleteFieldComponent,
+    UserAutocompleteFieldComponent,
   ],
   templateUrl: './empleados.component.html',
 })

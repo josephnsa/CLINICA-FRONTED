@@ -8,10 +8,11 @@
       <button mat-flat-button color="primary" (click)="openForm()">+ Nueva receta</button>
     </div>
     <div class="flex flex-wrap gap-3 items-center" [formGroup]="searchForm">
-      <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
-        <mat-label>Patient ID</mat-label>
-        <input matInput formControlName="patientId" placeholder="UUID del paciente" />
-      </mat-form-field>
+      <app-patient-autocomplete-field
+        class="min-w-[280px] flex-1"
+        label="Paciente"
+        [idControl]="$any(searchForm.controls.patientId)"
+      />
       <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
     </div>
   </div>
@@ -59,18 +60,19 @@
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="createForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <mat-form-field appearance="outline">
-          <mat-label>Patient ID</mat-label>
-          <input matInput formControlName="patientId" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Appointment ID</mat-label>
-          <input matInput formControlName="appointmentId" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Medication ID</mat-label>
-          <input matInput formControlName="medicationId" />
-        </mat-form-field>
+        <app-patient-autocomplete-field
+          label="Paciente"
+          [idControl]="$any(createForm.controls.patientId)"
+        />
+        <app-appointment-autocomplete-field
+          label="Cita"
+          [appointmentIdControl]="$any(createForm.controls.appointmentId)"
+          [patientId]="createForm.controls.patientId.value"
+        />
+        <app-medication-autocomplete-field
+          label="Medicamento"
+          [idControl]="$any(createForm.controls.medicationId)"
+        />
         <mat-form-field appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input matInput type="number" formControlName="quantity" />

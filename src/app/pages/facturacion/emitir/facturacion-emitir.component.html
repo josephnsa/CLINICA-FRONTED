@@ -12,15 +12,10 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Paciente (ID simulado)</mat-label>
-          <input matInput formControlName="patientId" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Nombre de paciente (solo visual)</mat-label>
-          <input matInput formControlName="patientName" />
-        </mat-form-field>
+        <app-patient-autocomplete-field
+          label="Paciente"
+          [idControl]="$any(invoiceForm.controls.patientId)"
+        />
 
         <mat-form-field appearance="outline">
           <mat-label>Tipo de comprobante</mat-label>

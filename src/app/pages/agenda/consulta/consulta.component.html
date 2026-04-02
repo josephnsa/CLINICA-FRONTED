@@ -5,10 +5,11 @@
       <p class="text-sm text-gray-500">Busca citas por paciente y gestiona el flujo de atencion.</p>
     </div>
     <div class="flex flex-wrap gap-3 items-center" [formGroup]="searchForm">
-      <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
-        <mat-label>Patient ID</mat-label>
-        <input matInput formControlName="patientId" />
-      </mat-form-field>
+      <app-patient-autocomplete-field
+        class="min-w-[280px] flex-1"
+        label="Paciente"
+        [idControl]="$any(searchForm.controls.patientId)"
+      />
       <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
     </div>
   </div>

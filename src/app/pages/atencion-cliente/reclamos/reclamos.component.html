@@ -18,10 +18,10 @@
       <p class="text-sm text-gray-500 mb-4">Completa los datos para iniciar el seguimiento del caso.</p>
       <form [formGroup]="createForm" class="space-y-4">
 
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>ID del Paciente</mat-label>
-          <input matInput formControlName="patientId" placeholder="UUID del paciente" />
-        </mat-form-field>
+        <app-patient-autocomplete-field
+          label="Paciente"
+          [idControl]="$any(createForm.controls.patientId)"
+        />
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="outline" class="w-full">

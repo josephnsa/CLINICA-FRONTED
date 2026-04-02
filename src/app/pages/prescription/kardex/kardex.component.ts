@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { PrescriptionService } from 'src/app/core/services/prescription.service';
 import { KardexEntry } from 'src/app/core/models';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
 
 @Component({
   selector: 'app-kardex',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, PatientAutocompleteFieldComponent],
   templateUrl: './kardex.component.html',
 })
 export class KardexComponent {

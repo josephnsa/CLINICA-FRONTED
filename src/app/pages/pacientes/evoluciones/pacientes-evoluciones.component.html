@@ -75,10 +75,11 @@
       <mat-card-content>
         <form [formGroup]="evolucionForm" class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
   
-  <mat-form-field appearance="outline">
-    <mat-label>Appointment ID</mat-label>
-    <input matInput formControlName="appointmentId" placeholder="UUID de la cita" />
-  </mat-form-field>
+  <app-appointment-autocomplete-field
+    label="Cita"
+    [appointmentIdControl]="$any(evolucionForm.controls.appointmentId)"
+    [patientId]="selectedPatient ? selectedPatient.id : null"
+  />
 
   <mat-form-field appearance="outline">
     <mat-label>Código CIE-10</mat-label>

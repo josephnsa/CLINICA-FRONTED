@@ -9,13 +9,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CustomerServiceService } from '../../../core/services/customer-service.service';
 import { MatCardModule } from '@angular/material/card';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
+import { AppointmentAutocompleteFieldComponent } from 'src/app/shared/autocomplete/appointment-autocomplete-field.component';
 @Component({
   selector: 'app-encuestas',
   standalone: true,
   imports: [
     CommonModule, RouterModule, ReactiveFormsModule,
     MatButtonModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatSnackBarModule,MatCardModule,
+    MatInputModule, MatSnackBarModule, MatCardModule,
+    PatientAutocompleteFieldComponent,
+    AppointmentAutocompleteFieldComponent,
   ],
   templateUrl: './encuestas.component.html',
 })

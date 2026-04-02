@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { AgendaService } from 'src/app/core/services/agenda.service';
 import { AppointmentResponse } from 'src/app/core/models';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
 
 @Component({
   selector: 'app-consulta',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, PatientAutocompleteFieldComponent],
   templateUrl: './consulta.component.html',
 })
 export class ConsultaComponent {

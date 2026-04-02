@@ -9,10 +9,10 @@
   <mat-card class="!shadow-sm">
     <mat-card-content class="!pt-6">
       <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <mat-form-field appearance="outline">
-          <mat-label>Sede ID</mat-label>
-          <input matInput formControlName="sedeId" placeholder="Ej. sede-centro" />
-        </mat-form-field>
+        <app-sede-autocomplete-field
+          label="Sede"
+          [idControl]="$any(filterForm.controls.sedeId)"
+        />
         <app-date-picker-field label="Fecha inicio" [control]="startDateCtrl" />
         <app-date-picker-field label="Fecha fin" [control]="endDateCtrl" />
       </form>

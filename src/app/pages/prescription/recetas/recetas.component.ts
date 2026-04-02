@@ -4,11 +4,21 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { PrescriptionService } from 'src/app/core/services/prescription.service';
 import { PrescriptionResponse } from 'src/app/core/models';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
+import { AppointmentAutocompleteFieldComponent } from 'src/app/shared/autocomplete/appointment-autocomplete-field.component';
+import { MedicationAutocompleteFieldComponent } from 'src/app/shared/autocomplete/medication-autocomplete-field.component';
 
 @Component({
   selector: 'app-recetas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    PatientAutocompleteFieldComponent,
+    AppointmentAutocompleteFieldComponent,
+    MedicationAutocompleteFieldComponent,
+  ],
   templateUrl: './recetas.component.html',
 })
 export class RecetasComponent implements OnInit {

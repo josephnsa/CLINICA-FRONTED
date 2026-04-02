@@ -7,6 +7,8 @@ import { AvailabilityRule, AvailabilityBlock } from 'src/app/core/models';
 import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
 import { TimePickerFieldComponent } from 'src/app/shared/datetime/time-picker-field.component';
 import { combineDateAndTimeToLocalIso } from 'src/app/shared/datetime/datetime.utils';
+import { DoctorAutocompleteFieldComponent } from 'src/app/shared/autocomplete/doctor-autocomplete-field.component';
+import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede-autocomplete-field.component';
 
 @Component({
   selector: 'app-disponibilidad',
@@ -17,6 +19,8 @@ import { combineDateAndTimeToLocalIso } from 'src/app/shared/datetime/datetime.u
     MaterialModule,
     DatePickerFieldComponent,
     TimePickerFieldComponent,
+    DoctorAutocompleteFieldComponent,
+    SedeAutocompleteFieldComponent,
   ],
   templateUrl: './disponibilidad.component.html',
 })

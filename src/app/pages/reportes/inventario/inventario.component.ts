@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { ReportsService } from 'src/app/core/services/reports.service';
 import { InventoryReportResponse } from 'src/app/core/models';
+import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede-autocomplete-field.component';
 
 @Component({
   selector: 'app-inventario-reporte',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, SedeAutocompleteFieldComponent],
   templateUrl: './inventario.component.html',
 })
 export class InventarioReporteComponent {

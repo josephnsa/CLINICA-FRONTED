@@ -6,11 +6,12 @@ import { ReportsService } from 'src/app/core/services/reports.service';
 import { ClinicalReportResponse } from 'src/app/core/models';
 import { DatePickerFieldComponent } from 'src/app/shared/datetime/date-picker-field.component';
 import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
+import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede-autocomplete-field.component';
 
 @Component({
   selector: 'app-clinicos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule, DatePickerFieldComponent],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, DatePickerFieldComponent, SedeAutocompleteFieldComponent],
   templateUrl: './clinicos.component.html',
 })
 export class ClinicosComponent {

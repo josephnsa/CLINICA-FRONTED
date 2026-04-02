@@ -6,11 +6,12 @@ import { ExamService } from 'src/app/core/services/exam.service';
 import { PatientService } from 'src/app/core/services/patient.service';
 import { CatalogService } from 'src/app/core/services/catalog.service';
 import { ExamOrder, CreateExamOrderDto, ApiResponse, PageResponse, Patient, Doctor, ClinicalService } from 'src/app/core/models';
+import { AppointmentAutocompleteFieldComponent } from 'src/app/shared/autocomplete/appointment-autocomplete-field.component';
 
 @Component({
   selector: 'app-ordenes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, AppointmentAutocompleteFieldComponent],
   templateUrl: './ordenes.component.html',
 })
 export class OrdenesComponent implements OnInit {

@@ -2,14 +2,14 @@
   <h2 class="text-xl font-semibold">Calendarios por Especialidad</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-4 gap-3" [formGroup]="searchForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Doctor ID</mat-label>
-      <input matInput formControlName="doctorId" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Sede ID</mat-label>
-      <input matInput formControlName="sedeId" />
-    </mat-form-field>
+    <app-doctor-autocomplete-field
+      label="Doctor"
+      [idControl]="$any(searchForm.controls.doctorId)"
+    />
+    <app-sede-autocomplete-field
+      label="Sede"
+      [idControl]="$any(searchForm.controls.sedeId)"
+    />
     <app-date-picker-field
       class="md:col-span-2"
       label="Fecha"

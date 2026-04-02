@@ -30,14 +30,14 @@
           <mat-label>Apellidos</mat-label>
           <input matInput formControlName="lastName" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>ID usuario del sistema</mat-label>
-          <input matInput formControlName="userId" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>ID sede</mat-label>
-          <input matInput formControlName="sedeId" />
-        </mat-form-field>
+        <app-user-autocomplete-field
+          label="Usuario del sistema"
+          [idControl]="$any(form.controls.userId)"
+        />
+        <app-sede-autocomplete-field
+          label="Sede"
+          [idControl]="$any(form.controls.sedeId)"
+        />
         <mat-form-field appearance="outline">
           <mat-label>Cargo</mat-label>
           <mat-select formControlName="role">

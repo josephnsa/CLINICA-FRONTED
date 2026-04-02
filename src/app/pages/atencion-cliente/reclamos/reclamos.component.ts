@@ -11,6 +11,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { CustomerServiceService } from '../../../core/services/customer-service.service';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
 import {
   Complaint, ComplaintType, ComplaintPriority,
   COMPLAINT_TYPE_LABELS, COMPLAINT_PRIORITY_LABELS, COMPLAINT_STATUS_LABELS
@@ -24,6 +25,7 @@ import {
     MatButtonModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatSnackBarModule,
     MatTooltipModule, MatCardModule,
+    PatientAutocompleteFieldComponent,
   ],
   templateUrl: './reclamos.component.html',
 })

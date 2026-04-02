@@ -4,11 +4,19 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { AgendaService } from 'src/app/core/services/agenda.service';
 import { TriageResponse } from 'src/app/core/models';
+import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
+import { AppointmentAutocompleteFieldComponent } from 'src/app/shared/autocomplete/appointment-autocomplete-field.component';
 
 @Component({
   selector: 'app-triaje',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    PatientAutocompleteFieldComponent,
+    AppointmentAutocompleteFieldComponent,
+  ],
   templateUrl: './triaje.component.html',
 })
 export class TriajeComponent {
