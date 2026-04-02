@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
@@ -31,7 +31,7 @@ import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede
   ],
   templateUrl: './citas.component.html',
 })
-export class CitasComponent {
+export class CitasComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly agendaService = inject(AgendaService);
   private readonly patientService = inject(PatientService);
@@ -67,10 +67,24 @@ export class CitasComponent {
     reason:        ['', Validators.required],
   });
 
+  ngOnInit(): void {
+    this.loadAllAppointments();
+  }
+
   onSearch(): void {
     const patientId = this.searchForm.get('patientId')?.value || '';
     if (!patientId) return;
     this.agendaService.getAppointmentsByPatient(patientId).subscribe({
+      next: (resp) => {
+        this.appointments = resp.data;
+        this.hydrateMissingNames();
+      },
+      error: () => {},
+    });
+  }
+
+  private loadAllAppointments(): void {
+    this.agendaService.getAllAppointments().subscribe({
       next: (resp) => {
         this.appointments = resp.data;
         this.hydrateMissingNames();
@@ -131,6 +145,9 @@ export class CitasComponent {
         this.showForm = false;
         this.appointments = [resp.data, ...this.appointments];
         this.hydrateMissingNames();
+        this.snackBar.open(`Cita creada con estado: ${resp.data.status}`, 'Cerrar', {
+          duration: 3500,
+        });
       },
       error: (err) => {
         this.isSaving = false;
@@ -155,6 +172,22 @@ export class CitasComponent {
         this.hydrateMissingNames();
       },
       error: () => {},
+    });
+  }
+
+  confirmAppointment(id: string): void {
+    this.agendaService.confirmAppointment(id).subscribe({
+      next: (resp) => {
+        this.appointments = this.appointments.map((a) =>
+          a.id === id ? resp.data : a
+        );
+        this.hydrateMissingNames();
+        this.snackBar.open('Cita confirmada.', 'Cerrar', { duration: 3000 });
+      },
+      error: (err) => {
+        const message = err?.error?.message || 'No se pudo confirmar la cita.';
+        this.snackBar.open(message, 'Cerrar', { duration: 5000 });
+      },
     });
   }
 

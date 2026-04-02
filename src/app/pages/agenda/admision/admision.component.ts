@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { AgendaService } from 'src/app/core/services/agenda.service';
 import { AppointmentResponse } from 'src/app/core/models';
+import { PatientService } from 'src/app/core/services/patient.service';
 import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/patient-autocomplete-field.component';
 
 @Component({
@@ -12,16 +13,22 @@ import { PatientAutocompleteFieldComponent } from 'src/app/shared/autocomplete/p
   imports: [CommonModule, ReactiveFormsModule, MaterialModule, PatientAutocompleteFieldComponent],
   templateUrl: './admision.component.html',
 })
-export class AdmisionComponent {
+export class AdmisionComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly agendaService = inject(AgendaService);
+  private readonly patientService = inject(PatientService);
 
   appointments: AppointmentResponse[] = [];
+  private readonly patientNameById = new Map<string, string>();
   displayedColumns = ['patientName', 'startTime', 'status', 'actions'];
 
   searchForm = this.fb.group({
     patientId: ['', Validators.required],
   });
+
+  ngOnInit(): void {
+    this.loadAllAppointments();
+  }
 
   onSearch(): void {
     const patientId = this.searchForm.get('patientId')?.value || '';
@@ -29,8 +36,19 @@ export class AdmisionComponent {
     this.agendaService.getAppointmentsByPatient(patientId).subscribe({
       next: (resp) => {
         this.appointments = resp.data.filter(a =>
-          a.status === 'CONFIRMED' || a.status === 'CHECKED_IN'
+          a.status === 'PENDING' || a.status === 'CONFIRMED' || a.status === 'CHECKED_IN'
         );
+        this.hydrateMissingPatientNames();
+      },
+      error: () => {},
+    });
+  }
+
+  private loadAllAppointments(): void {
+    this.agendaService.getAllAppointments().subscribe({
+      next: (resp) => {
+        this.appointments = resp.data;
+        this.hydrateMissingPatientNames();
       },
       error: () => {},
     });
@@ -42,8 +60,34 @@ export class AdmisionComponent {
         this.appointments = this.appointments.map(a =>
           a.id === id ? resp.data : a
         );
+        this.hydrateMissingPatientNames();
       },
       error: () => {},
     });
+  }
+
+  displayPatientName(row: AppointmentResponse): string {
+    const direct = row.patientName?.trim();
+    if (direct) return direct;
+    return this.patientNameById.get(row.patientId) ?? '—';
+  }
+
+  private hydrateMissingPatientNames(): void {
+    const missingPatientIds = Array.from(
+      new Set(
+        this.appointments
+          .filter((a) => !a.patientName?.trim() && !!a.patientId)
+          .map((a) => a.patientId)
+      )
+    ).filter((id) => !this.patientNameById.has(id));
+
+    for (const patientId of missingPatientIds) {
+      this.patientService.getPatientById(patientId).subscribe({
+        next: (resp) => {
+          this.patientNameById.set(patientId, `${resp.data.firstName} ${resp.data.lastName}`.trim());
+        },
+        error: () => {},
+      });
+    }
   }
 }

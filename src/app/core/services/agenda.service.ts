@@ -35,6 +35,16 @@ export class AgendaService {
     );
   }
 
+  getAllAppointments(params?: { page?: number; size?: number }) {
+    let httpParams = new HttpParams()
+      .set('page', String(params?.page ?? 0))
+      .set('size', String(params?.size ?? 200));
+    return this.http.get<ApiResponse<AppointmentResponse[]>>(
+      `${this.baseUrl}/appointments`,
+      { params: httpParams }
+    );
+  }
+
   cancelAppointment(id: string, reason: string) {
     return this.http.delete<ApiResponse<AppointmentResponse>>(
       `${this.baseUrl}/appointments/${id}`,
@@ -45,6 +55,12 @@ export class AgendaService {
   rescheduleAppointment(id: string, body: RescheduleAppointmentRequest) {
     return this.http.patch<ApiResponse<AppointmentResponse>>(
       `${this.baseUrl}/appointments/${id}/reschedule`, body
+    );
+  }
+
+  confirmAppointment(id: string) {
+    return this.http.patch<ApiResponse<AppointmentResponse>>(
+      `${this.baseUrl}/appointments/${id}/confirm`, {}
     );
   }
 

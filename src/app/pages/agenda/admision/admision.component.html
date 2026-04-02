@@ -13,7 +13,7 @@
   <table mat-table [dataSource]="appointments" class="w-full">
     <ng-container matColumnDef="patientName">
       <th mat-header-cell *matHeaderCellDef>Paciente</th>
-      <td mat-cell *matCellDef="let row">{{ row.patientName }}</td>
+      <td mat-cell *matCellDef="let row">{{ displayPatientName(row) }}</td>
     </ng-container>
     <ng-container matColumnDef="startTime">
       <th mat-header-cell *matHeaderCellDef>Hora</th>
@@ -31,6 +31,9 @@
           (click)="checkIn(row.id)">
           Check-in
         </button>
+        <span *ngIf="row.status === 'PENDING'" class="text-amber-700 text-sm">
+          Pendiente de confirmación
+        </span>
         <span *ngIf="row.status === 'CHECKED_IN'" class="text-green-600 font-medium">
           ✓ Check-in realizado
         </span>
