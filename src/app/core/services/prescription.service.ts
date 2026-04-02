@@ -37,6 +37,13 @@ export class PrescriptionService {
     );
   }
 
+  cancelPrescription(id: string) {
+    return this.http.patch<ApiResponse<PrescriptionResponse>>(
+      `${this.baseUrl}/prescriptions/${id}/cancel`,
+      {}
+    );
+  }
+
   // ── Kardex ─────────────────────────────────────────
   getKardex(patientId: string) {
     return this.http.get<ApiResponse<KardexEntry[]>>(

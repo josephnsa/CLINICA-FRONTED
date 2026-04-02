@@ -19,7 +19,7 @@ export class KardexComponent {
   kardex: KardexEntry[] = [];
   isLoading = false;
 
-  displayedColumns = ['medicationName', 'dosage', 'frequency', 'duration', 'status', 'createdAt'];
+  displayedColumns = ['medicationName', 'action', 'quantity', 'recordedAt'];
 
   searchForm = this.fb.group({
     patientId: ['', Validators.required],
