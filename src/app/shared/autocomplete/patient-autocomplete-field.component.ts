@@ -102,6 +102,10 @@ export class PatientAutocompleteFieldComponent implements OnInit, OnDestroy {
         map((v) => (typeof v === 'string' ? v.trim() : '')),
         distinctUntilChanged(),
         tap((term) => {
+          // Si el usuario está escribiendo texto libre, aún no hay selección válida.
+          if (term.length > 0) {
+            this.idControl.setValue('', { emitEvent: false });
+          }
           if (term.length < this.minChars) {
             this.options = [];
           }
@@ -119,6 +123,12 @@ export class PatientAutocompleteFieldComponent implements OnInit, OnDestroy {
       )
       .subscribe((rows) => {
         this.options = rows;
+        // Mejora UX: si la búsqueda devuelve un único paciente, selección automática.
+        if (rows.length === 1) {
+          const p = rows[0];
+          this.idControl.setValue(p.id, { emitEvent: false });
+          this.displayCtrl.setValue(p, { emitEvent: false });
+        }
       });
   }
 
