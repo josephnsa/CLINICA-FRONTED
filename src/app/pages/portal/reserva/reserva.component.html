@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-gray-50">
+
+  <!-- NAVBAR -->
+  <div class="bg-indigo-600 text-white px-6 py-4 flex items-center gap-3 shadow">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon class="text-white">arrow_back</mat-icon>
+    </button>
+    <div>
+      <p class="font-bold text-lg leading-tight">Reservar cita</p>
+      @if (specialty()) {
+        <p class="text-xs opacity-80">{{ specialty() }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto p-6 space-y-5">
+
+    <mat-card class="!p-6 !rounded-2xl !shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Selecciona fecha y horario</h2>
+
+      <div class="space-y-4">
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="form.controls.date"
+            [min]="today" readonly (click)="picker.open()" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        @if (loading()) {
+          <div class="flex justify-center py-4">
+            <mat-icon class="animate-spin text-indigo-400">refresh</mat-icon>
+          </div>
+        } @else if (slots().length > 0) {
+          <div class="space-y-2">
+            <p class="text-sm font-medium text-gray-600">Horarios disponibles</p>
+            <div class="grid grid-cols-3 gap-2">
+              @for (slot of slots(); track slot.id) {
+                <button type="button"
+                  class="py-2 px-3 rounded-lg border-2 text-sm font-medium transition-all"
+                  [class]="form.controls.slotId.value === slot.id
+                    ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                    : 'border-gray-200 hover:border-indigo-300 text-gray-700'"
+                  (click)="form.controls.slotId.setValue(slot.id)">
+                  {{ slot.startTime | date:'HH:mm' }}
+                </button>
+              }
+            </div>
+          </div>
+        } @else if (form.controls.date.value) {
+          <div class="text-center py-6 text-gray-400 border border-dashed rounded-xl">
+            <mat-icon>event_busy</mat-icon>
+            <p class="text-sm mt-1">No hay horarios disponibles para esta fecha</p>
+          </div>
+        }
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Notas adicionales (opcional)</mat-label>
+          <textarea matInput [formControl]="form.controls.notes" rows="3"
+            placeholder="Síntomas, motivo de consulta..."></textarea>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="w-full !py-3"
+          [disabled]="form.invalid || saving()" (click)="submit()">
+          <mat-icon>check_circle</mat-icon>
+          {{ saving() ? 'Reservando...' : 'Confirmar reserva' }}
+        </button>
+
+      </div>
+    </mat-card>
+
+  </div>
+</div>

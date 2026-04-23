@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../models';
@@ -24,4 +24,30 @@ export class CustomerServiceService {
     return this.http.post<ApiResponse<SatisfactionSurvey>>(`${this.base}/surveys`, body)
       .pipe(map(r => r.data));
   }
+  getComplaints(filters?: { patientId?: string; sedeId?: string; status?: string }): Observable<Complaint[]> {
+  let params = new HttpParams();
+  if (filters?.patientId) params = params.set('patientId', filters.patientId);
+  if (filters?.sedeId)    params = params.set('sedeId', filters.sedeId);
+  if (filters?.status)    params = params.set('status', filters.status);
+
+  return this.http
+    .get<ApiResponse<Complaint[]>>(`${this.base}/complaints`, { params })
+    .pipe(map(r => r.data));
+}
+
+getComplaint(id: string): Observable<Complaint> {
+  return this.http
+    .get<ApiResponse<Complaint>>(`${this.base}/complaints/${id}`)
+    .pipe(map(r => r.data));
+}
+
+getSurveys(filters?: { patientId?: string; appointmentId?: string }): Observable<SatisfactionSurvey[]> {
+  let params = new HttpParams();
+  if (filters?.patientId)     params = params.set('patientId', filters.patientId);
+  if (filters?.appointmentId) params = params.set('appointmentId', filters.appointmentId);
+
+  return this.http
+    .get<ApiResponse<SatisfactionSurvey[]>>(`${this.base}/surveys`, { params })
+    .pipe(map(r => r.data));
+}
 }

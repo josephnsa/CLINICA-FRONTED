@@ -21,6 +21,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { PortalInterceptor } from './core/interceptors/portal.interceptor';
 
 // icons
 import { TablerIconsModule } from 'angular-tabler-icons';
@@ -69,6 +70,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: PortalInterceptor,
       multi: true,
     },
     {

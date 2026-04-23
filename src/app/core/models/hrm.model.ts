@@ -69,3 +69,35 @@ export const EMPLOYEE_ROLES: EmployeeRole[] = [
   'CAJERO',
   'RECEPCIONISTA',
 ];
+
+export interface AttendanceRecord {
+  id: string;
+  employeeId: string;
+  sedeId: string;
+  date: string;
+  checkIn: string;
+  checkOut?: string;
+  minutesWorked?: number;
+  status: 'PRESENT' | 'ABSENT' | 'LATE' | 'EXCUSED';
+  notes?: string;
+}
+
+export interface CheckInRequest {
+  employeeId: string;
+  sedeId: string;
+}
+
+export interface CheckOutRequest {
+  employeeId: string;
+}
+
+export interface ProductivityReport {
+  employeeId: string;
+  employeeName: string;
+  totalDays: number;
+  presentDays: number;
+  absentDays: number;
+  lateDays: number;
+  totalMinutesWorked: number;
+  appointmentsAttended?: number;
+}

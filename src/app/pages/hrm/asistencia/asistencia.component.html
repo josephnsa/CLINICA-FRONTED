@@ -1,3 +1,83 @@
-<div class="p-6">
-  <h1>Horarios</h1>
+<div class="flex flex-col gap-6">
+  <h2 class="text-xl font-semibold">Control de Asistencia</h2>
+
+  <mat-card>
+    <mat-card-title class="p-4">Registrar entrada / salida</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="checkInForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Employee ID</mat-label>
+          <input matInput formControlName="employeeId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Sede ID</mat-label>
+          <input matInput formControlName="sedeId" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end" class="gap-2">
+      <button mat-stroked-button color="primary" (click)="doCheckIn()">Registrar entrada</button>
+      <button mat-flat-button color="primary" (click)="doCheckOut()">Registrar salida</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title class="p-4">Ver asistencia</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Employee ID</mat-label>
+          <input matInput formControlName="employeeId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Desde</mat-label>
+          <input matInput formControlName="from" placeholder="YYYY-MM-DD" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hasta</mat-label>
+          <input matInput formControlName="to" placeholder="YYYY-MM-DD" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" (click)="loadAttendance()" [disabled]="isLoading">
+        Buscar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <table mat-table [dataSource]="attendance" class="w-full">
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let row">{{ row.date | date:'dd/MM/yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="checkIn">
+      <th mat-header-cell *matHeaderCellDef>Entrada</th>
+      <td mat-cell *matCellDef="let row">{{ row.checkIn | date:'HH:mm' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="checkOut">
+      <th mat-header-cell *matHeaderCellDef>Salida</th>
+      <td mat-cell *matCellDef="let row">{{ row.checkOut ? (row.checkOut | date:'HH:mm') : '—' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="minutesWorked">
+      <th mat-header-cell *matHeaderCellDef>Minutos</th>
+      <td mat-cell *matCellDef="let row">{{ row.minutesWorked ?? '—' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let row">
+        <span class="text-sm px-2 py-1 rounded"
+          [ngClass]="{
+            'bg-green-100 text-green-700': row.status === 'PRESENT',
+            'bg-yellow-100 text-yellow-700': row.status === 'LATE',
+            'bg-red-100 text-red-700': row.status === 'ABSENT',
+            'bg-blue-100 text-blue-700': row.status === 'EXCUSED'
+          }">
+          {{ row.status }}
+        </span>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
 </div>

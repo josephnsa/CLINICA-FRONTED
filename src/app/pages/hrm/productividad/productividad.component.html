@@ -1,3 +1,65 @@
-<div class="p-6">
-  <h1>Horarios</h1>
+<div class="flex flex-col gap-4">
+  <h2 class="text-xl font-semibold">Productividad</h2>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Employee ID</mat-label>
+          <input matInput formControlName="employeeId" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Desde</mat-label>
+          <input matInput formControlName="from" placeholder="YYYY-MM-DD" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hasta</mat-label>
+          <input matInput formControlName="to" placeholder="YYYY-MM-DD" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" (click)="generate()" [disabled]="isLoading">
+        {{ isLoading ? 'Generando...' : 'Generar reporte' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div *ngIf="report" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <mat-card class="text-center">
+      <mat-card-content>
+        <div class="text-3xl font-bold text-blue-600">{{ report.totalDays }}</div>
+        <div class="text-sm text-gray-500 mt-1">Total días</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="text-center">
+      <mat-card-content>
+        <div class="text-3xl font-bold text-green-600">{{ report.presentDays }}</div>
+        <div class="text-sm text-gray-500 mt-1">Días presentes</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="text-center">
+      <mat-card-content>
+        <div class="text-3xl font-bold text-red-600">{{ report.absentDays }}</div>
+        <div class="text-sm text-gray-500 mt-1">Ausencias</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="text-center">
+      <mat-card-content>
+        <div class="text-3xl font-bold text-yellow-600">{{ report.lateDays }}</div>
+        <div class="text-sm text-gray-500 mt-1">Tardanzas</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card *ngIf="report">
+    <mat-card-content class="p-4">
+      <p class="text-gray-700">
+        Total minutos trabajados: <strong>{{ report.totalMinutesWorked }}</strong>
+      </p>
+      <p class="text-gray-700" *ngIf="report.appointmentsAttended !== undefined">
+        Citas atendidas: <strong>{{ report.appointmentsAttended }}</strong>
+      </p>
+    </mat-card-content>
+  </mat-card>
 </div>

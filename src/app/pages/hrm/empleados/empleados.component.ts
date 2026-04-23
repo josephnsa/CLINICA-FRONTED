@@ -14,6 +14,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
+import { map } from 'rxjs/operators';
 import { HrmService } from '../../../core/services/hrm.service';
 import { Employee, EmployeeRole, EMPLOYEE_ROLES } from '../../../core/models/hrm.model';
 import { formatDateToYmd } from 'src/app/shared/datetime/datetime.utils';
@@ -78,7 +79,9 @@ export class EmpleadosComponent implements OnInit {
 
   loadEmployees() {
     this.loading.set(true);
-    this.hrmService.getEmployees().subscribe({
+    this.hrmService.getEmployees().pipe(
+      map(response => response.data)
+    ).subscribe({
       next: (data) => { this.employees.set(data); this.loading.set(false); },
       error: () => { this.snack.open('Error al cargar empleados', 'Cerrar', { duration: 3000 }); this.loading.set(false); },
     });
@@ -121,7 +124,7 @@ export class EmpleadosComponent implements OnInit {
   }
 
   verHorarios(employee: Employee) {
-    this.router.navigate(['/hrm/horarios', employee.id]);
+    this.router.navigate(['/rrhh/horarios', employee.id]);
   }
 
   deactivate(employee: Employee) {

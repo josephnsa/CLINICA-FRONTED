@@ -217,6 +217,8 @@ export class FullComponent implements OnInit {
       'seguimiento/encuestas': 'atencion-cliente/encuestas',
       'hrm/empleados': 'rrhh/empleados',
       'hrm/horarios': 'rrhh/horarios',
+      'hrm/asistencia': 'rrhh/asistencia',
+      'hrm/productividad': 'rrhh/productividad',
     };
 
     return routeAliases[cleanRoute] ?? cleanRoute;

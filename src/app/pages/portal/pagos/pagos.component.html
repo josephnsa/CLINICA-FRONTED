@@ -1,0 +1,27 @@
+<div class="min-h-screen bg-gray-50">
+
+  <div class="bg-indigo-600 text-white px-6 py-4 flex items-center justify-between shadow">
+    <div class="flex items-center gap-2">
+      <mat-icon>local_hospital</mat-icon>
+      <span class="font-bold text-lg">Portal del Paciente</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-sm opacity-80">{{ patient?.fullName }}</span>
+      <button mat-icon-button (click)="logout()">
+        <mat-icon class="text-white">logout</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto p-6">
+    <div class="text-center py-20 text-gray-400 border border-dashed rounded-2xl bg-white">
+      <mat-icon class="!text-6xl text-indigo-300">payments</mat-icon>
+      <p class="mt-4 text-lg font-semibold text-gray-600">Pagos online</p>
+      <p class="text-sm mt-2 text-gray-400 max-w-xs mx-auto">
+        Esta sección estará disponible próximamente.<br>
+        Pronto podrás ver y gestionar los pagos de tus citas desde aquí.
+      </p>
+    </div>
+  </div>
+
+</div>

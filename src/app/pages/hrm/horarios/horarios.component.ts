@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { map } from 'rxjs/operators';
 import { HrmService } from '../../../core/services/hrm.service';
 import { TimePickerFieldComponent } from 'src/app/shared/datetime/time-picker-field.component';
 import { EmployeeSchedule, DAY_NAMES } from '../../../core/models/hrm.model';
@@ -59,7 +60,9 @@ export class HorariosComponent implements OnInit {
 
   loadSchedules() {
     this.loading.set(true);
-    this.hrmService.getSchedules(this.employeeId()).subscribe({
+    this.hrmService.getSchedules(this.employeeId()).pipe(
+      map(response => response.data)
+    ).subscribe({
       next: (data) => { this.schedules.set(data); this.loading.set(false); },
       error: () => { this.snack.open('Error al cargar horarios', 'Cerrar', { duration: 3000 }); this.loading.set(false); },
     });

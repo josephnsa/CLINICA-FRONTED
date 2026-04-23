@@ -9,37 +9,25 @@ export const HRM_ROUTES: Routes = [
   {
     path: 'empleados',
     loadComponent: () =>
-      import('./empleados/empleados.component').then((m) => m.EmpleadosComponent),
+      import('./empleados/empleados.component').then(m => m.EmpleadosComponent),
     title: 'Ficha de empleado',
   },
   {
-    path: 'horarios/:id',
+    path: 'horarios',
     loadComponent: () =>
-      import('./horarios/horarios.component').then((m) => m.HorariosComponent),
+      import('./horarios/horarios.component').then(m => m.HorariosComponent),
     title: 'Horarios y guardias',
   },
   {
-  path: 'horarios',
-  loadComponent: () =>
-    import('./horarios/horarios.component').then((m) => m.HorariosComponent),
-  title: 'Horarios y guardias',
-},
-{
-  path: 'horarios/:id',
-  loadComponent: () =>
-    import('./horarios/horarios.component').then((m) => m.HorariosComponent),
-  title: 'Horarios y guardias',
-},
-  /*{
     path: 'asistencia',
     loadComponent: () =>
-      import('./asistencia/asistencia.component').then((m) => m.AsistenciaComponent),
+      import('./asistencia/asistencia.component').then(m => m.AsistenciaComponent),
     title: 'Control de asistencia',
   },
   {
     path: 'productividad',
     loadComponent: () =>
-      import('./productividad/productividad.component').then((m) => m.ProductividadComponent),
+      import('./productividad/productividad.component').then(m => m.ProductividadComponent),
     title: 'Productividad',
-  },*/
+  },
 ];

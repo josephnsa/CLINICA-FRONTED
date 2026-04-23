@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 mb-4">
+        <mat-icon class="!text-white !text-3xl">local_hospital</mat-icon>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Portal del Paciente</h1>
+      <p class="text-sm text-gray-500 mt-1">Accede a tus citas, exámenes y más</p>
+    </div>
+
+    <mat-card class="!p-0 !rounded-2xl !shadow-lg overflow-hidden">
+      <mat-tab-group mat-stretch-tabs animationDuration="200ms">
+
+        <!-- LOGIN -->
+        <mat-tab label="Iniciar sesión">
+          <div class="p-6 space-y-4">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Correo electrónico</mat-label>
+              <input matInput type="email" [formControl]="loginForm.controls.email" />
+              <mat-icon matPrefix class="mr-2 text-gray-400">email</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Contraseña</mat-label>
+              <input matInput [type]="hidePass() ? 'password' : 'text'"
+                [formControl]="loginForm.controls.password" />
+              <mat-icon matPrefix class="mr-2 text-gray-400">lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hidePass.set(!hidePass())">
+                <mat-icon>{{ hidePass() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" class="w-full !py-3"
+              [disabled]="loginForm.invalid || loading()" (click)="submitLogin()">
+              {{ loading() ? 'Ingresando...' : 'Ingresar' }}
+            </button>
+          </div>
+        </mat-tab>
+
+        <!-- REGISTRO -->
+        <mat-tab label="Crear cuenta">
+          <div class="p-6 space-y-4">
+            <p class="text-sm text-gray-500 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+              <mat-icon class="!text-base align-middle text-blue-500">info</mat-icon>
+              Usa el email registrado en la clínica para vincular tu cuenta.
+            </p>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Correo electrónico</mat-label>
+              <input matInput type="email" [formControl]="registerForm.controls.email" />
+              <mat-icon matPrefix class="mr-2 text-gray-400">email</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Contraseña</mat-label>
+              <input matInput [type]="hidePass() ? 'password' : 'text'"
+                [formControl]="registerForm.controls.password" />
+              <mat-icon matPrefix class="mr-2 text-gray-400">lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hidePass.set(!hidePass())">
+                <mat-icon>{{ hidePass() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-hint>Mínimo 8 caracteres</mat-hint>
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" class="w-full !py-3"
+              [disabled]="registerForm.invalid || loading()" (click)="submitRegister()">
+              {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+            </button>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card>
+
+  </div>
+</div>

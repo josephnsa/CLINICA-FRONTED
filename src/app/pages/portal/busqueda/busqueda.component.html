@@ -1,0 +1,83 @@
+<div class="min-h-screen bg-gray-50">
+
+  <!-- NAVBAR PORTAL -->
+  <div class="bg-indigo-600 text-white px-6 py-4 flex items-center justify-between shadow">
+    <div class="flex items-center gap-2">
+      <mat-icon>local_hospital</mat-icon>
+      <span class="font-bold text-lg">Portal del Paciente</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-sm opacity-80">{{ patient?.fullName }}</span>
+      <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesión">
+        <mat-icon class="text-white">logout</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto p-6 space-y-6">
+
+    <div>
+      <h2 class="text-xl font-bold text-gray-800">Búsqueda de especialistas</h2>
+      <p class="text-sm text-gray-500">Encuentra al médico que necesitas y agenda tu cita.</p>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="flex flex-col md:flex-row gap-3">
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label>Buscar médico o especialidad</mat-label>
+        <input matInput [formControl]="filterForm.controls.query" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full md:w-64">
+        <mat-label>Especialidad</mat-label>
+        <mat-select [formControl]="filterForm.controls.specialty">
+          <mat-option value="">Todas</mat-option>
+          @for (s of specialties(); track s) {
+            <mat-option [value]="s">{{ s }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- RESULTADOS -->
+    @if (loading()) {
+      <div class="flex justify-center py-10">
+        <mat-icon class="animate-spin text-indigo-400">refresh</mat-icon>
+      </div>
+    } @else if (filtered().length === 0) {
+      <div class="text-center py-16 text-gray-400 border border-dashed rounded-xl bg-white">
+        <mat-icon class="!text-5xl">search_off</mat-icon>
+        <p class="mt-2">No se encontraron especialistas</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @for (d of filtered(); track d.id) {
+          <div class="bg-white rounded-xl border shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                <mat-icon class="text-indigo-600">person</mat-icon>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-800">{{ d.doctorName }}</p>
+                <p class="text-sm text-indigo-600">{{ d.specialty }}</p>
+              </div>
+            </div>
+            @if (d.services?.length) {
+              <div class="flex flex-wrap gap-2">
+                @for (s of d.services; track s) {
+                  <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{{ s }}</span>
+                }
+              </div>
+            }
+            <button mat-flat-button color="primary" class="w-full" (click)="reservar(d)">
+              <mat-icon>calendar_month</mat-icon>
+              Reservar cita
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

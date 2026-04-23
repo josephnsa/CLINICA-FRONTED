@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-50">
+
+  <!-- NAVBAR -->
+  <div class="bg-indigo-600 text-white px-6 py-4 flex items-center justify-between shadow">
+    <div class="flex items-center gap-2">
+      <mat-icon>local_hospital</mat-icon>
+      <span class="font-bold text-lg">Portal del Paciente</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-sm opacity-80">{{ patient?.fullName }}</span>
+      <button mat-icon-button (click)="logout()">
+        <mat-icon class="text-white">logout</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto p-6 space-y-5">
+
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-bold text-gray-800">Mis citas</h2>
+        <p class="text-sm text-gray-500">Confirmaciones y recordatorios de tus citas médicas.</p>
+      </div>
+      <button mat-flat-button color="primary" (click)="nueva()">
+        <mat-icon>add</mat-icon>
+        Nueva cita
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="flex justify-center py-10">
+        <mat-icon class="animate-spin text-indigo-400">refresh</mat-icon>
+      </div>
+    } @else if (appointments().length === 0) {
+      <div class="text-center py-16 text-gray-400 border border-dashed rounded-xl bg-white">
+        <mat-icon class="!text-5xl">event_busy</mat-icon>
+        <p class="mt-2 font-medium">No tienes citas registradas</p>
+        <p class="text-xs mt-1">Busca un especialista y agenda tu primera cita.</p>
+        <button mat-stroked-button color="primary" class="mt-4" (click)="nueva()">
+          Buscar especialista
+        </button>
+      </div>
+    } @else {
+      <div class="space-y-3">
+        @for (a of appointments(); track a.id) {
+          <div class="bg-white rounded-xl border shadow-sm p-5 space-y-3 hover:shadow-md transition-shadow">
+
+            <div class="flex items-start justify-between gap-4">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-semibold text-gray-800">{{ a.doctorName }}</span>
+                  <span class="text-xs px-2 py-0.5 rounded-full font-medium" [class]="statusColor(a.status)">
+                    {{ getStatusLabel(a.status) }}
+                  </span>
+                </div>
+                <p class="text-sm text-indigo-600">{{ a.specialty }}</p>
+                <p class="text-sm text-gray-500">{{ a.serviceName }}</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-sm font-semibold text-gray-700">
+                  {{ a.startTime | date:'dd/MM/yyyy' }}
+                </p>
+                <p class="text-xs text-gray-400">
+                  {{ a.startTime | date:'HH:mm' }} hrs
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs text-gray-400 border-t pt-2">
+              <mat-icon class="!text-sm">location_on</mat-icon>
+              <span>{{ a.sedeName }}</span>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>
