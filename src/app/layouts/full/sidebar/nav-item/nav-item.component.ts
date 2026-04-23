@@ -2,7 +2,6 @@ import {
   Component,
   HostBinding,
   Input,
-  OnInit,
   OnChanges,
   Output,
   EventEmitter,
@@ -31,17 +30,21 @@ import { NavService } from 'src/app/services/nav.service';
     trigger('indicatorRotate', [
       state('collapsed', style({ transform: 'rotate(0deg)' })),
       state('expanded', style({ transform: 'rotate(180deg)' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4,0.0,0.2,1)')),
+      transition('expanded <=> collapsed', animate('250ms cubic-bezier(0.4,0.0,0.2,1)')),
     ]),
-  ]
+    trigger('childrenSlide', [
+      state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
+      state('expanded', style({ height: '*', opacity: 1, overflow: 'hidden' })),
+      transition('collapsed => expanded', animate('280ms cubic-bezier(0.4,0.0,0.2,1)')),
+      transition('expanded => collapsed', animate('220ms cubic-bezier(0.4,0.0,0.2,1)')),
+    ]),
+  ],
 })
 export class AppNavItemComponent implements OnChanges {
   @Output() toggleMobileLink: any = new EventEmitter<void>();
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  expanded: any = false;
-  disabled: any = false;
-  twoLines: any = false;
+  expanded = false;
   @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
   @Input() item: NavItem | any;
   @Input() depth: any;
@@ -63,21 +66,14 @@ export class AppNavItemComponent implements OnChanges {
   onItemSelected(item: NavItem) {
     if (!item.children || !item.children.length) {
       this.router.navigate([item.route]);
-
     }
     if (item.children && item.children.length) {
       this.expanded = !this.expanded;
+      this.ariaExpanded = this.expanded;
     }
-    //scroll
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    if (!this.expanded) {
-      if (window.innerWidth < 1024) {
-        this.notify.emit();
-      }
+    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+    if (!this.expanded && window.innerWidth < 1024) {
+      this.notify.emit();
     }
   }
 
@@ -105,5 +101,4 @@ export class AppNavItemComponent implements OnChanges {
       (child) => this.isDirectlyActive(child) || this.isChildActive(child)
     );
   }
-
 }

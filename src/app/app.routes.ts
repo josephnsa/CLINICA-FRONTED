@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './core/auth/auth.guard';
+import { MenuGuard } from './core/auth/menu.guard';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,7 @@ export const routes: Routes = [
     path: '',
     component: FullComponent,
     canActivate: [AuthGuard],
+    canActivateChild: [MenuGuard],
     children: [
       {
         path: 'dashboard',
