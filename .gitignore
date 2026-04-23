@@ -103,3 +103,33 @@ $RECYCLE.BIN/
 # ============================================================
 *.log
 logs/
+
+# ============================================================
+# GCP / CLOUD — nunca subir credenciales
+# ============================================================
+service-account*.json
+*-credentials.json
+gcp-key*.json
+*.pem
+*.key
+*.p12
+*.pfx
+.gcloudignore
+
+# Firebase (ignorar credenciales, no config pública)
+firebase-adminsdk*.json
+!firebase.json
+!.firebaserc
+
+# ============================================================
+# DOCKER
+# ============================================================
+.dockerignore
+
+# ============================================================
+# E2E / Cypress / Playwright
+# ============================================================
+/e2e/videos
+/e2e/screenshots
+/cypress/videos
+/cypress/screenshots

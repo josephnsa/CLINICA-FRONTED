@@ -147,13 +147,79 @@ El proyecto usa `@ngx-translate` con soporte para:
 
 ---
 
-## Despliegue en Netlify
+## Despliegue en Cloud Run (GCP) — Recomendado
+
+El proyecto incluye `Dockerfile` y `nginx.conf` listos para producción.
+
+### 1. Configurar la URL del backend
+
+Edita `src/environments/environment.prod.ts`:
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://salud-backend-xxxx-uc.a.run.app/api',
+};
+```
+
+### 2. Build y push con Cloud Build
+
+```bash
+gcloud auth login
+gcloud config set project pe-axelior-clinapp-dev
+
+gcloud builds submit --tag gcr.io/pe-axelior-clinapp-dev/clinica-frontend
+```
+
+### 3. Desplegar en Cloud Run
+
+```bash
+gcloud run deploy clinica-frontend \
+  --image gcr.io/pe-axelior-clinapp-dev/clinica-frontend \
+  --region us-central1 \
+  --platform managed \
+  --service-account clinica-backend-sa@pe-axelior-clinapp-dev.iam.gserviceaccount.com \
+  --allow-unauthenticated \
+  --port 8080 \
+  --project pe-axelior-clinapp-dev
+```
+
+### 4. Autorizar al frontend para invocar el backend
+
+```bash
+gcloud run services add-iam-policy-binding salud-backend \
+  --region=us-central1 \
+  --member=serviceAccount:clinica-backend-sa@pe-axelior-clinapp-dev.iam.gserviceaccount.com \
+  --role=roles/run.invoker \
+  --project=pe-axelior-clinapp-dev
+```
+
+### Arquitectura GCP
+
+```
+Usuario (navegador)
+        │
+        ▼
+┌───────────────────────────┐
+│  Cloud Run                │
+│  clinica-frontend (nginx) │  puerto 8080
+└────────────┬──────────────┘
+             │ HTTP autenticado con SA
+             ▼
+┌───────────────────────────┐
+│  Cloud Run                │
+│  salud-backend (API REST) │
+└────────────┬──────────────┘
+             │
+             ▼
+       Cloud SQL / Firestore
+```
+
+---
+
+## Despliegue en Netlify (alternativa)
 
 El proyecto incluye `netlify.toml` preconfigurado para despliegue automático.
-
-```toml
-# netlify.toml ya incluido en el repositorio
-```
 
 Solo conecta el repositorio en [netlify.com](https://netlify.com) y el despliegue se configura automáticamente.
 

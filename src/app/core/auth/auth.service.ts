@@ -39,6 +39,20 @@ export class AuthService {
       );
   }
 
+  googleLogin(idToken: string): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(`${this.baseUrl}/google/login`, { idToken }, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      })
+      .pipe(
+        tap((response: LoginResponse) => {
+          if (response.success) {
+            this.setSession(response.data);
+          }
+        })
+      );
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
