@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, DestroyRef, inject, NgZone } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
@@ -9,17 +9,23 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { LoginRequest, LoginResponse } from 'src/app/core/models';
+import { environment } from 'src/environments/environment';
+
+declare var google: any;
 
 @Component({
   selector: 'app-side-login',
   imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
   templateUrl: './side-login.component.html',
 })
-export class AppSideLoginComponent {
+export class AppSideLoginComponent implements AfterViewInit {
+  @ViewChild('googleBtn') googleBtnRef!: ElementRef;
+
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly toastr = inject(ToastrService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly ngZone = inject(NgZone);
 
   isLoading = false;
   hidePassword = true;
@@ -38,6 +44,68 @@ export class AppSideLoginComponent {
 
   get f() {
     return this.form.controls;
+  }
+
+  ngAfterViewInit(): void {
+    if (environment.googleClientId) {
+      this.waitForGoogleSdk();
+    }
+  }
+
+  private waitForGoogleSdk(): void {
+    if (typeof google !== 'undefined' && google?.accounts?.id) {
+      this.initGoogleButton();
+    } else {
+      setTimeout(() => this.waitForGoogleSdk(), 150);
+    }
+  }
+
+  private initGoogleButton(): void {
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: (response: { credential: string }) => {
+        this.ngZone.run(() => this.handleGoogleCredential(response.credential));
+      },
+    });
+    google.accounts.id.renderButton(this.googleBtnRef.nativeElement, {
+      theme: 'outline',
+      size: 'large',
+      text: 'continue_with',
+      shape: 'rectangular',
+      width: this.googleBtnRef.nativeElement.offsetWidth || 200,
+    });
+  }
+
+  private handleGoogleCredential(idToken: string): void {
+    this.isLoading = true;
+    this.authService
+      .googleLogin(idToken)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: LoginResponse) => {
+          if (!response.success) {
+            this.isLoading = false;
+            this.toastr.error(response.message ?? 'Error al iniciar sesión con Google', 'Google Sign-In');
+            return;
+          }
+          this.authService
+            .loadMenu()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.toastr.success('Bienvenido al sistema', 'Inicio de sesión');
+                this.router.navigate(['/dashboard']);
+              },
+              error: () => {
+                this.isLoading = false;
+              },
+            });
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   submit(): void {
