@@ -158,9 +158,13 @@ Edita `src/environments/environment.prod.ts`:
 ```typescript
 export const environment = {
   production: true,
-  apiUrl: 'https://salud-backend-xxxx-uc.a.run.app/api',
+  apiUrl: 'https://api.axelior.ai/api', // host del LB+IAP corporativo
 };
 ```
+
+Si tu organización bloquea `allUsers` en Cloud Run, evita usar `*.run.app` directo desde navegador.
+Usa la entrada corporativa **LB + IAP** documentada en:
+`scripts/gcp-lb-iap/README.md`.
 
 ### 2. Build y push con Cloud Build
 
