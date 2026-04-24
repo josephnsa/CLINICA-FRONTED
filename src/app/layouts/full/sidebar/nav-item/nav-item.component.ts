@@ -5,6 +5,7 @@ import {
   OnChanges,
   Output,
   EventEmitter,
+  ViewEncapsulation,
 } from '@angular/core';
 import { NavItem } from './nav-item';
 import { Router } from '@angular/router';
@@ -26,6 +27,7 @@ import { NavService } from 'src/app/services/nav.service';
   imports: [TranslateModule, TablerIconsModule, MaterialModule, CommonModule],
   templateUrl: './nav-item.component.html',
   styleUrls: [],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('indicatorRotate', [
       state('collapsed', style({ transform: 'rotate(0deg)' })),

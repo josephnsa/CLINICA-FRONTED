@@ -18,8 +18,9 @@ import { AppNavItemComponent } from './sidebar/nav-item/nav-item.component';
 import { navItems as staticNavItems } from './sidebar/sidebar-data';
 import { NavItem } from './sidebar/nav-item/nav-item';
 import { MenuItemDto } from 'src/app/core/models';
-import { AppTopstripComponent } from './top-strip/topstrip.component';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { MENU_SECTION_LAYOUT } from './menu-sections.config';
+import { normalizeMenuRoute } from 'src/app/core/utils/nav-route.util';
 
 const MOBILE_VIEW   = 'screen and (max-width: 768px)';
 const TABLET_VIEW   = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -54,7 +55,6 @@ const GROUP_ICONS: Record<string, string> = {
     NgScrollbarModule,
     TablerIconsModule,
     HeaderComponent,
-    AppTopstripComponent,
   ],
   templateUrl: './full.component.html',
   encapsulation: ViewEncapsulation.None,
@@ -117,7 +117,7 @@ export class FullComponent implements OnInit {
       complete: () => {
         this.authService.loadMenu().subscribe({
           next: () => this.buildNavItems(),
-          error: () => this.buildNavItems(), // fallback al caché local
+          error: () => this.buildNavItems(),
         });
       },
     });
@@ -189,8 +189,57 @@ export class FullComponent implements OnInit {
       }
     }
 
-    this.navItems = [...dynamicItems, ...staticNavItems];
+    this.navItems = [
+      ...this.buildSectionedNav(dynamicItems),
+      ...staticNavItems,
+    ];
     this.cdr.detectChanges();
+  }
+
+  /**
+   * Ordena los grupos del API en secciones (GENERAL, PACIENTES, …) y añade
+   * enlaces extra (Dashboard). Los grupos no clasificados van bajo "OTROS".
+   */
+  private buildSectionedNav(accordionGroups: NavItem[]): NavItem[] {
+    if (!accordionGroups.length) {
+      return [];
+    }
+
+    const byLabel = new Map<string, NavItem>();
+    for (const g of accordionGroups) {
+      if (g.displayName) {
+        byLabel.set(g.displayName, g);
+      }
+    }
+
+    const used = new Set<string>();
+    const result: NavItem[] = [];
+
+    for (const section of MENU_SECTION_LAYOUT) {
+      result.push({ navCap: section.title });
+
+      for (const extra of section.extraItems ?? []) {
+        result.push({ ...extra });
+      }
+
+      for (const label of section.groupLabels) {
+        const node = byLabel.get(label);
+        if (node) {
+          result.push(node);
+          used.add(label);
+        }
+      }
+    }
+
+    const leftovers = accordionGroups.filter(
+      (g) => !!g.displayName && !used.has(g.displayName)
+    );
+    if (leftovers.length) {
+      result.push({ navCap: 'OTROS' });
+      result.push(...leftovers);
+    }
+
+    return result;
   }
 
   /**
@@ -211,7 +260,7 @@ export class FullComponent implements OnInit {
       const navItem: NavItem = {
         displayName: item.label,
         iconName: 'tabler:point',
-        route: this.normalizeMenuRoute(item.route) ?? undefined,
+        route: normalizeMenuRoute(item.route) ?? undefined,
       };
       if (item.children && item.children.length > 0) {
         navItem.children = this.mapChildren(item.children);
@@ -219,25 +268,5 @@ export class FullComponent implements OnInit {
       }
       return navItem;
     });
-  }
-
-  private normalizeMenuRoute(route?: string | null): string | null {
-    if (!route) return null;
-    const cleanRoute = route.replace(/^\/+/, '');
-
-    const aliases: Record<string, string> = {
-      'atencion/reclamos':    'atencion-cliente/reclamos',
-      'atencion/encuestas':   'atencion-cliente/encuestas',
-      'seleccion/reclamos':   'atencion-cliente/reclamos',
-      'seleccion/encuestas':  'atencion-cliente/encuestas',
-      'seguimiento/reclamos': 'atencion-cliente/reclamos',
-      'seguimiento/encuestas':'atencion-cliente/encuestas',
-      'hrm/empleados':        'rrhh/empleados',
-      'hrm/horarios':         'rrhh/horarios',
-      'hrm/asistencia':       'rrhh/asistencia',
-      'hrm/productividad':    'rrhh/productividad',
-    };
-
-    return aliases[cleanRoute] ?? cleanRoute;
   }
 }

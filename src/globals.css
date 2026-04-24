@@ -164,3 +164,20 @@
         background-color: var(--color-light-warning) !important;
     }
 }
+
+/* Panel del buscador global (MatDialog) */
+.clinica-global-search-panel .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: transparent;
+    padding: 0;
+    box-shadow: none;
+}
+
+.clinica-global-search-panel .mat-mdc-dialog-surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible;
+}
+
+.clinica-global-search-backdrop {
+    background: rgba(0, 0, 0, 0.55);
+}
