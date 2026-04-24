@@ -56,8 +56,9 @@ export interface PortalDoctor {
   id: string;
   doctorName: string;
   specialty: string;
-  services?: string[];
+  services?: { id: string; name: string }[];  // ← objeto con id y name
   sede?: string;
+  sedeId?: string;
   consultationFee?: number;
   available?: boolean;
 }
@@ -65,12 +66,17 @@ export interface PortalSlot {
   id: string;
   startTime: string;
   endTime: string;
+  sedeId: string;
+  sedeName?: string;
 }
 
 export interface BookAppointmentRequest {
   patientId: string;
   doctorId: string;
-  slotId: string;
+  serviceId: string;
+  sedeId: string;
+  startTime: string;
+  endTime: string;
   notes?: string;
 }
 export interface PortalPayment {

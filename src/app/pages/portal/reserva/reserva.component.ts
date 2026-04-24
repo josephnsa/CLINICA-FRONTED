@@ -26,59 +26,77 @@ import { PortalSlot } from 'src/app/core/models/portal.model';
   templateUrl: './reserva.component.html',
 })
 export class ReservaComponent implements OnInit {
-  private svc   = inject(PortalService);
-  private fb    = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
+  private svc    = inject(PortalService);
+  private fb     = inject(FormBuilder);
+  private route  = inject(ActivatedRoute);
   private router = inject(Router);
   private snack  = inject(MatSnackBar);
 
-  loading  = signal(false);
-  saving   = signal(false);
-  slots    = signal<PortalSlot[]>([]);
-  patient  = this.svc.getPatient();
-  today = new Date();
+  loading      = signal(false);
+  saving       = signal(false);
+  slots        = signal<PortalSlot[]>([]);
+  selectedSlot = signal<PortalSlot | null>(null);
+  patient      = this.svc.getPatient();
+  today        = new Date();
 
   doctorId  = signal<string | null>(null);
   specialty = signal<string | null>(null);
+  serviceId = signal<string | null>(null);
+  sedeId    = signal<string | null>(null);
 
   form = this.fb.group({
-    date:   ['', Validators.required],
+    date:  ['', Validators.required],
     slotId: ['', Validators.required],
-    notes:  [''],
+    notes: [''],
   });
 
   ngOnInit() {
     this.route.queryParams.subscribe(p => {
       this.doctorId.set(p['doctorId'] ?? null);
       this.specialty.set(p['specialty'] ?? null);
+      this.serviceId.set(p['serviceId'] ?? null);
+      this.sedeId.set(p['sedeId'] ?? null);
     });
 
     this.form.controls.date.valueChanges.subscribe(date => {
-  if (date && this.doctorId()) this.loadSlots(date);
-});
+      if (date && this.doctorId()) this.loadSlots(date);
+    });
   }
 
-loadSlots(date: any) {
-  const formatted = date instanceof Date
-    ? date.toISOString().split('T')[0]
-    : new Date(date).toISOString().split('T')[0];
-  
-  this.loading.set(true);
-  this.slots.set([]);
-  this.svc.getAvailability(this.doctorId()!, formatted).subscribe({
-    next: (list) => { this.slots.set(list); this.loading.set(false); },
-    error: () => this.loading.set(false),
-  });
-}
+  loadSlots(date: any) {
+    const formatted = date instanceof Date
+      ? date.toISOString().split('T')[0]
+      : new Date(date).toISOString().split('T')[0];
+
+    this.loading.set(true);
+    this.slots.set([]);
+    this.selectedSlot.set(null);
+    this.form.controls.slotId.setValue('');
+
+    this.svc.getAvailability(this.doctorId()!, formatted).subscribe({
+      next: (list) => { this.slots.set(list); this.loading.set(false); },
+      error: () => this.loading.set(false),
+    });
+  }
+
+  selectSlot(slot: PortalSlot) {
+    this.selectedSlot.set(slot);
+    this.form.controls.slotId.setValue(slot.id);
+  }
 
   submit() {
-    if (this.form.invalid || !this.patient) return;
+    if (this.form.invalid || !this.patient || !this.selectedSlot()) return;
     this.saving.set(true);
+    const slot = this.selectedSlot()!;
+
     this.svc.bookAppointment({
-      patientId:  this.patient.patientId,
-      doctorId:   this.doctorId()!,
-      slotId:     this.form.value.slotId!,
-      notes:      this.form.value.notes ?? undefined,
+      patientId: this.patient.patientId,
+      doctorId:  this.doctorId()!,
+      serviceId: this.serviceId()!,
+      sedeId:    this.sedeId() ?? slot.sedeId,
+      startTime: slot.startTime,
+      endTime:   slot.endTime,
+      notes:     this.form.value.notes ?? undefined,
     }).subscribe({
       next: () => {
         this.snack.open('Cita reservada exitosamente', 'Cerrar', { duration: 3000 });
@@ -93,5 +111,10 @@ loadSlots(date: any) {
 
   goBack() {
     this.router.navigate(['/portal/busqueda']);
+  }
+
+  formatSlotTime(time: string): string {
+    if (!time) return '';
+    return time.length >= 5 ? time.slice(0, 5) : time;
   }
 }

@@ -1,93 +1,132 @@
-<div class="min-h-screen w-full flex">
+<div class="min-h-screen w-full flex" style="background:#eef2f9;">
 
-  <!-- ───────────────────────── Panel izquierdo: branding ───────────────────── -->
-  <div class="hidden lg:flex flex-col justify-between flex-1 p-10 text-white"
-       style="background: linear-gradient(135deg, #0d2e6e 0%, #1a56b0 60%, #1976d2 100%);">
+  <!-- ═══════════════ PANEL IZQUIERDO ═══════════════ -->
+  <div class="hidden lg:flex lg:w-[58%] flex-col justify-between p-10 xl:p-14 text-white relative overflow-hidden"
+       style="
+         background-color: #0b2545;
+         background-image: url('assets/images/logos/pasillo_clinico.png');
+         background-size: cover;
+         background-position: center;">
 
-    <!-- Logo + nombre -->
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-        <mat-icon style="font-size:22px;width:22px;height:22px" class="text-white">local_hospital</mat-icon>
+    <!-- Overlay oscuro sobre la foto -->
+    <div class="absolute inset-0" style="background: rgba(8, 22, 48, 0.74); z-index:0;"></div>
+
+    <!-- Contenido (por encima del overlay) -->
+    <div class="relative z-10 flex flex-col h-full justify-between">
+
+      <!-- Logo top-left -->
+      <div class="flex items-center gap-3">
+        <img src="assets/images/logos/logo_clinica2.png"
+             onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
+             alt="Clínica"
+             class="w-30 h-30 object-contain">
       </div>
-      <span class="font-bold text-lg tracking-wide">Clínica Yoselin</span>
-    </div>
 
-    <!-- Hero copy -->
-    <div>
-      <h2 class="text-4xl font-bold leading-tight mb-4">
-        Gestión clínica<br>integral y eficiente
-      </h2>
-      <p class="text-blue-200 text-base mb-10 max-w-sm leading-relaxed">
-        Administra citas, historia clínica, farmacia, facturación y mucho más
-        desde un solo sistema.
-      </p>
+      <!-- Hero + Features -->
+      <div class="mb-8">
+        <h2 class="text-5xl xl:text-6xl font-extrabold leading-[1.08] mb-5">
+          Clinical Precision,<br>
+          <span style="color:#44d0b2;">Human Empathy.</span>
+        </h2>
+        <p class="text-base mb-10 max-w-lg leading-relaxed" style="color:rgba(255,255,255,0.72);">
+          Simplificamos la gestión médica para que puedas enfocarte
+          en lo más importante: la salud de tus pacientes.
+        </p>
 
-      <!-- Feature list -->
-      <div class="space-y-4">
-        @for(feature of features; track feature.icon) {
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
-              <mat-icon style="font-size:18px;width:18px;height:18px" class="text-blue-200">{{ feature.icon }}</mat-icon>
-            </div>
-            <span class="text-sm text-blue-100">{{ feature.label }}</span>
-          </div>
-        }
-      </div>
-    </div>
-
-    <!-- Footer branding -->
-    <p class="text-xs text-blue-300">© {{ currentYear }} Clínica Yoselin · Todos los derechos reservados</p>
-  </div>
-
-  <!-- ───────────────────────── Panel derecho: login ────────────────────────── -->
-  <div class="flex flex-col justify-center items-center flex-1 bg-gray-50 p-6 sm:p-10">
-
-    <!-- Logo móvil (solo en pantallas pequeñas) -->
-    <div class="flex flex-col items-center mb-8 lg:hidden">
-      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-3"
-           style="background: linear-gradient(135deg, #0d2e6e, #1976d2);">
-        <mat-icon style="font-size:32px;width:32px;height:32px" class="text-white">local_hospital</mat-icon>
-      </div>
-      <h1 class="text-2xl font-bold text-gray-800">Clínica Yoselin</h1>
-      <p class="text-sm text-gray-500">Sistema de Gestión Integral</p>
-    </div>
-
-    <!-- Tarjeta de login -->
-    <div class="w-full max-w-sm">
-      <mat-card class="rounded-2xl overflow-hidden" style="box-shadow: 0 8px 40px rgba(13,46,110,0.12);">
-        <mat-card-content class="p-8">
-
-          <h2 class="text-xl font-bold text-gray-800 mb-1">Iniciar sesión</h2>
-          <p class="text-sm text-gray-500 mb-7">
-            Accede con tu cuenta institucional de Google
-          </p>
-
-          <!-- Botón de Google -->
-          <div #googleBtn class="w-full flex justify-center items-center min-h-[44px]"></div>
-
-          <!-- Spinner mientras procesa -->
-          @if(isLoading) {
-            <div class="flex flex-col items-center mt-6 gap-2">
-              <mat-spinner [diameter]="28"></mat-spinner>
-              <span class="text-xs text-gray-400">Verificando credenciales…</span>
+        <!-- Features grid 2 columnas -->
+        <div class="grid grid-cols-2 gap-4 max-w-2xl">
+          @for(feature of features; track feature.icon) {
+            <div class="flex items-center gap-4 rounded-2xl px-5 py-4"
+                 style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                   style="background:rgba(68,208,178,0.18);">
+                <mat-icon style="color:#44d0b2; font-size:22px; width:22px; height:22px;">
+                  {{ feature.icon }}
+                </mat-icon>
+              </div>
+              <span class="text-base font-semibold text-white leading-tight">{{ feature.label }}</span>
             </div>
           }
+        </div>
+      </div>
 
-          <!-- Separador -->
-          <div class="mt-8 pt-6 border-t border-gray-100">
-            <div class="flex items-center gap-2 text-xs text-gray-400">
-              <mat-icon style="font-size:14px;width:14px;height:14px">lock</mat-icon>
-              Acceso exclusivo para personal autorizado
-            </div>
-          </div>
-
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Soporte -->
-      <p class="text-center text-xs text-gray-400 mt-5">
-        ¿Problemas para acceder? Contacta al administrador del sistema.
+      <!-- Footer -->
+      <p class="text-xs" style="color:rgba(255,255,255,0.32);">
+        © {{ currentYear }} Clínica · Clinical Precision
       </p>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL DERECHO ═══════════════ -->
+  <div class="w-full lg:w-[42%] flex flex-col justify-center items-center px-6 py-10"
+       style="background:#eef2f9;">
+
+    <!-- Logo móvil (solo visible en mobile) -->
+    <div class="flex flex-col items-center mb-8 lg:hidden">
+      <img src="assets/images/logos/logo_clinica.png"
+           onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
+           alt="Clínica"
+           class="w-16 h-16 mb-3 object-contain">
+      <h1 class="text-2xl font-bold text-gray-800">Clínica</h1>
+    </div>
+
+    <!-- Card login -->
+    <div class="w-full max-w-lg">
+      <div class="rounded-3xl px-12 py-12 flex flex-col items-center"
+           style="background:#ffffff; box-shadow: 0 24px 60px rgba(10,35,66,0.13);">
+
+        <!-- Logo grande dentro de card -->
+        <img src="assets/images/logos/logo_clinica.png"
+             onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
+             alt="Clínica"
+             class="w-30 h-30 object-contain mb-3">
+
+        <!-- Título -->
+        <h2 class="text-4xl font-extrabold text-center mb-2" style="color:#0f2544;">
+          Iniciar sesión
+        </h2>
+        <p class="text-[32px] sm:text-[34px] leading-tight text-center mb-8" style="color:#5a6a85;">
+          Accede al portal clínico integral
+        </p>
+
+        <!-- Botón Google -->
+        <div class="w-full flex justify-center items-center py-1 mb-3"
+             style="background:#fff; min-height:64px;">
+          <div #googleBtn style="width:100%; min-width:300px; display:flex; justify-content:center;"></div>
+        </div>
+        @if(showGoogleFallback) {
+          <button type="button"
+                  class="w-full rounded-xl border px-4 py-3 text-base font-semibold text-[#0f2544] mb-2"
+                  style="border-color:#d7e1ef; background:#fff;"
+                  (click)="retryGoogleButton()">
+            Continuar con Google
+          </button>
+        }
+
+        <!-- Spinner loading -->
+        @if(isLoading) {
+          <div class="flex flex-col items-center mt-4 gap-2">
+            <mat-spinner [diameter]="28"></mat-spinner>
+            <span class="text-xs text-gray-400">Verificando credenciales…</span>
+          </div>
+        }
+
+        <!-- Link de ayuda DENTRO de la card -->
+        <div class="text-center mt-7">
+          <p class="text-[16px] sm:text-[20px] leading-tight" style="color:#4a5568;">¿Problemas para acceder?</p>
+          <a class="text-[16px] sm:text-[20px] leading-tight font-bold cursor-pointer" style="color:#2abfa3;">
+            Contacta al administrador del sistema
+          </a>
+        </div>
+
+        <!-- Footer desktop DENTRO de la card -->
+        <p class="text-center text-[14px] mt-8 tracking-widest uppercase"
+           style="color:#a0aec0; letter-spacing:0.12em;">
+          © {{ currentYear }} Clínica &bull; Clinical Precision
+        </p>
+
+      </div>
     </div>
 
   </div>

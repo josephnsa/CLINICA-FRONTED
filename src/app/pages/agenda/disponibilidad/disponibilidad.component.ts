@@ -27,6 +27,7 @@ import { SedeAutocompleteFieldComponent } from 'src/app/shared/autocomplete/sede
 export class DisponibilidadComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly agendaService = inject(AgendaService);
+  private readonly lastDoctorStorageKey = 'agenda_disponibilidad_last_doctor_id';
 
   rules: AvailabilityRule[] = [];
   blocks: AvailabilityBlock[] = [];
@@ -54,7 +55,14 @@ export class DisponibilidadComponent implements OnInit {
     reason: ['', Validators.required],
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const lastDoctorId = localStorage.getItem(this.lastDoctorStorageKey);
+    if (!lastDoctorId) return;
+
+    this.searchForm.patchValue({ doctorId: lastDoctorId });
+    this.loadRules(lastDoctorId);
+    this.loadBlocks(lastDoctorId);
+  }
 
   searchForm = this.fb.group({
   doctorId: ['', Validators.required],
@@ -63,6 +71,7 @@ export class DisponibilidadComponent implements OnInit {
 onSearch(): void {
   const doctorId = this.searchForm.get('doctorId')?.value || '';
   if (!doctorId) return;
+  localStorage.setItem(this.lastDoctorStorageKey, doctorId);
   this.loadRules(doctorId);
   this.loadBlocks(doctorId);
 }

@@ -19,26 +19,31 @@ declare var google: any;
 export class AppSideLoginComponent implements AfterViewInit {
   @ViewChild('googleBtn') googleBtnRef!: ElementRef;
 
-  private readonly router = inject(Router);
+  private readonly router     = inject(Router);
   private readonly authService = inject(AuthService);
-  private readonly toastr = inject(ToastrService);
+  private readonly toastr     = inject(ToastrService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly ngZone = inject(NgZone);
+  private readonly ngZone     = inject(NgZone);
 
   isLoading = false;
+  showGoogleFallback = false;
   readonly currentYear = new Date().getFullYear();
 
   readonly features = [
-    { icon: 'calendar_month',  label: 'Agenda y citas médicas en línea' },
-    { icon: 'description',     label: 'Historia clínica electrónica' },
-    { icon: 'science',         label: 'Gestión de exámenes y resultados' },
-    { icon: 'receipt_long',    label: 'Facturación y control de caja' },
-    { icon: 'medication',      label: 'Farmacia e inventario integrado' },
+    { icon: 'calendar_month', label: 'Online appointments'        },
+    { icon: 'description',    label: 'Electronic medical records' },
+    { icon: 'science',        label: 'Exam management'            },
+    { icon: 'receipt_long',   label: 'Billing'                    },
+    { icon: 'medication',     label: 'Pharmacy'                   },
   ];
 
   ngAfterViewInit(): void {
     if (environment.googleClientId) {
       this.waitForGoogleSdk();
+      setTimeout(() => {
+        const rendered = !!this.googleBtnRef?.nativeElement?.children?.length;
+        this.showGoogleFallback = !rendered;
+      }, 2000);
     }
   }
 
@@ -51,6 +56,8 @@ export class AppSideLoginComponent implements AfterViewInit {
   }
 
   private initGoogleButton(): void {
+    this.googleBtnRef.nativeElement.innerHTML = '';
+    const buttonWidth = Math.max(this.googleBtnRef.nativeElement.offsetWidth || 280, 360);
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: (response: { credential: string }) => {
@@ -59,11 +66,17 @@ export class AppSideLoginComponent implements AfterViewInit {
     });
     google.accounts.id.renderButton(this.googleBtnRef.nativeElement, {
       theme: 'outline',
-      size: 'large',
-      text: 'continue_with',
+      size:  'large',
+      text:  'continue_with',
       shape: 'rectangular',
-      width: this.googleBtnRef.nativeElement.offsetWidth || 280,
+      width: buttonWidth,
     });
+    this.showGoogleFallback = false;
+  }
+
+  retryGoogleButton(): void {
+    this.showGoogleFallback = false;
+    this.waitForGoogleSdk();
   }
 
   private handleGoogleCredential(idToken: string): void {
