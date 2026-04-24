@@ -1,37 +1,95 @@
-<div class="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+<div class="min-h-screen w-full flex">
 
-  <!-- Card login centrada y responsive -->
-  <div class="w-full max-w-sm">
-    <mat-card class="cardWithShadow rounded-2xl overflow-hidden">
-      <mat-card-content class="p-8 sm:p-10">
+  <!-- ───────────────────────── Panel izquierdo: branding ───────────────────── -->
+  <div class="hidden lg:flex flex-col justify-between flex-1 p-10 text-white"
+       style="background: linear-gradient(135deg, #0d2e6e 0%, #1a56b0 60%, #1976d2 100%);">
 
-        <!-- Branding -->
-        <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary mb-4">
-            <mat-icon class="text-white" style="font-size: 32px; width: 32px; height: 32px;">
-              local_hospital
-            </mat-icon>
-          </div>
-          <h1 class="text-2xl font-bold text-gray-800 leading-tight">Sistema de Salud Integral</h1>
-          <p class="text-sm text-gray-500 mt-2">Panel de administración clínico</p>
-        </div>
+    <!-- Logo + nombre -->
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+        <mat-icon style="font-size:22px;width:22px;height:22px" class="text-white">local_hospital</mat-icon>
+      </div>
+      <span class="font-bold text-lg tracking-wide">Clínica Yoselin</span>
+    </div>
 
-        <!-- Google Sign-In button -->
-        <div #googleBtn class="w-full flex justify-center items-center min-h-[44px]"></div>
+    <!-- Hero copy -->
+    <div>
+      <h2 class="text-4xl font-bold leading-tight mb-4">
+        Gestión clínica<br>integral y eficiente
+      </h2>
+      <p class="text-blue-200 text-base mb-10 max-w-sm leading-relaxed">
+        Administra citas, historia clínica, farmacia, facturación y mucho más
+        desde un solo sistema.
+      </p>
 
-        <!-- Spinner mientras procesa -->
-        @if(isLoading) {
-          <div class="flex justify-center mt-5">
-            <mat-spinner [diameter]="28"></mat-spinner>
+      <!-- Feature list -->
+      <div class="space-y-4">
+        @for(feature of features; track feature.icon) {
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
+              <mat-icon style="font-size:18px;width:18px;height:18px" class="text-blue-200">{{ feature.icon }}</mat-icon>
+            </div>
+            <span class="text-sm text-blue-100">{{ feature.label }}</span>
           </div>
         }
+      </div>
+    </div>
 
-      </mat-card-content>
-    </mat-card>
+    <!-- Footer branding -->
+    <p class="text-xs text-blue-300">© {{ currentYear }} Clínica Yoselin · Todos los derechos reservados</p>
+  </div>
 
-    <p class="text-center text-xs text-gray-400 mt-4">
-      Acceso exclusivo para personal autorizado
-    </p>
+  <!-- ───────────────────────── Panel derecho: login ────────────────────────── -->
+  <div class="flex flex-col justify-center items-center flex-1 bg-gray-50 p-6 sm:p-10">
+
+    <!-- Logo móvil (solo en pantallas pequeñas) -->
+    <div class="flex flex-col items-center mb-8 lg:hidden">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-3"
+           style="background: linear-gradient(135deg, #0d2e6e, #1976d2);">
+        <mat-icon style="font-size:32px;width:32px;height:32px" class="text-white">local_hospital</mat-icon>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Clínica Yoselin</h1>
+      <p class="text-sm text-gray-500">Sistema de Gestión Integral</p>
+    </div>
+
+    <!-- Tarjeta de login -->
+    <div class="w-full max-w-sm">
+      <mat-card class="rounded-2xl overflow-hidden" style="box-shadow: 0 8px 40px rgba(13,46,110,0.12);">
+        <mat-card-content class="p-8">
+
+          <h2 class="text-xl font-bold text-gray-800 mb-1">Iniciar sesión</h2>
+          <p class="text-sm text-gray-500 mb-7">
+            Accede con tu cuenta institucional de Google
+          </p>
+
+          <!-- Botón de Google -->
+          <div #googleBtn class="w-full flex justify-center items-center min-h-[44px]"></div>
+
+          <!-- Spinner mientras procesa -->
+          @if(isLoading) {
+            <div class="flex flex-col items-center mt-6 gap-2">
+              <mat-spinner [diameter]="28"></mat-spinner>
+              <span class="text-xs text-gray-400">Verificando credenciales…</span>
+            </div>
+          }
+
+          <!-- Separador -->
+          <div class="mt-8 pt-6 border-t border-gray-100">
+            <div class="flex items-center gap-2 text-xs text-gray-400">
+              <mat-icon style="font-size:14px;width:14px;height:14px">lock</mat-icon>
+              Acceso exclusivo para personal autorizado
+            </div>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Soporte -->
+      <p class="text-center text-xs text-gray-400 mt-5">
+        ¿Problemas para acceder? Contacta al administrador del sistema.
+      </p>
+    </div>
+
   </div>
 
 </div>

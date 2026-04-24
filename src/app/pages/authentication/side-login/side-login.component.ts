@@ -26,6 +26,15 @@ export class AppSideLoginComponent implements AfterViewInit {
   private readonly ngZone = inject(NgZone);
 
   isLoading = false;
+  readonly currentYear = new Date().getFullYear();
+
+  readonly features = [
+    { icon: 'calendar_month',  label: 'Agenda y citas médicas en línea' },
+    { icon: 'description',     label: 'Historia clínica electrónica' },
+    { icon: 'science',         label: 'Gestión de exámenes y resultados' },
+    { icon: 'receipt_long',    label: 'Facturación y control de caja' },
+    { icon: 'medication',      label: 'Farmacia e inventario integrado' },
+  ];
 
   ngAfterViewInit(): void {
     if (environment.googleClientId) {
