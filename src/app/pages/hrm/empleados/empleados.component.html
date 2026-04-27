@@ -78,81 +78,83 @@
 
   <!-- Tabla -->
   <div class="rounded-xl overflow-hidden shadow-sm border border-gray-200">
-    <table mat-table [dataSource]="filteredEmployees" class="w-full">
-
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Empleado</th>
-        <td mat-cell *matCellDef="let e">
-          <div class="flex items-center gap-3 py-2">
-            <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
-              {{ (e.firstName[0] + e.lastName[0]).toUpperCase() }}
+    <div class="module-table-wrap">
+  <table mat-table [dataSource]="filteredEmployees" class="w-full">
+  
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Empleado</th>
+          <td mat-cell *matCellDef="let e">
+            <div class="flex items-center gap-3 py-2">
+              <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
+                {{ (e.firstName[0] + e.lastName[0]).toUpperCase() }}
+              </div>
+              <div>
+                <p class="font-medium text-gray-800">{{ e.firstName }} {{ e.lastName }}</p>
+                <p class="text-xs text-gray-400">{{ e.id | slice:0:8 }}...</p>
+              </div>
             </div>
-            <div>
-              <p class="font-medium text-gray-800">{{ e.firstName }} {{ e.lastName }}</p>
-              <p class="text-xs text-gray-400">{{ e.id | slice:0:8 }}...</p>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="rol">
+          <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Cargo</th>
+          <td mat-cell *matCellDef="let e">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold" [ngClass]="getRolColor(e.role)">
+              {{ e.role }}
+            </span>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="colegiatura">
+          <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Colegiatura</th>
+          <td mat-cell *matCellDef="let e">
+            <span class="text-sm" [class.text-gray-400]="!e.licenseNumber">{{ e.licenseNumber || '—' }}</span>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="contratacion">
+          <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Contratación</th>
+          <td mat-cell *matCellDef="let e">
+            <span class="text-sm text-gray-600">{{ e.hireDate | date:'dd/MM/yyyy' }}</span>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Estado</th>
+          <td mat-cell *matCellDef="let e">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
+              [ngClass]="e.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'">
+              {{ e.isActive ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="!bg-gray-50"></th>
+          <td mat-cell *matCellDef="let e">
+            <div class="flex gap-1 justify-end">
+              <button mat-icon-button matTooltip="Ver horarios" color="primary" (click)="verHorarios(e)">
+                <mat-icon>schedule</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Desactivar" color="warn"
+                [disabled]="!e.isActive" (click)="deactivate(e)">
+                <mat-icon>person_off</mat-icon>
+              </button>
             </div>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="rol">
-        <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Cargo</th>
-        <td mat-cell *matCellDef="let e">
-          <span class="px-2.5 py-1 rounded-full text-xs font-semibold" [ngClass]="getRolColor(e.role)">
-            {{ e.role }}
-          </span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="colegiatura">
-        <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Colegiatura</th>
-        <td mat-cell *matCellDef="let e">
-          <span class="text-sm" [class.text-gray-400]="!e.licenseNumber">{{ e.licenseNumber || '—' }}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="contratacion">
-        <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Contratación</th>
-        <td mat-cell *matCellDef="let e">
-          <span class="text-sm text-gray-600">{{ e.hireDate | date:'dd/MM/yyyy' }}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="estado">
-        <th mat-header-cell *matHeaderCellDef class="!bg-gray-50 !font-semibold !text-gray-600">Estado</th>
-        <td mat-cell *matCellDef="let e">
-          <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
-            [ngClass]="e.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'">
-            {{ e.isActive ? 'Activo' : 'Inactivo' }}
-          </span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef class="!bg-gray-50"></th>
-        <td mat-cell *matCellDef="let e">
-          <div class="flex gap-1 justify-end">
-            <button mat-icon-button matTooltip="Ver horarios" color="primary" (click)="verHorarios(e)">
-              <mat-icon>schedule</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Desactivar" color="warn"
-              [disabled]="!e.isActive" (click)="deactivate(e)">
-              <mat-icon>person_off</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 transition-colors"></tr>
-
-      <tr class="mat-row" *matNoDataRow>
-        <td [attr.colspan]="displayedColumns.length" class="text-center py-12 text-gray-400">
-          <mat-icon class="!text-4xl opacity-30">group_off</mat-icon>
-          <p class="mt-2">No se encontraron empleados</p>
-        </td>
-      </tr>
-    </table>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 transition-colors"></tr>
+  
+        <tr class="mat-row" *matNoDataRow>
+          <td [attr.colspan]="displayedColumns.length" class="text-center py-12 text-gray-400">
+            <mat-icon class="!text-4xl opacity-30">group_off</mat-icon>
+            <p class="mt-2">No se encontraron empleados</p>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 
   @if (loading()) {

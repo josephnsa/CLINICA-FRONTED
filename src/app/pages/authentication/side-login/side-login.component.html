@@ -59,46 +59,36 @@
   </div>
 
   <!-- ═══════════════ PANEL DERECHO ═══════════════ -->
-  <div class="w-full lg:w-[42%] flex flex-col justify-center items-center px-6 py-10"
+  <div class="w-full lg:w-[42%] flex flex-col justify-center items-center px-4 sm:px-6 py-8 sm:py-10"
        style="background:#eef2f9;">
-
-    <!-- Logo móvil (solo visible en mobile) -->
-    <div class="flex flex-col items-center mb-8 lg:hidden">
-      <img src="assets/images/logos/logo_clinica.png"
-           onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
-           alt="Clínica"
-           class="w-16 h-16 mb-3 object-contain">
-      <h1 class="text-2xl font-bold text-gray-800">Clínica</h1>
-    </div>
 
     <!-- Card login -->
     <div class="w-full max-w-lg">
-      <div class="rounded-3xl px-12 py-12 flex flex-col items-center"
+      <div class="rounded-3xl px-6 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-12 flex flex-col items-center"
            style="background:#ffffff; box-shadow: 0 24px 60px rgba(10,35,66,0.13);">
 
         <!-- Logo grande dentro de card -->
         <img src="assets/images/logos/logo_clinica.png"
              onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
              alt="Clínica"
-             class="w-30 h-30 object-contain mb-3">
+             class="w-20 h-20 sm:w-28 sm:h-28 object-contain mb-3">
 
         <!-- Título -->
-        <h2 class="text-4xl font-extrabold text-center mb-2" style="color:#0f2544;">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center mb-2" style="color:#0f2544;">
           Iniciar sesión
         </h2>
-        <p class="text-[32px] sm:text-[34px] leading-tight text-center mb-8" style="color:#5a6a85;">
+        <p class="text-base sm:text-xl lg:text-2xl leading-snug text-center mb-6" style="color:#5a6a85;">
           Accede al portal clínico integral
         </p>
 
         <!-- Botón Google -->
-        <div class="w-full flex justify-center items-center py-1 mb-3"
-             style="background:#fff; min-height:64px;">
-          <div #googleBtn style="width:100%; min-width:300px; display:flex; justify-content:center;"></div>
+        <div class="w-full mb-3" style="min-height:50px;">
+          <div #googleBtn style="width:100%; display:block;"></div>
         </div>
         @if(showGoogleFallback) {
           <button type="button"
-                  class="w-full rounded-xl border px-4 py-3 text-base font-semibold text-[#0f2544] mb-2"
-                  style="border-color:#d7e1ef; background:#fff;"
+                  class="w-full rounded-xl px-4 py-3 text-base font-semibold text-white mb-2"
+                  style="background:#4285f4;"
                   (click)="retryGoogleButton()">
             Continuar con Google
           </button>
@@ -113,15 +103,15 @@
         }
 
         <!-- Link de ayuda DENTRO de la card -->
-        <div class="text-center mt-7">
-          <p class="text-[16px] sm:text-[20px] leading-tight" style="color:#4a5568;">¿Problemas para acceder?</p>
-          <a class="text-[16px] sm:text-[20px] leading-tight font-bold cursor-pointer" style="color:#2abfa3;">
+        <div class="text-center mt-6">
+          <p class="text-sm sm:text-base leading-tight" style="color:#4a5568;">¿Problemas para acceder?</p>
+          <a class="text-sm sm:text-base leading-tight font-bold cursor-pointer" style="color:#2abfa3;">
             Contacta al administrador del sistema
           </a>
         </div>
 
         <!-- Footer desktop DENTRO de la card -->
-        <p class="text-center text-[14px] mt-8 tracking-widest uppercase"
+        <p class="text-center text-xs mt-6 tracking-widest uppercase"
            style="color:#a0aec0; letter-spacing:0.12em;">
           © {{ currentYear }} Clínica &bull; Clinical Precision
         </p>

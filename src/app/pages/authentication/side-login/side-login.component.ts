@@ -57,7 +57,8 @@ export class AppSideLoginComponent implements AfterViewInit {
 
   private initGoogleButton(): void {
     this.googleBtnRef.nativeElement.innerHTML = '';
-    const buttonWidth = Math.max(this.googleBtnRef.nativeElement.offsetWidth || 280, 360);
+    const containerWidth = this.googleBtnRef.nativeElement.offsetWidth || 300;
+    const buttonWidth = Math.min(containerWidth, 400);
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: (response: { credential: string }) => {
@@ -65,7 +66,7 @@ export class AppSideLoginComponent implements AfterViewInit {
       },
     });
     google.accounts.id.renderButton(this.googleBtnRef.nativeElement, {
-      theme: 'outline',
+      theme: 'filled_blue',
       size:  'large',
       text:  'continue_with',
       shape: 'rectangular',

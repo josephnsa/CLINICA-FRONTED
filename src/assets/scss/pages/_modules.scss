@@ -1,0 +1,443 @@
+@use "../variables" as *;
+
+// ══════════════════════════════════════════════════════════════
+//  _modules.scss — Paleta teal del shell aplicada a todos los
+//  módulos clínicos + responsive unificado
+// ══════════════════════════════════════════════════════════════
+
+// ─── Tokens locales ──────────────────────────────────────────
+$tm-start   : $clinica-shell-teal-start;   // #168080
+$tm-mid     : $clinica-shell-teal-mid;     // #0c4a4d
+$tm-end     : $clinica-shell-teal-end;     // #083538
+$tm-accent  : $success;                    // #13deb9
+$tm-light   : rgba(22, 128, 128, 0.06);
+$tm-light2  : rgba(22, 128, 128, 0.12);
+$tm-dark    : #0f2544;
+$tm-muted   : #5a6a85;
+$tm-surface : #f4f7fb;
+$tm-card    : #ffffff;
+
+// ══════════════════════════════════════════════════════════════
+//  1. MATERIAL TABLE — cabeceras con degradado teal
+// ══════════════════════════════════════════════════════════════
+.mat-mdc-table,
+table[mat-table] {
+  width: 100%;
+
+  .mat-mdc-header-row {
+    background: linear-gradient(90deg, $tm-start 0%, $tm-mid 100%) !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 600 !important;
+    font-size: 0.78rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
+    border-bottom: none !important;
+    white-space: nowrap;
+  }
+
+  .mat-mdc-row {
+    transition: background 0.12s ease;
+
+    &:hover {
+      background: $tm-light !important;
+    }
+
+    &:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+
+  .mat-mdc-cell {
+    font-size: 0.875rem;
+    color: $tm-dark;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  2. MATERIAL CARD HEADERS — degradado teal en formularios
+// ══════════════════════════════════════════════════════════════
+mat-card,
+.mat-mdc-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(8, 53, 56, 0.1) !important;
+
+  mat-card-header,
+  .mat-mdc-card-header {
+    background: linear-gradient(135deg, $tm-start 0%, $tm-mid 100%) !important;
+    padding: 1.1rem 1.5rem !important;
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+
+    mat-card-title,
+    .mat-mdc-card-title,
+    .mat-card-title {
+      color: #ffffff !important;
+      font-weight: 700;
+    }
+
+    mat-card-subtitle,
+    .mat-mdc-card-subtitle {
+      color: rgba(255, 255, 255, 0.75) !important;
+    }
+
+    * {
+      color: #ffffff !important;
+    }
+  }
+
+  mat-card-content,
+  .mat-mdc-card-content {
+    padding: 1.25rem 1.5rem !important;
+
+    @media (max-width: 640px) {
+      padding: 1rem !important;
+    }
+  }
+
+  mat-card-actions,
+  .mat-mdc-card-actions {
+    padding: 0.75rem 1.5rem 1.25rem !important;
+    border-top: 1px solid rgba($tm-start, 0.12);
+    gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    @media (max-width: 480px) {
+      flex-direction: column-reverse;
+      padding: 0.75rem 1rem 1rem !important;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  3. PANEL DE BÚSQUEDA / FILTROS (barra superior de módulo)
+// ══════════════════════════════════════════════════════════════
+// Aplica a los divs tipo "rounded-xl border border-gray-200 bg-white"
+// que funcionan como header de cada módulo
+.module-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: $tm-card;
+  border-radius: 12px;
+  border-left: 4px solid $tm-start !important;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(8, 53, 56, 0.07);
+
+  .module-title {
+    h2, h3 {
+      color: $tm-dark;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    p {
+      color: $tm-muted;
+      font-size: 0.85rem;
+      margin: 0.2rem 0 0;
+    }
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      align-items: stretch;
+
+      mat-form-field,
+      app-patient-autocomplete-field,
+      app-doctor-autocomplete-field,
+      app-service-autocomplete-field,
+      app-sede-autocomplete-field {
+        width: 100% !important;
+        min-width: unset !important;
+      }
+
+      button[mat-flat-button],
+      button[mat-stroked-button] {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  4. TABLA CONTAINER — scroll horizontal en mobile
+// ══════════════════════════════════════════════════════════════
+.module-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  background: $tm-card;
+  box-shadow: 0 2px 8px rgba(8, 53, 56, 0.07);
+  border: 1px solid rgba($tm-start, 0.12);
+}
+
+// Scrollable wrapper automático para cualquier div con mat-table sin wrapper explícito
+@media (max-width: 767px) {
+  .overflow-hidden.rounded-xl {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  5. MATERIAL TABS — pestañas con cabecera teal
+// ══════════════════════════════════════════════════════════════
+.mat-mdc-tab-group {
+  .mat-mdc-tab-header {
+    background: linear-gradient(90deg, $tm-start 0%, $tm-mid 100%);
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+  }
+
+  .mat-mdc-tab {
+    color: rgba(255, 255, 255, 0.72) !important;
+    min-width: 100px;
+    font-weight: 500;
+
+    &.mdc-tab--active {
+      color: #ffffff !important;
+      font-weight: 700;
+    }
+
+    .mdc-tab__ripple::before {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+    }
+  }
+
+  .mdc-tab-indicator__content--underline {
+    border-color: $tm-accent !important;
+    border-top-width: 3px !important;
+  }
+
+  .mat-mdc-tab-body-wrapper {
+    border: 1px solid rgba($tm-start, 0.12);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    background: $tm-card;
+  }
+
+  .mat-mdc-tab-body-content {
+    padding: 1.25rem;
+
+    @media (max-width: 640px) {
+      padding: 0.75rem;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  6. EXPANSION PANEL — acordeón con teal
+// ══════════════════════════════════════════════════════════════
+.mat-expansion-panel {
+  border-radius: 10px !important;
+  box-shadow: 0 1px 6px rgba(8, 53, 56, 0.08) !important;
+  border: 1px solid rgba($tm-start, 0.1);
+  overflow: hidden;
+
+  .mat-expansion-panel-header {
+    background: $tm-light !important;
+    border-radius: 10px !important;
+    transition: background 0.15s;
+
+    &.mat-expanded {
+      background: $tm-light2 !important;
+      border-radius: 10px 10px 0 0 !important;
+    }
+
+    .mat-expansion-panel-header-title {
+      color: $tm-dark;
+      font-weight: 600;
+    }
+
+    .mat-expansion-indicator::after {
+      color: $tm-start;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  7. SECCIONES ESPECIALES — reemplaza azul por teal
+// ══════════════════════════════════════════════════════════════
+
+// Sección tipo "Contacto de emergencia" (bg-blue-50 → teal-50)
+.border-blue-100.bg-blue-50 {
+  background: rgba($tm-start, 0.05) !important;
+  border-color: rgba($tm-start, 0.22) !important;
+
+  h4.text-blue-900,
+  .text-blue-900 {
+    color: $tm-mid !important;
+  }
+}
+
+// Card headers con gradiente azul → teal
+.bg-gradient-to-r.from-blue-50.to-blue-100 {
+  background: linear-gradient(135deg, $tm-start 0%, $tm-mid 100%) !important;
+
+  .text-blue-900,
+  .text-2xl,
+  * {
+    color: #ffffff !important;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  8. STATUS BADGES — colores semánticos consistentes
+// ══════════════════════════════════════════════════════════════
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  line-height: 1.4;
+  white-space: nowrap;
+
+  &-success  { background: rgba(19, 222, 185, 0.14); color: #006a5e; }
+  &-warning  { background: rgba(255, 174, 31, 0.14); color: #7a5100; }
+  &-danger   { background: rgba(244, 67,  54, 0.12); color: #c62828; }
+  &-info     { background: rgba(83, 155, 255, 0.14); color: #1a4db5; }
+  &-teal     { background: rgba(22, 128, 128, 0.12); color: $tm-mid; }
+  &-neutral  { background: rgba(96, 125, 139, 0.12); color: #37474f; }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  9. FORM FIELDS — responsive y paleta teal focus
+// ══════════════════════════════════════════════════════════════
+.mat-mdc-form-field {
+  @media (max-width: 640px) {
+    width: 100%;
+    min-width: unset !important;
+  }
+}
+
+// Focus ring teal en campos outline
+.mat-mdc-form-field.mat-focused {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: $tm-start !important;
+  }
+
+  .mat-mdc-floating-label {
+    color: $tm-start !important;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  10. BOTONES — variante teal (clase auxiliar)
+// ══════════════════════════════════════════════════════════════
+button.btn-teal,
+a.btn-teal {
+  background: linear-gradient(90deg, $tm-start, $tm-mid) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 600;
+  border-radius: 8px !important;
+  padding: 0 1.25rem !important;
+
+  &:hover {
+    background: linear-gradient(90deg, $tm-mid, $tm-end) !important;
+    box-shadow: 0 4px 12px rgba($tm-start, 0.35) !important;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  11. LAYOUT RESPONSIVE GLOBAL — ajustes de grilla y padding
+// ══════════════════════════════════════════════════════════════
+@media (max-width: 640px) {
+  // Grilla 2 col → 1 col en mobile
+  .grid.grid-cols-2:not(.no-collapse) {
+    grid-template-columns: 1fr !important;
+  }
+
+  // Grilla 3 col → 1 col en mobile
+  .grid.grid-cols-3:not(.no-collapse) {
+    grid-template-columns: 1fr !important;
+  }
+
+  // Flex row → column en mobile (para toolbars de filtros simples)
+  .flex.justify-between.items-center:not(.no-collapse) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  // Botones de acción full-width en mobile
+  .mat-mdc-card-actions button,
+  .flex.justify-between button {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // Gap reducido en flex columns
+  .flex.flex-col.gap-5 { gap: 1rem !important; }
+  .flex.flex-col.gap-4 { gap: 0.875rem !important; }
+}
+
+@media (max-width: 480px) {
+  // Padding interno reducido
+  .p-4  { padding: 0.75rem !important; }
+  .p-6  { padding: 1rem !important; }
+  .px-6 { padding-left: 0.875rem !important; padding-right: 0.875rem !important; }
+  .py-4 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  12. SPINNER / ESTADO VACÍO
+// ══════════════════════════════════════════════════════════════
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: $tm-muted;
+  gap: 0.5rem;
+  text-align: center;
+
+  mat-icon {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: rgba($tm-start, 0.4);
+  }
+
+  p { margin: 0; font-size: 0.9rem; }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  13. CHIPS DE ESTADO (texto inline con color)
+// ══════════════════════════════════════════════════════════════
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  // Mapeo de clases Tailwind existentes → paleta semántica
+  &.text-green-600 { background: rgba(19, 222, 185, 0.12); color: #006a5e !important; }
+  &.text-red-600   { background: rgba(244, 67, 54, 0.1);  color: #b71c1c !important; }
+  &.text-blue-600  { background: rgba(83, 155, 255, 0.12); color: #1a4db5 !important; }
+  &.text-yellow-600{ background: rgba(255, 174, 31, 0.12); color: #7a5100 !important; }
+}
