@@ -1,11 +1,7 @@
-<div class="flex items-center justify-between">
-  <div class="branding">
-    <app-branding></app-branding>
+@if (showToggle) {
+  <div class="branding flex items-center justify-end">
+    <a href="javascript:void(0)" (click)="toggleMobileNav.emit()"
+      class="flex justify-center ng-star-inserted size-10! items-center text-sm">
+    </a>
   </div>
-
-  @if(showToggle) {
-  <a href="javascript:void(0)" (click)="toggleMobileNav.emit()"
-    class="flex justify-center ng-star-inserted size-10! items-center text-sm">
-  </a>
-  }
-</div>
+}
