@@ -48,6 +48,7 @@
     <mat-card>
       <mat-card-title class="p-4">Top Diagnósticos</mat-card-title>
       <mat-card-content>
+        <div class="module-table-wrap">
         <table mat-table [dataSource]="report.topDiagnoses" class="w-full">
           <ng-container matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef>Código</th>
@@ -64,12 +65,14 @@
           <tr mat-header-row *matHeaderRowDef="['code','description','count']"></tr>
           <tr mat-row *matRowDef="let row; columns: ['code','description','count']"></tr>
         </table>
+        </div>
       </mat-card-content>
     </mat-card>
 
     <mat-card>
       <mat-card-title class="p-4">Top Medicamentos</mat-card-title>
       <mat-card-content>
+        <div class="module-table-wrap">
         <table mat-table [dataSource]="report.topMedications" class="w-full">
           <ng-container matColumnDef="medicationName">
             <th mat-header-cell *matHeaderCellDef>Medicamento</th>
@@ -82,6 +85,7 @@
           <tr mat-header-row *matHeaderRowDef="['medicationName','count']"></tr>
           <tr mat-row *matRowDef="let row; columns: ['medicationName','count']"></tr>
         </table>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

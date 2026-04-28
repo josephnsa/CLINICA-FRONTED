@@ -13,3 +13,4 @@ export * from './reports.model';
 export * from './hrm.model';
 export * from './customer-service.model';
 export * from './portal.model';
+export * from './dashboard.model';

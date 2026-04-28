@@ -90,15 +90,22 @@ export class PortalService {
   }
   getAvailability(doctorId: string, date: string): Observable<PortalSlot[]> {
   return this.http
-    .get<ApiResponse<PortalSlot[]>>(`${environment.apiUrl}/public/availability`, {
+    .get<ApiResponse<any[]>>(`${environment.apiUrl}/public/availability`, {
       params: { doctorId, date }
     })
-    .pipe(map(r => r.data));
+    .pipe(
+      map(r => r.data.map((s: any) => ({
+        id: s.id,
+        startTime: s.startTime,
+        endTime: s.endTime,
+        sedeId: s.sedeId ?? '',   // ← agrega estoS
+      })))
+    );
 }
 
 bookAppointment(body: BookAppointmentRequest): Observable<any> {
   return this.http
-    .post<ApiResponse<any>>(`${this.base}/appointments`, body)
+    .post<ApiResponse<any>>(`${environment.apiUrl}/appointments`, body)
     .pipe(map(r => r.data));
 
 }

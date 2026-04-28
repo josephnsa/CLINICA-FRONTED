@@ -1,16 +1,82 @@
-<mat-toolbar class="topbar gap-2">
+<mat-toolbar class="clinica-header topbar mat-elevation-z0 !px-3 sm:!px-5 !gap-2 sm:!gap-4 !items-center !min-h-[70px]">
 
-
-  <!-- Mobile Menu -->
   @if(!showToggle) {
-  <button mat-icon-button (click)="toggleMobileNav.emit()" class="flex justify-center">
-    <i class="iconify flex" data-icon="solar:hamburger-menu-linear"></i>
+  <button mat-icon-button type="button" (click)="toggleMobileNav.emit()" class="clinica-header-iconbtn flex justify-center shrink-0">
+    <i-tabler name="menu-2" class="size-6 flex text-white"></i-tabler>
   </button>
   }
 
-  <span class="flex-auto"></span>
+  <!-- Marca -->
+  <div class="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+    <img [src]="logoSrc" width="48" height="48" class="object-contain size-10 sm:size-12 shrink-0" alt="Clínica" />
+    <div class="flex flex-col min-w-0 leading-tight">
+      <span class="text-white font-bold text-base sm:text-lg tracking-tight truncate">Clínica</span>
+      <span class="text-white/85 text-[10px] sm:text-xs font-normal truncate hidden sm:block">Sistema de Gestión Integral</span>
+    </div>
+  </div>
 
+  <!-- Búsqueda global (paleta); visible en todos los anchos (sin lupa duplicada junto a notificaciones). -->
+  <div class="flex-1 flex justify-center min-w-0 px-2">
+    <button type="button" class="clinica-header-search clinica-header-search-trigger w-full max-w-md flex items-center gap-2 px-4 py-2 rounded-full text-left"
+      (click)="openGlobalSearch()" aria-label="Abrir búsqueda de pantallas">
+      <i-tabler name="search" class="size-5 shrink-0 text-white/70 flex"></i-tabler>
+      <span class="flex-1 min-w-0 text-sm text-white/55 truncate">Buscar pantallas…</span>
+      <span class="hidden lg:inline text-[10px] text-white/35 border border-white/15 rounded px-1.5 py-0.5 shrink-0">/</span>
+    </button>
+  </div>
 
+  <!-- Acciones -->
+  <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+    <button mat-icon-button type="button" [matMenuTriggerFor]="notifMenu" class="clinica-header-iconbtn relative" aria-label="Notificaciones">
+      <i-tabler name="bell" class="size-6 flex text-white"></i-tabler>
+      @if (totalUnread() > 0) {
+      <span class="clinica-header-notif-badge">{{ totalUnread() > 99 ? '99+' : totalUnread() }}</span>
+      }
+    </button>
 
+    <mat-menu #notifMenu="matMenu" xPosition="before" panelClass="topbar-dd">
+      <div class="px-4 py-2 text-sm font-semibold text-gray-800">Notificaciones</div>
+      <mat-divider></mat-divider>
+      @if (recentNotifications().length === 0) {
+      <div class="px-4 py-3 text-sm text-gray-500">Sin alertas recientes</div>
+      } @else {
+      <div class="max-h-80 overflow-y-auto">
+        @for (item of recentNotifications(); track $index) {
+        <button mat-menu-item type="button" class="!items-start !py-3 !whitespace-normal">
+          <div class="text-sm font-medium text-gray-900">{{ item.title }}</div>
+          <div class="text-xs text-gray-600 mt-0.5">{{ item.body }}</div>
+        </button>
+        }
+      </div>
+      }
+    </mat-menu>
 
+    <button mat-button type="button" [matMenuTriggerFor]="userMenu" class="clinica-header-profile !min-w-0 !px-1 sm:!px-2 !normal-case">
+      <span class="flex items-center gap-2">
+        <span class="clinica-header-avatar shrink-0">{{ initials() }}</span>
+        <span class="hidden sm:flex flex-col items-start text-left min-w-0 max-w-[140px] lg:max-w-[200px]">
+          <span class="header-user-name text-sm leading-tight truncate w-full">{{ displayName() }}</span>
+          <span class="text-white/75 text-xs leading-tight truncate w-full uppercase tracking-wide">{{ displayRole() }}</span>
+        </span>
+        <i-tabler name="chevron-down" class="size-4 text-white/90 hidden sm:flex shrink-0"></i-tabler>
+      </span>
+    </button>
+
+    <mat-menu #userMenu="matMenu" xPosition="before">
+      @if (sedeLabel()) {
+      <div class="px-4 py-2 text-xs text-gray-500">Sede</div>
+      <div class="px-4 pb-2 text-sm font-medium text-gray-900">{{ sedeLabel() }}</div>
+      } @else {
+      <div class="px-4 py-3 text-sm text-gray-500">Sin sede asignada</div>
+      }
+    </mat-menu>
+
+    <button mat-button type="button" (click)="logout()"
+      class="clinica-header-logout !hidden md:!inline-flex !text-white !min-w-0 !normal-case">
+      <span class="clinica-header-logout-inner">
+        <i-tabler name="logout" class="clinica-header-logout-icon shrink-0"></i-tabler>
+        <span class="clinica-header-logout-text">Cerrar sesión</span>
+      </span>
+    </button>
+  </div>
 </mat-toolbar>

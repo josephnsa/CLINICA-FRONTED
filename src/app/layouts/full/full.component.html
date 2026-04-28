@@ -1,5 +1,7 @@
-<div class="blue_theme light-theme" dir="ltr">
-  <app-topstrip></app-topstrip>
+<div class="blue_theme light-theme app-shell" dir="ltr">
+  <app-header [showToggle]="!isOver" (toggleCollapsed)="toggleCollapsed()"
+    (toggleMobileNav)="sidenav.toggle()"></app-header>
+
   <mat-sidenav-container class="mainWrapper" autosize autoFocus>
     <!-- ============================================================== -->
     <!-- Vertical Sidebar -->
@@ -11,7 +13,7 @@
         <app-sidebar (toggleMobileNav)="sidenav.toggle()" [showToggle]="isOver"></app-sidebar>
         <ng-scrollbar class="relative" style="height: 100%">
           <mat-nav-list class="sidebar-list">
-            @for(item of navItems; track item) {
+            @for(item of navItems; track $index) {
             <app-nav-item [item]="item" (notify)="sidenav.toggle()" class="top-parent">
             </app-nav-item>
             }
@@ -24,9 +26,6 @@
     <!-- Main Content -->
     <!-- ============================================================== -->
     <mat-sidenav-content class="contentWrapper" #content>
-
-      <app-header [showToggle]="!isOver" (toggleCollapsed)="toggleCollapsed()"
-        (toggleMobileNav)="sidenav.toggle()"></app-header>
 
       <main class="pageWrapper maxWidth">
 

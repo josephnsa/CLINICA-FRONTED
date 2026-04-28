@@ -43,7 +43,7 @@
                     ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
                     : 'border-gray-200 hover:border-indigo-300 text-gray-700'"
                   (click)="form.controls.slotId.setValue(slot.id)">
-                  {{ slot.startTime | date:'HH:mm' }}
+                  {{ formatSlotTime(slot.startTime) }}
                 </button>
               }
             </div>

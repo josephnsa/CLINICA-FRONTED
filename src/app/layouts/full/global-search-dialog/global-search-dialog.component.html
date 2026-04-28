@@ -1,0 +1,46 @@
+<div class="gs-dialog">
+  <div class="gs-searchbar">
+    <i-tabler name="search" class="gs-searchbar-icon"></i-tabler>
+    <input
+      #queryInput
+      type="search"
+      class="gs-input"
+      placeholder="Buscar pantallas…"
+      autocomplete="off"
+      spellcheck="false"
+      [ngModel]="query()"
+      (ngModelChange)="onQueryInput($event)"
+      aria-label="Buscar en la aplicación"
+    />
+    <span class="gs-kbd-hint" aria-hidden="true">Esc</span>
+  </div>
+
+  <mat-divider class="gs-divider"></mat-divider>
+
+  @if (filtered().length > 0) {
+  <div class="gs-section-label">Resultados</div>
+  }
+
+  <div class="gs-results" role="listbox" aria-label="Resultados de búsqueda">
+    @if (filtered().length === 0) {
+    <div class="gs-empty">No hay coincidencias. Prueba con otro término.</div>
+    } @else {
+    @for (entry of filtered(); track entry.id; let i = $index) {
+    <button
+      type="button"
+      role="option"
+      class="gs-card"
+      [class.gs-card-active]="i === selectedIndex()"
+      (mouseenter)="selectedIndex.set(i)"
+      (click)="pick(entry)"
+    >
+      <span class="iconify gs-card-icon" [attr.data-icon]="entry.iconTabler"></span>
+      <div class="gs-card-text">
+        <div class="gs-card-title">{{ entry.title }}</div>
+        <div class="gs-card-sub">{{ entry.subtitle }}</div>
+      </div>
+    </button>
+    }
+    }
+  </div>
+</div>
