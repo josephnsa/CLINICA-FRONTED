@@ -25,11 +25,18 @@
     }
 
     <button
+      mat-icon-button
+      (click)="logout()"
+      class="sm:hidden !text-white hover:!bg-white/10"
+      title="Cerrar sesión">
+      <mat-icon>logout</mat-icon>
+    </button>
+    <button
       mat-stroked-button
       (click)="logout()"
-      class="!text-white !border-white/30 !text-xs hover:!bg-white/10 !min-h-0 !h-8 !px-3">
+      class="hidden sm:flex !text-white !border-white/30 !text-xs hover:!bg-white/10 !min-h-0 !h-8 !px-3">
       <mat-icon class="!text-base !w-4 !h-4 mr-1">logout</mat-icon>
-      <span class="hidden sm:inline">Cerrar sesión</span>
+      Cerrar sesión
     </button>
   </div>
 
