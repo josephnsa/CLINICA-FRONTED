@@ -69,6 +69,11 @@
       } @else {
       <div class="px-4 py-3 text-sm text-gray-500">Sin sede asignada</div>
       }
+      <mat-divider class="md:hidden"></mat-divider>
+      <button mat-menu-item type="button" (click)="logout()" class="md:hidden">
+        <i-tabler name="logout" class="size-5 mr-2 text-red-500"></i-tabler>
+        <span class="text-red-500">Cerrar sesión</span>
+      </button>
     </mat-menu>
 
     <button mat-button type="button" (click)="logout()"
