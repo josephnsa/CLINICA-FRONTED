@@ -11,6 +11,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { concatMap } from 'rxjs';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
 import { AppSettings } from 'src/app/config';
@@ -98,7 +99,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.applyFallbackUser();
-    this.dashboardService.getHeaderUser().subscribe({
+    this.authService.syncSession().pipe(
+      concatMap(() => this.dashboardService.getHeaderUser())
+    ).subscribe({
       next: (res) => {
         if (res.success && res.data) {
           this.me.set(res.data);
