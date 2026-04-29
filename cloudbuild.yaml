@@ -1,47 +1,20 @@
 steps:
-  - name: "gcr.io/cloud-builders/docker"
-    id: "docker-build"
-    args:
-      - "build"
-      - "--cache-from"
-      - "us-central1-docker.pkg.dev/pe-axelior-clinapp-dev/clinica-backend/salud-frontend:latest"
-      - "-t"
-      - "us-central1-docker.pkg.dev/pe-axelior-clinapp-dev/clinica-backend/salud-frontend:$COMMIT_SHA"
-      - "-t"
-      - "us-central1-docker.pkg.dev/pe-axelior-clinapp-dev/clinica-backend/salud-frontend:latest"
-      - "."
+  - name: "node:20-alpine"
+    id: "npm-ci"
+    entrypoint: "npm"
+    args: ["ci", "--legacy-peer-deps"]
 
-  - name: "gcr.io/cloud-builders/docker"
-    id: "docker-push-sha"
-    args:
-      - "push"
-      - "us-central1-docker.pkg.dev/pe-axelior-clinapp-dev/clinica-backend/salud-frontend:$COMMIT_SHA"
+  - name: "node:20-alpine"
+    id: "build-angular"
+    entrypoint: "npm"
+    args: ["run", "build", "--", "--configuration", "production"]
 
-  - name: "gcr.io/cloud-builders/docker"
-    id: "docker-push-latest"
+  - name: "node:20-alpine"
+    id: "deploy-firebase-hosting"
+    entrypoint: "sh"
     args:
-      - "push"
-      - "us-central1-docker.pkg.dev/pe-axelior-clinapp-dev/clinica-backend/salud-frontend:latest"
-
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    id: "cloud-run-deploy"
-    entrypoint: "gcloud"
-    args:
-      - "run"
-      - "deploy"
-      - "salud-frontend"
-      - "--image=us-central1-docker.pkg.dev/pe-axelior-clinapp-dev/clinica-backend/salud-frontend:$COMMIT_SHA"
-      - "--region=us-central1"
-      - "--platform=managed"
-      - "--port=8080"
-      - "--memory=256Mi"
-      - "--cpu=1"
-      - "--min-instances=0"
-      - "--max-instances=3"
-      - "--concurrency=200"
-      - "--timeout=30s"
-      - "--allow-unauthenticated"
-      - "--service-account=clinica-backend-sa@pe-axelior-clinapp-dev.iam.gserviceaccount.com"
+      - "-c"
+      - "npm i -g firebase-tools && firebase deploy --project pe-axelior-clinapp-dev --only hosting --non-interactive"
 
 timeout: "900s"
 

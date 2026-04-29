@@ -4,17 +4,19 @@ set -euo pipefail
 PROJECT_ID="pe-axelior-clinapp-dev"
 BRANCH="release/develop"
 
-echo "=== 1. Permisos al Cloud Build SA ==="
+echo "=== 1. Permisos al Cloud Build SA para Firebase Hosting ==="
 PROJECT_NUMBER="$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')"
 CB_SA="${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
 
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:${CB_SA}" \
-  --role="roles/run.admin"
+  --role="roles/firebase.admin" \
+  --condition=None
 
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:${CB_SA}" \
-  --role="roles/iam.serviceAccountUser"
+  --role="roles/serviceusage.serviceUsageConsumer" \
+  --condition=None
 
 echo "=== 2. Trigger Cloud Build FRONTEND ==="
 gcloud builds triggers create github \
@@ -24,7 +26,7 @@ gcloud builds triggers create github \
   --branch-pattern="^${BRANCH}$" \
   --build-config="cloudbuild.yaml" \
   --name="frontend-deploy-release-develop" \
-  --description="Deploy frontend Angular a Cloud Run"
+  --description="Deploy frontend Angular a Firebase Hosting"
 
 echo "=== 3. Trigger Cloud Build BACKEND ==="
 gcloud builds triggers create github \
@@ -39,9 +41,10 @@ gcloud builds triggers create github \
 
 echo ""
 echo "Setup completado."
-echo "URL esperada frontend despues del primer deploy:"
-echo "https://salud-frontend-${PROJECT_NUMBER}.us-central1.run.app"
+echo "URLs esperadas frontend despues del primer deploy:"
+echo "https://${PROJECT_ID}.web.app"
+echo "https://${PROJECT_ID}.firebaseapp.com"
 echo ""
 echo "Siguiente paso:"
-echo "1) Entregar URL a Julio para DNS"
-echo "2) Actualizar CORS backend con URL Cloud Run + dominio final"
+echo "1) Actualizar OAuth con origenes web.app/firebaseapp.com"
+echo "2) Actualizar CORS backend con web.app/firebaseapp.com + dominio final"
