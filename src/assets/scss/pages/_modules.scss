@@ -16,33 +16,41 @@ $tm-dark    : #1e1040;                     // texto oscuro con tinte purple
 $tm-muted   : #5a6a85;
 $tm-surface : #f4f7fb;
 $tm-card    : #ffffff;
+// Cabecera tipo SaaS ejecutivo (referencia Axelior / dashboards modernos)
+$tm-table-header-bg: #f1f0f7;
+$tm-table-header-text: #5c5a72;
+$tm-table-header-border: rgba(124, 58, 237, 0.12);
 
 // ══════════════════════════════════════════════════════════════
-//  1. MATERIAL TABLE — cabeceras con degradado teal
+//  1. MATERIAL TABLE — cabecera clara ejecutiva (sin bloques morados)
 // ══════════════════════════════════════════════════════════════
 .mat-mdc-table,
 table[mat-table] {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 
   .mat-mdc-header-row {
-    background: linear-gradient(90deg, $tm-start 0%, $tm-mid 100%) !important;
+    background: $tm-table-header-bg !important;
+    box-shadow: inset 0 -1px 0 $tm-table-header-border;
   }
 
   .mat-mdc-header-cell {
-    color: rgba(255, 255, 255, 0.95) !important;
-    font-weight: 600 !important;
-    font-size: 0.78rem !important;
+    color: $tm-table-header-text !important;
+    font-weight: 700 !important;
+    font-size: 0.6875rem !important;
     text-transform: uppercase;
-    letter-spacing: 0.055em;
+    letter-spacing: 0.08em;
     border-bottom: none !important;
     white-space: nowrap;
+    background: transparent !important;
   }
 
   .mat-mdc-row {
-    transition: background 0.12s ease;
+    transition: background 0.14s ease;
 
     &:hover {
-      background: $tm-light !important;
+      background: rgba(124, 58, 237, 0.04) !important;
     }
 
     &:last-child .mat-mdc-cell {
@@ -53,11 +61,35 @@ table[mat-table] {
   .mat-mdc-cell {
     font-size: 0.875rem;
     color: $tm-dark;
+    border-bottom: 1px solid rgba(30, 16, 64, 0.06);
+    vertical-align: middle;
+  }
+
+  .mat-column-acciones,
+  .mat-column-actions {
+    white-space: nowrap;
+    min-width: 180px;
+  }
+
+  @media (max-width: 768px) {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      padding-inline: 0.65rem !important;
+      font-size: 0.8rem !important;
+    }
+  }
+
+  // Acciones tipo enlace ejecutivo (sin bloques de botón pesados)
+  .mat-mdc-cell .mat-mdc-button-base.mat-mdc-button {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    min-width: auto;
+    padding: 0 0.5rem;
   }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  2. MATERIAL CARD HEADERS — degradado teal en formularios
+//  2. MATERIAL CARD HEADERS — barra de contexto ejecutiva (no bloque morado)
 // ══════════════════════════════════════════════════════════════
 mat-card,
 .mat-mdc-card {
@@ -67,25 +99,27 @@ mat-card,
 
   mat-card-header,
   .mat-mdc-card-header {
-    background: linear-gradient(135deg, $tm-start 0%, $tm-mid 100%) !important;
-    padding: 1.1rem 1.5rem !important;
+    background: linear-gradient(180deg, #faf9ff 0%, #f8fafc 100%) !important;
+    padding: 1rem 1.5rem !important;
     margin-bottom: 0 !important;
     border-radius: 0 !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+    box-shadow: inset 4px 0 0 0 $tm-start;
 
     mat-card-title,
     .mat-mdc-card-title,
     .mat-card-title {
-      color: #ffffff !important;
+      color: $tm-dark !important;
       font-weight: 700;
+      font-size: 1rem !important;
+      letter-spacing: -0.02em;
     }
 
     mat-card-subtitle,
     .mat-mdc-card-subtitle {
-      color: rgba(255, 255, 255, 0.75) !important;
-    }
-
-    * {
-      color: #ffffff !important;
+      color: $tm-muted !important;
+      font-size: 0.8125rem !important;
+      margin-top: 0.2rem;
     }
   }
 
@@ -129,9 +163,10 @@ mat-card,
   gap: 1rem;
   background: $tm-card;
   border-radius: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.1);
   border-left: 4px solid $tm-start !important;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 2px 8px rgba(46, 16, 101, 0.07);
+  padding: 1.125rem 1.35rem;
+  box-shadow: 0 1px 3px rgba(46, 16, 101, 0.06);
 
   .module-title {
     h2, h3 {
@@ -182,8 +217,17 @@ mat-card,
   -webkit-overflow-scrolling: touch;
   border-radius: 12px;
   background: $tm-card;
-  box-shadow: 0 2px 8px rgba(46, 16, 101, 0.07);
-  border: 1px solid rgba($tm-start, 0.12);
+  box-shadow: 0 1px 3px rgba(46, 16, 101, 0.06);
+  border: 1px solid rgba($tm-start, 0.1);
+  max-width: 100%;
+
+  table[mat-table] {
+    min-width: 760px;
+  }
+
+  .mat-mdc-header-row {
+    border-radius: 12px 12px 0 0;
+  }
 }
 
 // Scrollable wrapper automático para cualquier div con mat-table sin wrapper explícito
@@ -199,34 +243,37 @@ mat-card,
 // ══════════════════════════════════════════════════════════════
 .mat-mdc-tab-group {
   .mat-mdc-tab-header {
-    background: linear-gradient(90deg, $tm-start 0%, $tm-mid 100%);
+    background: #f8fafc;
     border-radius: 12px 12px 0 0;
     overflow: hidden;
+    border: 1px solid rgba($tm-start, 0.1);
+    border-bottom: none;
   }
 
   .mat-mdc-tab {
-    color: rgba(255, 255, 255, 0.72) !important;
+    color: $tm-muted !important;
     min-width: 100px;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.875rem;
 
     &.mdc-tab--active {
-      color: #ffffff !important;
+      color: $tm-start !important;
       font-weight: 700;
     }
 
     .mdc-tab__ripple::before {
-      background-color: rgba(255, 255, 255, 0.12) !important;
+      background-color: rgba($tm-start, 0.08) !important;
     }
   }
 
   .mdc-tab-indicator__content--underline {
-    border-color: $tm-accent !important;
+    border-color: $tm-start !important;
     border-top-width: 3px !important;
   }
 
   .mat-mdc-tab-body-wrapper {
-    border: 1px solid rgba($tm-start, 0.12);
-    border-top: none;
+    border: 1px solid rgba($tm-start, 0.1);
+    border-top: 1px solid rgba($tm-start, 0.08);
     border-radius: 0 0 12px 12px;
     background: $tm-card;
   }
@@ -285,14 +332,14 @@ mat-card,
   }
 }
 
-// Card headers con gradiente azul → teal
+// Card headers con gradiente azul → barra ejecutiva Axelior
 .bg-gradient-to-r.from-blue-50.to-blue-100 {
-  background: linear-gradient(135deg, $tm-start 0%, $tm-mid 100%) !important;
+  background: linear-gradient(180deg, #faf9ff 0%, #f4f2fb 100%) !important;
+  border-bottom: 1px solid rgba($tm-start, 0.1);
 
   .text-blue-900,
-  .text-2xl,
-  * {
-    color: #ffffff !important;
+  .text-2xl {
+    color: $tm-dark !important;
   }
 }
 
@@ -604,6 +651,13 @@ a.btn-teal {
   gap: 0.5rem;
   position: relative;
   overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba($tm-start, 0.22);
+    box-shadow: 0 12px 22px rgba(46, 16, 101, 0.12);
+  }
 
   // Barra de acento izquierda — codificación de prioridad
   &::before {
@@ -626,7 +680,7 @@ a.btn-teal {
   }
 
   .hc-kpi-value {
-    font-size: 2rem;
+    font-size: clamp(1.8rem, 3.4vw, 2.3rem);
     font-weight: 800;
     line-height: 1;
     color: $tm-dark;
@@ -659,20 +713,26 @@ a.btn-teal {
   &--prescriptions { &::before { background: $cs-iv-color; } .hc-kpi-value { color: $cs-iv-color; } }
   &--alerts       { &::before { background: $hc-critical; } background: $hc-critical-bg; }
   &--shortage     { &::before { background: $sc-shortage; } background: $sc-shortage-bg; }
+
+  @media (max-width: 640px) {
+    padding: 1rem 1rem 0.95rem;
+    gap: 0.35rem;
+  }
 }
 
 // ─── 14.6 SECCIÓN DE MÓDULO — Header con contexto clínico ────
 .hc-module-header {
   background: $tm-card;
-  border-radius: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 58, 237, 0.1);
   border-left: 4px solid $tm-start;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 2px 8px rgba(46, 16, 101, 0.07);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(46, 16, 101, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.875rem;
+  gap: 1rem 1.5rem;
 
   .hc-module-info {
     flex: 1;
@@ -680,30 +740,31 @@ a.btn-teal {
   }
 
   .hc-module-title {
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: 800;
     color: $tm-dark;
-    margin: 0 0 0.15rem;
+    margin: 0 0 0.35rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
 
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
       color: $tm-start;
       flex-shrink: 0;
     }
   }
 
   .hc-module-subtitle {
-    font-size: 0.82rem;
+    font-size: 0.9rem;
     color: $tm-muted;
     margin: 0;
-    line-height: 1.45;
+    line-height: 1.55;
+    max-width: 40rem;
   }
 
   .hc-module-actions {
@@ -731,10 +792,33 @@ a.btn-teal {
     flex-direction: column;
     align-items: flex-start;
 
+    .mat-mdc-form-field {
+      width: 100%;
+    }
+
     .hc-module-actions button {
       width: 100%;
     }
   }
+}
+
+// Executive toolbar actions and main buttons
+button[mat-flat-button].btn-teal,
+button[mat-flat-button].mat-primary {
+  border-radius: 10px !important;
+  height: 40px;
+  padding-inline: 1rem !important;
+  box-shadow: 0 6px 14px rgba($tm-start, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba($tm-start, 0.28);
+  }
+}
+
+button[mat-stroked-button] {
+  border-radius: 10px !important;
 }
 
 // ─── 14.7 TABLA CLÍNICA — filas con indicadores de seguridad ──
@@ -921,22 +1005,25 @@ a.btn-teal {
 
 // ─── 15.4 mat-card-header con clases Tailwind azules ─────────
 // Patrón: <mat-card-header class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 mb-4">
+// Misma línea visual que card headers ejecutivos (sin bloque morado pesado)
 .mat-mdc-card mat-card-header.bg-gradient-to-r,
 .mat-mdc-card .mat-mdc-card-header.bg-gradient-to-r {
-  background: linear-gradient(135deg, $tm-start 0%, $tm-mid 100%) !important;
+  background: linear-gradient(180deg, #faf9ff 0%, #f4f2fb 100%) !important;
+  border-bottom: 1px solid rgba($tm-start, 0.1);
+  box-shadow: inset 4px 0 0 0 $tm-start;
 
   mat-card-title,
   .mat-mdc-card-title,
   .mat-card-title {
-    color: #fff !important;
-    font-size: 1.1rem !important;
+    color: $tm-dark !important;
+    font-size: 1.05rem !important;
     font-weight: 700 !important;
   }
 
   mat-card-subtitle,
-  .mat-mdc-card-subtitle { color: rgba(255, 255, 255, 0.75) !important; }
+  .mat-mdc-card-subtitle { color: $tm-muted !important; }
 
-  h2, h3, h4 { color: #fff !important; }
+  h2, h3, h4 { color: $tm-dark !important; }
 }
 
 // ─── 15.5 h2 título standalone del módulo ────────────────────
@@ -1110,4 +1197,28 @@ td[colspan] {
   font-size: 0.875rem;
   text-align: center;
   padding:   1.5rem !important;
+}
+
+// ─── 16. PAGINADOR — estilo ejecutivo Axelior ─────────────────
+.mat-mdc-paginator {
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    color: $tm-muted;
+  }
+
+  .mat-mdc-paginator-navigation-previous,
+  .mat-mdc-paginator-navigation-next,
+  .mat-mdc-paginator-navigation-first,
+  .mat-mdc-paginator-navigation-last {
+    border-radius: 8px;
+  }
+
+  .mat-mdc-paginator-page-size .mat-mdc-text-field-wrapper {
+    border-radius: 8px;
+  }
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-navigation-previous:not(:disabled):hover,
+.mat-mdc-paginator .mat-mdc-paginator-navigation-next:not(:disabled):hover {
+  background: rgba($tm-start, 0.08);
+  color: $tm-start;
 }

@@ -1,11 +1,14 @@
-<div class="flex flex-col gap-5">
+<div class="hci-mod hc-page flex flex-col gap-5">
 
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-    <div class="mb-3">
-      <h2 class="text-xl font-semibold text-gray-900">Examenes - Ordenes</h2>
-      <p class="text-sm text-gray-500">Busca pacientes y gestiona sus ordenes de examen.</p>
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Órdenes de examen</h1>
+      <p class="hci-mod__subtitle">Busca pacientes y gestiona sus órdenes de laboratorio e imagen.</p>
     </div>
-    <div class="flex flex-wrap items-center gap-3" [formGroup]="searchForm">
+  </header>
+
+  <div class="hci-mod__filters module-filter-bar" [formGroup]="searchForm">
+    <div class="filter-row hci-mod__filter-row flex flex-wrap items-center gap-3">
       <mat-form-field appearance="outline" class="min-w-[280px] flex-1">
         <mat-label>Buscar paciente</mat-label>
         <input matInput placeholder="Nombre o DNI" formControlName="search" (keyup.enter)="onSearch()" />
@@ -14,7 +17,7 @@
     </div>
   </div>
 
-  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+  <div class="hci-mod-table-wrap module-table-wrap">
     <table mat-table [dataSource]="patients" class="w-full">
     <ng-container matColumnDef="docNumber">
       <th mat-header-cell *matHeaderCellDef>N° Documento</th>

@@ -1,5 +1,17 @@
-<div class="flex flex-col gap-4">
-  <div class="flex flex-wrap items-center gap-4" [formGroup]="filtersForm">
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Catálogo de servicios</h1>
+      <p class="hci-mod__subtitle">Servicios clínicos por especialidad, código y vigencia.</p>
+    </div>
+    <button mat-flat-button color="primary" class="hci-mod__cta" (click)="newService()">
+      <mat-icon>add</mat-icon>
+      Nuevo servicio
+    </button>
+  </header>
+
+  <div class="hci-mod__filters module-filter-bar" [formGroup]="filtersForm">
+    <div class="filter-row hci-mod__filter-row flex flex-wrap items-center gap-4">
     <mat-form-field appearance="outline">
       <mat-label>Buscar servicio</mat-label>
       <input matInput placeholder="Código o nombre" formControlName="search" (keyup.enter)="onSearch()" />
@@ -20,13 +32,10 @@
     </mat-checkbox>
 
     <span class="flex-auto"></span>
-
-    <button mat-flat-button color="primary" (click)="newService()">
-      Nuevo servicio
-    </button>
+    </div>
   </div>
 
-  <div class="module-table-wrap">
+  <div class="hci-mod-table-wrap module-table-wrap">
   <table mat-table [dataSource]="services" class="w-full">
       <ng-container matColumnDef="code">
         <th mat-header-cell *matHeaderCellDef>Código</th>

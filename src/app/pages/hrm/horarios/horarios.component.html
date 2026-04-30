@@ -1,17 +1,16 @@
-<div class="p-6 space-y-6">
+<div class="hci-mod hc-page flex flex-col gap-5 p-6">
 
-  <!-- Header -->
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-    <div class="flex items-center gap-4">
-      <button mat-icon-button routerLink="/hrm/empleados">
+  <header class="hci-mod__hero">
+    <div class="flex items-start gap-3 min-w-0 flex-1">
+      <button mat-icon-button type="button" routerLink="/rrhh/empleados" aria-label="Volver a empleados">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <div>
-        <h1 class="text-2xl font-bold text-gray-800">RRHH - Horarios</h1>
-        <p class="text-sm text-gray-500">Turnos habituales del empleado</p>
+      <div class="hci-mod__titles">
+        <h1 class="hci-mod__title">Horarios y guardias</h1>
+        <p class="hci-mod__subtitle">Turnos habituales del empleado seleccionado.</p>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- Grilla -->
   <div class="grid gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">

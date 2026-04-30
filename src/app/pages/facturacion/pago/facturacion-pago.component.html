@@ -1,4 +1,5 @@
-<mat-card class="cardWithShadow max-w-2xl">
+<div class="hci-mod hc-page flex flex-col gap-5 p-6 items-center">
+<mat-card class="cardWithShadow max-w-2xl w-full">
   <mat-card-title>Registrar pago</mat-card-title>
   <mat-card-content class="mt-4">
     <ng-container *ngIf="invoice; else loadingOrEmpty">
@@ -65,4 +66,5 @@
     </ng-template>
   </mat-card-content>
 </mat-card>
+</div>
 

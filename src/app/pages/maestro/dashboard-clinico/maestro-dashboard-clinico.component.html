@@ -1,19 +1,14 @@
-<div class="flex flex-col gap-5">
-
-  <!-- ── Cabecera operativa del turno ─────────────────────── -->
-  <div class="hc-module-header flex items-center justify-between flex-wrap gap-3">
+<div class="hci-dash hc-page flex flex-col gap-5">
+  <!-- Cabecera -->
+  <header class="hci-dash__hero">
     <div>
-      <h2 class="hc-module-title">
-        <span>Dashboard Clínico</span>
-      </h2>
-      <p class="hc-module-subtitle">Resumen operativo del turno — actualización en tiempo real</p>
+      <h1 class="hci-dash__title">Dashboard clínico</h1>
+      <p class="hci-dash__subtitle">
+        Resumen operativo del turno: citas, exámenes, prescripciones y alertas — actualización en tiempo real cuando el backend esté conectado.
+      </p>
     </div>
-    <div class="flex flex-wrap items-center gap-3">
-      <app-date-picker-field
-        class="min-w-[200px]"
-        label="Fecha"
-        [control]="dashboardDate"
-      />
+    <div class="hci-dash__actions">
+      <app-date-picker-field class="min-w-[200px]" label="Fecha" [control]="dashboardDate" />
       <mat-form-field appearance="outline" class="min-w-[160px]">
         <mat-label>Sede</mat-label>
         <mat-select>
@@ -21,59 +16,143 @@
         </mat-select>
       </mat-form-field>
     </div>
+  </header>
+
+  <!-- KPIs -->
+  <section class="hci-dash__kpis" aria-label="Indicadores del día">
+    @for (k of kpis; track k.id) {
+      <article class="hci-kpi" [ngClass]="'hci-kpi--' + k.variant">
+        <div class="hci-kpi__top">
+          <p class="hci-kpi__label">{{ k.label }}</p>
+          <div class="hci-kpi__icon" aria-hidden="true">
+            <mat-icon>{{ k.icon }}</mat-icon>
+          </div>
+        </div>
+        <p class="hci-kpi__value">{{ k.value }}</p>
+        <p class="hci-kpi__sub">{{ k.sub }}</p>
+        <p
+          class="hci-kpi__trend"
+          [class.hci-kpi__trend--up]="k.trendType === 'up'"
+          [class.hci-kpi__trend--down]="k.trendType === 'down'"
+          [class.hci-kpi__trend--flat]="k.trendType === 'flat'"
+        >
+          @if (k.trendType === 'up') {
+            <mat-icon>trending_up</mat-icon>
+          } @else if (k.trendType === 'down') {
+            <mat-icon>trending_down</mat-icon>
+          }
+          {{ k.trend }}@if (k.trend !== '—') {
+            <span> vs ayer</span>
+          }
+        </p>
+      </article>
+    }
+  </section>
+
+  <!-- Gráficas -->
+  <div class="hci-dash__charts">
+    <mat-card class="hci-dash-card">
+      <mat-card-header>
+        <mat-card-title>Actividad del día</mat-card-title>
+        <mat-card-subtitle>Citas y movimientos por franja horaria (demostración)</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="hci-chart-host">
+          <apx-chart
+            [series]="activityChart.series"
+            [chart]="activityChart.chart"
+            [xaxis]="activityChart.xaxis"
+            [stroke]="activityChart.stroke"
+            [fill]="activityChart.fill"
+            [markers]="activityChart.markers"
+            [dataLabels]="activityChart.dataLabels"
+            [yaxis]="activityChart.yaxis"
+            [grid]="activityChart.grid"
+            [colors]="activityChart.colors"
+            [tooltip]="activityChart.tooltip"
+          ></apx-chart>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="hci-dash-card">
+      <mat-card-header>
+        <mat-card-title>Distribución de citas</mat-card-title>
+        <mat-card-subtitle>Estado de las citas del día (demostración)</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="hci-chart-host">
+          <apx-chart
+            [series]="donutChart.series"
+            [chart]="donutChart.chart"
+            [labels]="donutChart.labels"
+            [colors]="donutChart.colors"
+            [legend]="donutChart.legend"
+            [dataLabels]="donutChart.dataLabels"
+            [plotOptions]="donutChart.plotOptions"
+          ></apx-chart>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <!-- ── KPI Cards: métricas operativas del día ────────────── -->
-  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+  <!-- Próximas citas + Alertas -->
+  <div class="hci-dash__row2">
+    <mat-card class="hci-dash-card">
+      <mat-card-header>
+        <mat-card-title>Próximas citas</mat-card-title>
+        <mat-card-subtitle>Siguientes turnos programados (vista previa)</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="hci-upcoming-list">
+          @for (u of upcomingDemo; track u.time + u.name) {
+            <div class="hci-upcoming-row">
+              <span class="hci-upcoming-time">{{ u.time }}</span>
+              <div class="hci-upcoming-avatar" aria-hidden="true">{{ u.initials }}</div>
+              <div class="hci-upcoming-body">
+                <p class="hci-upcoming-name">{{ u.name }}</p>
+                <p class="hci-upcoming-sub">{{ u.sub }}</p>
+              </div>
+              <span
+                class="hci-pill"
+                [class.hci-pill--purple]="u.pillClass === 'purple'"
+                [class.hci-pill--blue]="u.pillClass === 'blue'"
+                [class.hci-pill--green]="u.pillClass === 'green'"
+              >
+                {{ u.pill }}
+              </span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-    <div class="hc-kpi-card hc-kpi-card--appointments">
-      <p class="hc-kpi-label">Citas hoy</p>
-      <p class="hc-kpi-value">0</p>
-      <p class="hc-kpi-sub">programadas</p>
-    </div>
-
-    <div class="hc-kpi-card hc-kpi-card--exams">
-      <p class="hc-kpi-label">Exámenes</p>
-      <p class="hc-kpi-value">0</p>
-      <p class="hc-kpi-sub">solicitados</p>
-    </div>
-
-    <div class="hc-kpi-card hc-kpi-card--prescriptions">
-      <p class="hc-kpi-label">Prescripciones</p>
-      <p class="hc-kpi-value">0</p>
-      <p class="hc-kpi-sub">activas</p>
-    </div>
-
-    <div class="hc-kpi-card hc-kpi-card--pending">
-      <p class="hc-kpi-label">En triaje</p>
-      <p class="hc-kpi-value">0</p>
-      <p class="hc-kpi-sub">en espera</p>
-    </div>
-
-    <div class="hc-kpi-card hc-kpi-card--alerts">
-      <p class="hc-kpi-label">Alertas stock</p>
-      <p class="hc-kpi-value">0</p>
-      <p class="hc-kpi-sub">medicamentos</p>
-    </div>
-
-    <div class="hc-kpi-card hc-kpi-card--critical">
-      <p class="hc-kpi-label">Críticos</p>
-      <p class="hc-kpi-value">0</p>
-      <p class="hc-kpi-sub">pacientes</p>
-    </div>
-
+    <mat-card class="hci-dash-card hci-alerts-card">
+      <mat-card-header>
+        <mat-card-title>Alertas importantes</mat-card-title>
+        <mat-card-subtitle>Requieren atención del equipo</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @for (a of alertsDemo; track a.text) {
+          <div class="hci-alert-row" role="button" tabindex="0">
+            <mat-icon class="hci-alert-ico">{{ a.icon }}</mat-icon>
+            <p class="hci-alert-text">{{ a.text }}</p>
+            <mat-icon class="hci-alert-chev">chevron_right</mat-icon>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <!-- ── Tabla de últimas citas ────────────────────────────── -->
-  <mat-card>
+  <!-- Tabla citas recientes -->
+  <mat-card class="hci-dash-card">
     <mat-card-header>
       <mat-card-title>Citas recientes</mat-card-title>
-      <mat-card-subtitle>Últimas 10 citas del día ordenadas por hora</mat-card-subtitle>
+      <mat-card-subtitle>Últimas citas del día ordenadas por hora</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="module-table-wrap">
-        <table mat-table [dataSource]="[]" class="w-full">
-
+        <table mat-table [dataSource]="recentCitas" class="w-full">
           <ng-container matColumnDef="hora">
             <th mat-header-cell *matHeaderCellDef>Hora</th>
             <td mat-cell *matCellDef="let row">{{ row.hora }}</td>
@@ -92,32 +171,38 @@
           <ng-container matColumnDef="estado">
             <th mat-header-cell *matHeaderCellDef>Estado</th>
             <td mat-cell *matCellDef="let row">
-              <span class="hc-badge"
+              <span
+                class="hc-badge"
                 [class.hc-badge--pending]="row.estado === 'AGENDADA'"
                 [class.hc-badge--triage]="row.estado === 'TRIAJE'"
                 [class.hc-badge--stable]="row.estado === 'ATENDIDA'"
                 [class.hc-badge--warning]="row.estado === 'EN_CONSULTA'"
-                [class.hc-badge--inactive]="row.estado === 'CANCELADA'">
+                [class.hc-badge--inactive]="row.estado === 'CANCELADA'"
+              >
                 {{ row.estado }}
               </span>
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="['hora','paciente','especialista','estado']"></tr>
-          <tr mat-row *matRowDef="let row; columns: ['hora','paciente','especialista','estado']"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-          <tr class="mat-mdc-no-data-row">
-            <td [attr.colspan]="4">
+          <tr *matNoDataRow class="mat-mdc-row">
+            <td class="mat-mdc-cell" [attr.colspan]="displayedColumns.length">
               <div class="empty-state">
                 <mat-icon>calendar_today</mat-icon>
                 <p>No hay citas registradas para esta fecha</p>
               </div>
             </td>
           </tr>
-
         </table>
+      </div>
+      <div class="hci-dash-table-footer">
+        <a mat-button routerLink="/agenda/citas">
+          Ver todas las citas
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
       </div>
     </mat-card-content>
   </mat-card>
-
 </div>

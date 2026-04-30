@@ -1,20 +1,17 @@
-<div class="flex flex-col gap-5">
+<div class="hci-mod hc-page flex flex-col gap-5">
 
-  <!-- ── Cabecera del módulo ───────────────────────────────── -->
-  <div class="hc-module-header hc-module-header--pharmacy">
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <h2 class="hc-module-title">Inventario — Control de Stock</h2>
-        <p class="hc-module-subtitle">
-          Registra ingresos y salidas de medicamentos.
-          Sigue el método FEFO (First Expired, First Out) para sustancias controladas.
-        </p>
-      </div>
-      <button mat-flat-button class="btn-teal" (click)="openForm()">
-        + Registrar movimiento
-      </button>
+  <header class="hci-mod__hero hci-mod__hero--pharmacy">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Control de stock</h1>
+      <p class="hci-mod__subtitle">
+        Registra ingresos y salidas; aplica FEFO en sustancias controladas y mantén trazabilidad DSCSA.
+      </p>
     </div>
-  </div>
+    <button mat-flat-button color="primary" class="hci-mod__cta" (click)="openForm()">
+      <mat-icon>add</mat-icon>
+      Registrar movimiento
+    </button>
+  </header>
 
   <!-- ── Formulario de movimiento ─────────────────────────── -->
   @if (showForm) {

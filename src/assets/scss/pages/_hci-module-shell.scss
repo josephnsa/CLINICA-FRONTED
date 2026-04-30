@@ -1,0 +1,381 @@
+@use "../variables" as *;
+
+// ══════════════════════════════════════════════════════════════
+//  Shell ejecutivo Axelior — mismas piezas que módulo usuarios
+//  Usar en raíz: class="hci-mod hc-page flex flex-col gap-5"
+// ══════════════════════════════════════════════════════════════
+
+.hci-mod {
+  min-width: 0;
+}
+
+.hci-mod__titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.hci-mod__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.hci-mod__hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  border-left: 4px solid $axelior-purple-600;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(46, 16, 101, 0.06);
+}
+
+.hci-mod__title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1e1040;
+  line-height: 1.2;
+}
+
+.hci-mod__subtitle {
+  margin: 0;
+  max-width: 40rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #5a6a85;
+}
+
+.hci-mod__hero--pharmacy {
+  border-left-color: $cs-ii-color;
+  background: rgba($cs-ii-color, 0.03);
+}
+
+.hci-mod__hero--critical {
+  border-left-color: $hc-critical;
+  background: $hc-critical-bg;
+}
+
+.hci-mod__title--with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    color: $axelior-purple-600;
+  }
+}
+
+// Listados: tabla principal al mismo nivel visual que referencia usuarios
+.hci-mod.hc-page > .module-table-wrap {
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(46, 16, 101, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.hci-mod.hc-page > .module-filter-bar {
+  border-radius: 14px;
+}
+
+.hci-mod__cta.mat-mdc-unelevated-button {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  padding: 0 1.15rem !important;
+  height: 44px;
+
+  mat-icon {
+    margin-right: 0.25rem;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.hci-mod__filter-row {
+  align-items: center;
+}
+
+.hci-mod__field-icon {
+  margin-right: 0.25rem;
+  color: #94a3b8 !important;
+  font-size: 20px !important;
+}
+
+.hci-mod__filter-btn.mat-mdc-outlined-button {
+  border-radius: 10px !important;
+  font-weight: 600;
+  border-color: rgba(124, 58, 237, 0.22) !important;
+  color: $axelior-purple-700 !important;
+
+  mat-icon {
+    margin-right: 0.35rem;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.hci-mod__kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.hci-mod-kpi {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(124, 58, 237, 0.08);
+  box-shadow: 0 1px 3px rgba(46, 16, 101, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hci-mod-kpi__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.15rem;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.hci-mod-kpi__icon--total {
+  background: rgba(124, 58, 237, 0.1);
+  color: $axelior-purple-600;
+}
+
+.hci-mod-kpi__icon--active {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.hci-mod-kpi__icon--inactive {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.hci-mod-kpi__icon--roles {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.hci-mod-kpi__label {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a8699;
+}
+
+.hci-mod-kpi__value {
+  margin: 0;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #1e1040;
+  line-height: 1.1;
+}
+
+.hci-mod-kpi__hint {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+.hci-mod-table-card.mat-mdc-card {
+  border-radius: 14px !important;
+  overflow: hidden;
+  border: 1px solid rgba(124, 58, 237, 0.08);
+  box-shadow: 0 2px 12px rgba(46, 16, 101, 0.06) !important;
+}
+
+.hci-mod-table-card .mat-mdc-card-header {
+  display: none;
+}
+
+.hci-mod-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+// Solo dentro de tarjeta tabla (evita doble borde); en listados sueltos conserva `module-table-wrap`.
+.hci-mod-table-card .hci-mod-table-wrap.module-table-wrap {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.hci-mod-table {
+  .mat-mdc-header-row {
+    background: #eef0f6 !important;
+  }
+
+  .mat-mdc-header-cell {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.07em;
+    font-weight: 800 !important;
+    color: #5c6478 !important;
+    border-bottom: 1px solid rgba(30, 16, 64, 0.06) !important;
+    box-shadow: none !important;
+  }
+
+  .mat-mdc-cell {
+    padding-top: 0.85rem !important;
+    padding-bottom: 0.85rem !important;
+    font-size: 0.875rem;
+    border-bottom-color: rgba(30, 16, 64, 0.05) !important;
+    vertical-align: middle;
+  }
+
+  .mat-mdc-row:hover {
+    background: rgba(124, 58, 237, 0.03) !important;
+  }
+}
+
+.hci-mod-th {
+  display: table-cell;
+  white-space: nowrap;
+
+  .hci-mod-sort-hint {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.2rem;
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: #b0b8c9;
+  }
+}
+
+.hci-mod-th--actions {
+  text-align: right;
+}
+
+.hci-mod-td-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.hci-mod-action-btn.mat-mdc-icon-button {
+  color: $axelior-purple-600 !important;
+
+  &:hover {
+    background: rgba(124, 58, 237, 0.08) !important;
+  }
+}
+
+.hci-mod-usercell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hci-mod-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.hci-mod-usercell__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.hci-mod-usercell__email {
+  font-weight: 600;
+  color: #1e1040;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hci-mod-usercell__id {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.hci-mod-namecell__name {
+  display: block;
+  font-weight: 700;
+  color: #1e1040;
+}
+
+.hci-mod-namecell__sub {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.hci-mod-rolecell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: #334155;
+
+  .hci-mod-rolecell__icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $axelior-purple-600;
+  }
+}
+
+.hci-mod-td-muted {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.hci-mod-paginator.mat-mdc-paginator {
+  border-top: 1px solid rgba(124, 58, 237, 0.08);
+  background: #fafbff;
+}
+
+.hci-mod-tab-group {
+  width: 100%;
+}

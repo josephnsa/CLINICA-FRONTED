@@ -1,16 +1,16 @@
-<div class="p-6 space-y-6">
-  <div class="flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-2xl font-bold text-gray-800">Reclamos e Incidencias</h1>
-      <p class="text-sm text-gray-500">Gestiona, prioriza y resuelve reclamos de pacientes.</p>
+<div class="hci-mod hc-page flex flex-col gap-5 p-6">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Reclamos e incidencias</h1>
+      <p class="hci-mod__subtitle">Gestiona, prioriza y resuelve reclamos de pacientes.</p>
     </div>
     @if (!showForm()) {
-      <button mat-flat-button color="primary" (click)="openForm()">
+      <button mat-flat-button color="primary" class="hci-mod__cta" (click)="openForm()">
         <mat-icon>add</mat-icon>
         Nuevo reclamo
       </button>
     }
-  </div>
+  </header>
 
   @if (showForm()) {
     <mat-card class="!p-6 !shadow-sm">

@@ -1,4 +1,11 @@
-<div class="flex flex-col gap-4">
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Tarifarios y convenios</h1>
+      <p class="hci-mod__subtitle">Tarifas por sede y servicio; la facturación usará este catálogo cuando el API esté activo.</p>
+    </div>
+  </header>
+
   <mat-card class="cardWithShadow !bg-slate-50 !border-slate-200">
     <mat-card-content class="!py-3">
       <p class="text-sm text-slate-600 m-0">
@@ -9,7 +16,8 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="flex flex-wrap items-center gap-4" [formGroup]="filtersForm">
+  <div class="module-filter-bar hci-mod__filters" [formGroup]="filtersForm">
+    <div class="filter-row hci-mod__filter-row flex flex-wrap items-center gap-4">
     <mat-form-field appearance="outline">
       <mat-label>Sede</mat-label>
       <mat-select formControlName="sedeId" (selectionChange)="onSearch()">
@@ -33,9 +41,10 @@
     <button mat-flat-button color="primary">
       Nueva tarifa
     </button>
+    </div>
   </div>
 
-  <div class="module-table-wrap">
+  <div class="hci-mod-table-wrap module-table-wrap">
   <table mat-table [dataSource]="tariffs" class="w-full">
       <ng-container matColumnDef="sedeName">
         <th mat-header-cell *matHeaderCellDef>Sede</th>

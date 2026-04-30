@@ -1,19 +1,18 @@
-<div class="flex flex-col gap-5">
+<div class="hci-mod hc-page flex flex-col gap-5">
 
-  <!-- ── Cabecera del módulo ───────────────────────────────── -->
-  <div class="hc-module-header hc-module-header--critical flex items-center justify-between flex-wrap gap-3">
-    <div>
-      <h2 class="hc-module-title">Farmacia — Alertas de Inventario</h2>
-      <p class="hc-module-subtitle">Monitoreo de stock crítico, desabasto y medicamentos por vencer</p>
+  <header class="hci-mod__hero hci-mod__hero--critical">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Alertas de inventario</h1>
+      <p class="hci-mod__subtitle">Stock crítico, desabasto y vencimientos — prioriza compras y ajustes.</p>
     </div>
-    <div class="flex items-center gap-2">
+    <div class="hci-mod__actions">
       @if (alerts.length > 0) {
         <span class="sc-badge sc-badge--shortage">
           {{ alerts.length }} alerta{{ alerts.length !== 1 ? 's' : '' }} activa{{ alerts.length !== 1 ? 's' : '' }}
         </span>
       }
     </div>
-  </div>
+  </header>
 
   <!-- ── Banner crítico ────────────────────────────────────── -->
   @if (alerts.length > 0) {
@@ -34,7 +33,7 @@
 
   <!-- ── Tabla de alertas activas ─────────────────────────── -->
   @if (alerts.length > 0) {
-    <div class="module-table-wrap">
+    <div class="hci-mod-table-wrap module-table-wrap">
       <table mat-table [dataSource]="alerts" class="w-full">
 
         <ng-container matColumnDef="medicationName">

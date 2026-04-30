@@ -122,10 +122,11 @@
         letter-spacing: 0.04em;
       }
 
-      // ── Ítem activo ───────────────────────────────────────
+      // ── Ítem activo (referencia módulos: lavanda + barra violeta)
       &.activeMenu {
-        background-color: rgba($axelior-purple-600, 0.09) !important;
-        box-shadow: inset 3px 0 0 0 $axelior-purple-600;
+        background-color: rgba($axelior-purple-600, 0.11) !important;
+        box-shadow: inset 4px 0 0 0 $axelior-purple-600;
+        border-radius: 10px;
 
         .mdc-list-item__primary-text {
           color: $axelior-purple-700 !important;
@@ -137,6 +138,15 @@
         .mat-icon {
           color: $axelior-purple-600 !important;
         }
+
+        .arrow-icon .mat-icon {
+          color: $axelior-purple-500 !important;
+        }
+      }
+
+      &.activeMenu.mat-toolbar.mat-primary {
+        background-color: rgba($axelior-purple-600, 0.11) !important;
+        color: inherit !important;
       }
 
       // Ícono izquierdo

@@ -1,25 +1,21 @@
-<div class="flex flex-col gap-4">
+<div class="hci-mod hc-page flex flex-col gap-5">
 
-  <!-- ── Module header ────────────────────────────────────────────── -->
-  <div class="hc-module-header">
-    <div class="hc-module-info">
-      <h2 class="hc-module-title">
-        <mat-icon>calendar_month</mat-icon>
-        Gestión de Citas
-      </h2>
-      <p class="hc-module-subtitle">Agenda y seguimiento de consultas médicas</p>
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title hci-mod__title--with-icon">
+        <mat-icon aria-hidden="true">calendar_month</mat-icon>
+        Gestión de citas
+      </h1>
+      <p class="hci-mod__subtitle">Agenda y seguimiento de consultas médicas.</p>
     </div>
-    <div class="hc-module-actions">
-      <button mat-flat-button color="primary" (click)="openForm()">
-        <mat-icon>add</mat-icon>
-        Nueva cita
-      </button>
-    </div>
-  </div>
+    <button mat-flat-button color="primary" class="hci-mod__cta" (click)="openForm()">
+      <mat-icon>add</mat-icon>
+      Nueva cita
+    </button>
+  </header>
 
-  <!-- ── Filter bar ───────────────────────────────────────────────── -->
-  <div class="module-filter-bar" [formGroup]="searchForm">
-    <div class="filter-row">
+  <div class="hci-mod__filters module-filter-bar" [formGroup]="searchForm">
+    <div class="filter-row hci-mod__filter-row">
       <app-patient-autocomplete-field
         style="flex:1; min-width:200px; max-width:480px;"
         label="Buscar por paciente"
@@ -34,7 +30,7 @@
   </div>
 
   <!-- ── Appointments table ───────────────────────────────────────── -->
-  <div class="module-table-wrap">
+  <div class="hci-mod-table-wrap module-table-wrap">
     <table mat-table [dataSource]="appointments" class="w-full">
 
       <ng-container matColumnDef="patientName">

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { HttpErrorResponse } from '@angular/common/http';
+import { PageEvent } from '@angular/material/paginator';
 import { SecurityService } from 'src/app/core/services/security.service';
 import { ApiResponse, UserListResponse, UserSummary, Role } from 'src/app/core/models';
 import {
@@ -34,32 +35,55 @@ export class SeguridadUsuariosComponent implements OnInit {
   users: UserSummary[] = [];
   roles: Role[] = [];
   isLoading = false;
+  totalUsers = 0;
+  pageIndex = 0;
+  pageSize = 10;
+  readonly pageSizeOptions = [5, 10, 25];
 
-  displayedColumns = ['email', 'fullName', 'roleName', 'sedes', 'active', 'actions'];
+  /** Columnas alineadas al diseño ejecutivo (usuario = avatar + email + id). */
+  displayedColumns = ['usuario', 'fullName', 'roleName', 'sedes', 'active', 'actions'];
+
+  /** Usuario seleccionado para el menú contextual de la fila. */
+  menuContext: UserSummary | null = null;
 
   ngOnInit(): void {
     this.loadRoles();
     this.loadUsers();
   }
 
-  get hasUsers(): boolean {
-    return this.users && this.users.length > 0;
+  /** KPIs: total desde API; activos/inactivos en la página actual; roles = catálogo. */
+  get kpiTotal(): number {
+    return this.totalUsers;
   }
 
-  loadUsers(page = 0): void {
+  get kpiActiveOnPage(): number {
+    return this.users.filter((u) => u.active).length;
+  }
+
+  get kpiInactiveOnPage(): number {
+    return this.users.filter((u) => !u.active).length;
+  }
+
+  get kpiRolesCount(): number {
+    return this.roles.length;
+  }
+
+  loadUsers(page = this.pageIndex): void {
     const { search, role, active } = this.filtersForm.value;
     this.isLoading = true;
+    this.pageIndex = page;
     this.securityService
       .getUsers({
         search: search ?? '',
         role: role ?? '',
         active: active === '' ? undefined : active === 'true',
         page,
-        size: 20,
+        size: this.pageSize,
       })
       .subscribe({
         next: (resp: ApiResponse<UserListResponse>) => {
-          this.users = resp.data.items;
+          this.users = resp.data?.items ?? [];
+          this.totalUsers = resp.data?.total ?? this.users.length;
           this.isLoading = false;
         },
         error: () => {
@@ -71,14 +95,79 @@ export class SeguridadUsuariosComponent implements OnInit {
   loadRoles(): void {
     this.securityService.getRoles().subscribe({
       next: (resp: ApiResponse<Role[]>) => {
-        this.roles = resp.data;
+        this.roles = resp.data ?? [];
       },
       error: () => {},
     });
   }
 
   onSearch(): void {
+    this.pageIndex = 0;
     this.loadUsers(0);
+  }
+
+  onPage(ev: PageEvent): void {
+    this.pageIndex = ev.pageIndex;
+    this.pageSize = ev.pageSize;
+    this.loadUsers(ev.pageIndex);
+  }
+
+  openFiltersHint(): void {
+    this.snackBar.open('Filtros avanzados disponibles próximamente.', 'Cerrar', { duration: 3000 });
+  }
+
+  initials(u: UserSummary): string {
+    const n = (u.fullName || u.email || '?').trim();
+    const parts = n.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return n.slice(0, 2).toUpperCase() || '??';
+  }
+
+  avatarHue(u: UserSummary): number {
+    let h = 0;
+    for (let i = 0; i < u.id.length; i++) {
+      h = (h * 31 + u.id.charCodeAt(i)) % 360;
+    }
+    return h;
+  }
+
+  userRef(u: UserSummary): string {
+    const short = u.id.replace(/-/g, '').slice(0, 6).toUpperCase();
+    return `USR-${short}`;
+  }
+
+  roleIcon(code: string): string {
+    const c = (code || '').toUpperCase();
+    if (c.includes('ADMIN')) return 'verified';
+    if (c.includes('FARM')) return 'medication';
+    if (c.includes('MED')) return 'stethoscope';
+    if (c.includes('ENF')) return 'healing';
+    return 'badge';
+  }
+
+  sedesLabel(u: UserSummary): string {
+    const n = u.sedes?.length ?? 0;
+    if (n === 0) return '—';
+    if (n === 1) return '1 sede';
+    return `${n} sedes`;
+  }
+
+  setMenuUser(u: UserSummary): void {
+    this.menuContext = u;
+  }
+
+  onMenuRoles(): void {
+    if (this.menuContext) {
+      this.manageRoles(this.menuContext);
+    }
+  }
+
+  avatarGradient(u: UserSummary): string {
+    const h = this.avatarHue(u);
+    const h2 = (h + 42) % 360;
+    return `linear-gradient(135deg, hsl(${h}, 58%, 44%), hsl(${h2}, 52%, 36%))`;
   }
 
   newUser(): void {
@@ -441,4 +530,3 @@ export class UserRolesDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { user: UserSummary }
   ) {}
 }
-

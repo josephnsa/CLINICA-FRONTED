@@ -1,18 +1,17 @@
-<div class="flex flex-col gap-5">
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-    <div class="mb-3">
-      <h2 class="text-xl font-semibold text-gray-900">Disponibilidad medica</h2>
-      <p class="text-sm text-gray-500">Configura reglas semanales y bloqueos del doctor por sede.</p>
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Reglas de disponibilidad</h1>
+      <p class="hci-mod__subtitle">Configura reglas semanales y bloqueos del médico por sede.</p>
     </div>
-    <div class="flex justify-end">
-      <button mat-flat-button color="primary" (click)="showRuleForm = !showRuleForm">
-        + Nueva regla
-      </button>
-    </div>
-  </div>
+    <button mat-flat-button color="primary" class="hci-mod__cta" type="button" (click)="showRuleForm = !showRuleForm">
+      <mat-icon>add</mat-icon>
+      Nueva regla
+    </button>
+  </header>
 
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm" [formGroup]="searchForm">
-    <div class="flex flex-wrap items-center gap-4">
+  <div class="hci-mod__filters module-filter-bar" [formGroup]="searchForm">
+    <div class="filter-row hci-mod__filter-row flex flex-wrap items-center gap-4">
       <app-doctor-autocomplete-field
         class="min-w-[280px] flex-1"
         label="Doctor"

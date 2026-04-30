@@ -1,7 +1,12 @@
-<div class="flex flex-col gap-4">
-  <h2 class="text-xl font-semibold">Productividad</h2>
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Productividad</h1>
+      <p class="hci-mod__subtitle">Indicadores por empleado y rango de fechas.</p>
+    </div>
+  </header>
 
-  <mat-card>
+  <mat-card class="hci-mod-table-card">
     <mat-card-content>
       <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
         <mat-form-field appearance="outline">

@@ -1,5 +1,14 @@
-<div class="flex flex-col gap-6">
-  <mat-tab-group>
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Especialidades y especialistas</h1>
+      <p class="hci-mod__subtitle">
+        Catálogo de especialidades y médicos con colegiatura, sede y estado operativo.
+      </p>
+    </div>
+  </header>
+
+  <mat-tab-group class="hci-mod-tab-group">
     <mat-tab label="Especialidades">
       <div class="mt-4 flex items-center gap-4" [formGroup]="specialtiesFiltersForm">
         <mat-form-field appearance="outline" class="grow">
@@ -16,7 +25,7 @@
         </button>
       </div>
 
-      <div class="module-table-wrap mt-4">
+      <div class="hci-mod-table-wrap module-table-wrap mt-4">
         <table mat-table [dataSource]="filteredSpecialties" class="w-full">
           <ng-container matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef>Código</th>
@@ -67,7 +76,7 @@
         </button>
       </div>
 
-      <div class="module-table-wrap mt-4">
+      <div class="hci-mod-table-wrap module-table-wrap mt-4">
         <table mat-table [dataSource]="filteredDoctors" class="w-full">
           <ng-container matColumnDef="fullName">
             <th mat-header-cell *matHeaderCellDef>Nombre completo</th>

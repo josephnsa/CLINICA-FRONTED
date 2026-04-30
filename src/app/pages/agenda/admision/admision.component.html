@@ -1,16 +1,23 @@
-<div class="flex flex-col gap-4">
-  <h2 class="text-xl font-semibold">Admisión / Check-in</h2>
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Admisión / Check-in</h1>
+      <p class="hci-mod__subtitle">Localiza la cita del paciente y confirma su llegada al consultorio.</p>
+    </div>
+  </header>
 
-  <div class="flex gap-3 items-center" [formGroup]="searchForm">
+  <div class="hci-mod__filters module-filter-bar" [formGroup]="searchForm">
+    <div class="filter-row hci-mod__filter-row flex gap-3 items-center flex-wrap">
     <app-patient-autocomplete-field
       class="w-full max-w-[520px]"
       label="Paciente"
       [idControl]="$any(searchForm.controls.patientId)"
     />
     <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+    </div>
   </div>
 
-  <div class="module-table-wrap">
+  <div class="hci-mod-table-wrap module-table-wrap">
   <table mat-table [dataSource]="appointments" class="w-full">
       <ng-container matColumnDef="patientName">
         <th mat-header-cell *matHeaderCellDef>Paciente</th>

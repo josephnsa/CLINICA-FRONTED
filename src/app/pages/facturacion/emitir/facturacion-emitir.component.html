@@ -1,7 +1,13 @@
-<div class="flex flex-col gap-4">
-  <mat-card class="cardWithShadow">
-    <mat-card-title>Emitir comprobante</mat-card-title>
-    <mat-card-content class="mt-4" [formGroup]="invoiceForm">
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Emitir comprobante</h1>
+      <p class="hci-mod__subtitle">Proforma / boleta / factura con ítems de servicio y método de pago.</p>
+    </div>
+  </header>
+
+  <mat-card class="cardWithShadow hci-mod-table-card">
+    <mat-card-content class="mt-4 !pt-6" [formGroup]="invoiceForm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <mat-form-field appearance="outline">
           <mat-label>Sede</mat-label>
@@ -44,7 +50,7 @@
           </button>
         </div>
 
-        <div class="module-table-wrap">
+        <div class="hci-mod-table-wrap module-table-wrap">
   <table mat-table [dataSource]="items.controls" class="w-full">
             <ng-container matColumnDef="service">
               <th mat-header-cell *matHeaderCellDef>Servicio</th>

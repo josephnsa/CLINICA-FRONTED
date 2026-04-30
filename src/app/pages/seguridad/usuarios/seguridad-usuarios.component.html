@@ -1,85 +1,222 @@
-<div class="flex flex-col gap-4">
-  <div class="flex flex-wrap items-center gap-4" [formGroup]="filtersForm">
-    <mat-form-field appearance="outline" class="min-w-[220px]">
-      <mat-label>Buscar usuario</mat-label>
-      <input
-        matInput
-        placeholder="Nombre o email"
-        formControlName="search"
-        (keyup.enter)="onSearch()"
-      />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="min-w-[180px]">
-      <mat-label>Rol</mat-label>
-      <mat-select formControlName="role" (selectionChange)="onSearch()">
-        <mat-option value="">Todos</mat-option>
-        <mat-option *ngFor="let r of roles" [value]="r.code">
-          {{ r.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="min-w-[160px]">
-      <mat-label>Estado</mat-label>
-      <mat-select formControlName="active" (selectionChange)="onSearch()">
-        <mat-option value="">Todos</mat-option>
-        <mat-option value="true">Activos</mat-option>
-        <mat-option value="false">Inactivos</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <span class="flex-auto"></span>
-
-    <button mat-flat-button color="primary" (click)="newUser()">
+<div class="hci-mod hc-page flex flex-col gap-5">
+  <!-- Cabecera módulo ejecutiva -->
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Gestión de usuarios</h1>
+      <p class="hci-mod__subtitle">
+        Administra cuentas, roles y accesos por sede. Mantén el control de quién puede operar en el sistema.
+      </p>
+    </div>
+    <button mat-flat-button color="primary" class="hci-mod__cta" (click)="newUser()">
+      <mat-icon>add</mat-icon>
       Nuevo usuario
     </button>
+  </header>
+
+  <!-- Filtros -->
+  <div class="hci-mod__filters module-filter-bar" [formGroup]="filtersForm">
+    <div class="filter-row hci-mod__filter-row">
+      <mat-form-field appearance="outline" class="hci-mod__search flex-1 min-w-[200px]">
+        <mat-label>Buscar</mat-label>
+        <mat-icon matPrefix class="hci-mod__field-icon">search</mat-icon>
+        <input
+          matInput
+          placeholder="Nombre, correo o identificador…"
+          formControlName="search"
+          (keyup.enter)="onSearch()"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="min-w-[160px]">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="role" (selectionChange)="onSearch()">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let r of roles" [value]="r.code">{{ r.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="min-w-[140px]">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="active" (selectionChange)="onSearch()">
+          <mat-option value="">Todos</mat-option>
+          <mat-option value="true">Activos</mat-option>
+          <mat-option value="false">Inactivos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button type="button" class="hci-mod__filter-btn" (click)="openFiltersHint()">
+        <mat-icon>filter_list</mat-icon>
+        Filtros
+      </button>
+
+      <button mat-flat-button color="primary" class="hci-mod__search-btn sm:hidden" (click)="onSearch()">
+        Buscar
+      </button>
+    </div>
   </div>
 
-  <div class="module-table-wrap">
-  <table mat-table [dataSource]="users" class="w-full">
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let row">{{ row.email }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="fullName">
-        <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="roleName">
-        <th mat-header-cell *matHeaderCellDef>Rol</th>
-        <td mat-cell *matCellDef="let row">{{ row.roleName }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="sedes">
-        <th mat-header-cell *matHeaderCellDef>Sedes</th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.sedes?.join(', ') }}
-        </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="active">
-        <th mat-header-cell *matHeaderCellDef>Estado</th>
-        <td mat-cell *matCellDef="let row">
-          <span [ngClass]="row.active ? 'text-green-600' : 'text-red-600'">
-            {{ row.active ? 'Activo' : 'Inactivo' }}
-          </span>
-        </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-button color="primary" (click)="editUser(row)">Editar</button>
-          <button mat-button (click)="manageRoles(row)">Roles / Permisos</button>
-        </td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </div>
+  <!-- KPIs -->
+  <section class="hci-mod__kpis" aria-label="Resumen de usuarios">
+    <article class="hci-mod-kpi">
+      <div class="hci-mod-kpi__icon hci-mod-kpi__icon--total">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <p class="hci-mod-kpi__label">Total usuarios</p>
+      <p class="hci-mod-kpi__value">{{ kpiTotal }}</p>
+      <p class="hci-mod-kpi__hint">Registrados en el sistema</p>
+    </article>
+    <article class="hci-mod-kpi">
+      <div class="hci-mod-kpi__icon hci-mod-kpi__icon--active">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <p class="hci-mod-kpi__label">Activos</p>
+      <p class="hci-mod-kpi__value">{{ kpiActiveOnPage }}</p>
+      <p class="hci-mod-kpi__hint">En esta página de resultados</p>
+    </article>
+    <article class="hci-mod-kpi">
+      <div class="hci-mod-kpi__icon hci-mod-kpi__icon--inactive">
+        <mat-icon>block</mat-icon>
+      </div>
+      <p class="hci-mod-kpi__label">Inactivos</p>
+      <p class="hci-mod-kpi__value">{{ kpiInactiveOnPage }}</p>
+      <p class="hci-mod-kpi__hint">En esta página de resultados</p>
+    </article>
+    <article class="hci-mod-kpi">
+      <div class="hci-mod-kpi__icon hci-mod-kpi__icon--roles">
+        <mat-icon>category</mat-icon>
+      </div>
+      <p class="hci-mod-kpi__label">Roles</p>
+      <p class="hci-mod-kpi__value">{{ kpiRolesCount }}</p>
+      <p class="hci-mod-kpi__hint">Catálogo asignable</p>
+    </article>
+  </section>
+
+  <!-- Tabla en tarjeta -->
+  <mat-card class="hci-mod-table-card">
+    <mat-card-content class="hci-mod-table-card__inner !p-0">
+      @if (isLoading) {
+        <div class="hci-mod-loading">
+          <mat-spinner diameter="36"></mat-spinner>
+          <span>Cargando usuarios…</span>
+        </div>
+      } @else {
+        <div class="hci-mod-table-wrap module-table-wrap">
+          <table mat-table [dataSource]="users" class="hci-mod-table w-full">
+            <ng-container matColumnDef="usuario">
+              <th mat-header-cell *matHeaderCellDef class="hci-mod-th">
+                Usuario
+                <mat-icon class="hci-mod-sort-hint" aria-hidden="true">swap_vert</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row" class="hci-mod-td-user">
+                <div class="hci-mod-usercell">
+                  <div class="hci-mod-avatar" [style.background]="avatarGradient(row)">
+                    {{ initials(row) }}
+                  </div>
+                  <div class="hci-mod-usercell__text">
+                    <span class="hci-mod-usercell__email">{{ row.email }}</span>
+                    <span class="hci-mod-usercell__id">ID: {{ userRef(row) }}</span>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef class="hci-mod-th">
+                Nombre
+                <mat-icon class="hci-mod-sort-hint" aria-hidden="true">swap_vert</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div class="hci-mod-namecell">
+                  <span class="hci-mod-namecell__name">{{ row.fullName }}</span>
+                  <span class="hci-mod-namecell__sub">Acceso según rol asignado</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="roleName">
+              <th mat-header-cell *matHeaderCellDef class="hci-mod-th">
+                Rol
+                <mat-icon class="hci-mod-sort-hint" aria-hidden="true">swap_vert</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div class="hci-mod-rolecell">
+                  <mat-icon class="hci-mod-rolecell__icon">{{ roleIcon(row.roleCode) }}</mat-icon>
+                  <span>{{ row.roleName }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sedes">
+              <th mat-header-cell *matHeaderCellDef class="hci-mod-th">Sedes</th>
+              <td mat-cell *matCellDef="let row" class="hci-mod-td-muted">{{ sedesLabel(row) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="active">
+              <th mat-header-cell *matHeaderCellDef class="hci-mod-th">Estado</th>
+              <td mat-cell *matCellDef="let row">
+                <span [ngClass]="row.active ? 'text-green-600' : 'text-red-600'">
+                  {{ row.active ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="hci-mod-th hci-mod-th--actions">Acciones</th>
+              <td mat-cell *matCellDef="let row" class="hci-mod-td-actions">
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Editar"
+                  class="hci-mod-action-btn"
+                  (click)="editUser(row)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Más opciones"
+                  class="hci-mod-action-btn"
+                  [matMenuTriggerFor]="userRowMenu"
+                  (click)="setMenuUser(row)"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hci-mod-data-row"></tr>
+
+            <tr *matNoDataRow class="mat-mdc-row">
+              <td class="mat-mdc-cell" [attr.colspan]="displayedColumns.length">
+                <div class="empty-state">
+                  <mat-icon>person_search</mat-icon>
+                  <p>No hay usuarios con los filtros seleccionados</p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <mat-menu #userRowMenu="matMenu">
+          <button mat-menu-item (click)="onMenuRoles()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Roles y permisos
+          </button>
+        </mat-menu>
+
+        <mat-paginator
+          class="hci-mod-paginator"
+          [length]="totalUsers"
+          [pageIndex]="pageIndex"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          [hidePageSize]="false"
+          showFirstLastButtons
+          (page)="onPage($event)"
+        ></mat-paginator>
+      }
+    </mat-card-content>
+  </mat-card>
 </div>
-

@@ -1,0 +1,388 @@
+@use '../../../../assets/scss/variables' as *;
+
+// ── Shell página (dashboard ejecutivo Axelior) ───────────────
+.hci-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hci-dash__hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.hci-dash__title {
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1e1040;
+  margin: 0 0 0.35rem;
+  line-height: 1.2;
+}
+
+.hci-dash__subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5a6a85;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.hci-dash__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+// ── KPIs ─────────────────────────────────────────────────────
+.hci-dash__kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.hci-kpi {
+  position: relative;
+  background: #fff;
+  border-radius: 14px;
+  padding: 1rem 1rem 0.85rem;
+  border: 1px solid rgba(124, 58, 237, 0.08);
+  box-shadow: 0 1px 3px rgba(46, 16, 101, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 132px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(46, 16, 101, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+.hci-kpi__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.hci-kpi__label {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a8699;
+  line-height: 1.3;
+  max-width: 70%;
+}
+
+.hci-kpi__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.hci-kpi__value {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #1e1040;
+  line-height: 1;
+}
+
+.hci-kpi__sub {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #7a8699;
+}
+
+.hci-kpi__trend {
+  margin: 0.15rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &--up {
+    color: #0d9488;
+  }
+
+  &--down {
+    color: #dc2626;
+  }
+
+  &--flat {
+    color: #94a3b8;
+  }
+}
+
+// Variantes color icono
+.hci-kpi--appointments .hci-kpi__icon {
+  background: rgba(124, 58, 237, 0.1);
+  color: $axelior-purple-600;
+}
+.hci-kpi--exams .hci-kpi__icon {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+.hci-kpi--rx .hci-kpi__icon {
+  background: rgba(67, 56, 202, 0.1);
+  color: #4338ca;
+}
+.hci-kpi--triage .hci-kpi__icon {
+  background: rgba(234, 88, 12, 0.1);
+  color: #ea580c;
+}
+.hci-kpi--stock .hci-kpi__icon {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+.hci-kpi--critical .hci-kpi__icon {
+  background: rgba(185, 28, 28, 0.1);
+  color: #b91c1c;
+}
+
+// ── Grillas charts + listas ─────────────────────────────────
+.hci-dash__charts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1.35fr 1fr;
+  }
+}
+
+.hci-dash__row2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 960px) {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+.hci-dash-card {
+  mat-card-header {
+    padding-bottom: 0.25rem !important;
+  }
+
+  mat-card-title {
+    font-size: 1rem !important;
+  }
+
+  mat-card-subtitle {
+    font-size: 0.8rem !important;
+  }
+
+  mat-card-content {
+    padding-top: 0.5rem !important;
+  }
+}
+
+.hci-chart-host {
+  min-height: 240px;
+  width: 100%;
+}
+
+// ── Lista próximas citas ─────────────────────────────────────
+.hci-upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hci-upcoming-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(30, 16, 64, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0.25rem;
+  }
+}
+
+.hci-upcoming-time {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $axelior-purple-600;
+  min-width: 3.1rem;
+}
+
+.hci-upcoming-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, $axelior-purple-600, $axelior-purple-800);
+  flex-shrink: 0;
+}
+
+.hci-upcoming-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.hci-upcoming-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e1040;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hci-upcoming-sub {
+  margin: 0.1rem 0 0;
+  font-size: 0.75rem;
+  color: #7a8699;
+}
+
+.hci-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  &--purple {
+    background: rgba(124, 58, 237, 0.1);
+    color: $axelior-purple-700;
+  }
+  &--blue {
+    background: rgba(37, 99, 235, 0.1);
+    color: #1d4ed8;
+  }
+  &--green {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+  }
+}
+
+// ── Alertas ──────────────────────────────────────────────────
+.hci-alerts-card mat-card-content {
+  background: linear-gradient(180deg, #fff5f5 0%, #fff 100%);
+  margin: 0 -1.5rem -1.25rem;
+  padding: 1rem 1.5rem 1.25rem !important;
+  border-radius: 0 0 12px 12px;
+}
+
+.hci-alert-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.08);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(254, 226, 226, 0.35);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  mat-icon.hci-alert-ico {
+    color: #ea580c;
+    flex-shrink: 0;
+  }
+
+  mat-icon.hci-alert-chev {
+    margin-left: auto;
+    color: #cbd5e1;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.hci-alert-text {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #7f1d1d;
+  line-height: 1.35;
+}
+
+// ── Tabla citas recientes ────────────────────────────────────
+.hci-dash-table-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem 0 0;
+  margin-top: 0.25rem;
+  border-top: 1px solid rgba(124, 58, 237, 0.08);
+
+  a.mat-mdc-button {
+    font-weight: 700;
+    color: $axelior-purple-600 !important;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+  }
+}
+
+.hci-dash .module-table-wrap {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.hci-dash .mat-mdc-cell {
+  border-bottom-color: rgba(30, 16, 64, 0.05);
+}
