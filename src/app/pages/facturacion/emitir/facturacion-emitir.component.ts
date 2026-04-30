@@ -15,6 +15,7 @@ import {
   InvoiceResponse,
   PaymentMethod,
   Sede,
+  SunatStatusResponse,
 } from 'src/app/core/models';
 import { SecurityService } from 'src/app/core/services/security.service';
 import { CatalogService } from 'src/app/core/services/catalog.service';
@@ -48,7 +49,12 @@ export class FacturacionEmitirComponent implements OnInit {
     items: this.fb.array([]),
   });
 
+  lookupForm = this.fb.group({
+    invoiceId: ['', Validators.required],
+  });
+
   emittedInvoice: InvoiceResponse | null = null;
+  sunatStatus: SunatStatusResponse | null = null;
 
   ngOnInit(): void {
     this.loadSedes();
@@ -144,6 +150,7 @@ export class FacturacionEmitirComponent implements OnInit {
           return;
         }
         this.emittedInvoice = resp.data;
+        this.sunatStatus = null;
         this.toastr.success(
           `Comprobante ${resp.data.number} emitido correctamente`,
           'Facturación'
@@ -160,6 +167,89 @@ export class FacturacionEmitirComponent implements OnInit {
       return;
     }
     this.router.navigate(['/facturacion/pagos', this.emittedInvoice.id]);
+  }
+
+  lookupInvoice(): void {
+    if (this.lookupForm.invalid) {
+      this.lookupForm.markAllAsTouched();
+      return;
+    }
+    const invoiceId = this.lookupForm.controls.invoiceId.value?.trim();
+    if (!invoiceId) {
+      return;
+    }
+
+    this.billingService.getInvoice(invoiceId).subscribe({
+      next: (resp: ApiResponse<InvoiceResponse>) => {
+        if (!resp.success) {
+          this.toastr.error(resp.message || 'No se pudo consultar el comprobante');
+          return;
+        }
+        this.emittedInvoice = resp.data;
+        this.sunatStatus = null;
+        this.toastr.success('Comprobante cargado', 'Facturación');
+      },
+      error: () => this.toastr.error('No se pudo consultar el comprobante', 'Facturación'),
+    });
+  }
+
+  sendToSunat(): void {
+    if (!this.emittedInvoice) return;
+    this.billingService.sendToSunat(this.emittedInvoice.id).subscribe({
+      next: (resp: ApiResponse<SunatStatusResponse>) => {
+        if (!resp.success) {
+          this.toastr.error(resp.message || 'No se pudo enviar a SUNAT');
+          return;
+        }
+        this.sunatStatus = resp.data;
+        this.toastr.success('Enviado a SUNAT', 'Facturación');
+      },
+      error: () => this.toastr.error('No se pudo enviar a SUNAT', 'Facturación'),
+    });
+  }
+
+  refreshSunatStatus(): void {
+    if (!this.emittedInvoice) return;
+    this.billingService.getSunatStatus(this.emittedInvoice.id).subscribe({
+      next: (resp: ApiResponse<SunatStatusResponse>) => {
+        if (!resp.success) {
+          this.toastr.error(resp.message || 'No se pudo consultar estado SUNAT');
+          return;
+        }
+        this.sunatStatus = resp.data;
+      },
+      error: () => this.toastr.error('No se pudo consultar estado SUNAT', 'Facturación'),
+    });
+  }
+
+  downloadPdf(): void {
+    if (!this.emittedInvoice) return;
+    this.billingService.downloadInvoicePdf(this.emittedInvoice.id).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${this.emittedInvoice?.number || 'comprobante'}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+      error: () => this.toastr.error('No se pudo descargar el PDF', 'Facturación'),
+    });
+  }
+
+  refundInvoice(): void {
+    if (!this.emittedInvoice) return;
+    this.billingService.refundInvoice(this.emittedInvoice.id).subscribe({
+      next: (resp: ApiResponse<InvoiceResponse>) => {
+        if (!resp.success) {
+          this.toastr.error(resp.message || 'No se pudo aplicar devolución');
+          return;
+        }
+        this.emittedInvoice = resp.data;
+        this.toastr.success('Devolución aplicada', 'Facturación');
+      },
+      error: () => this.toastr.error('No se pudo aplicar devolución', 'Facturación'),
+    });
   }
 }
 

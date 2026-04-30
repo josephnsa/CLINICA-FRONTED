@@ -14,6 +14,8 @@ export interface CreateInvoiceRequest {
   items: InvoiceItemRequest[];
   invoiceType: InvoiceType;
   paymentMethod?: PaymentMethod;
+  isProforma?: boolean;
+  notes?: string;
 }
 
 export interface InvoicePatientSummary {
@@ -63,5 +65,16 @@ export interface CashRegisterSummary {
   totalAmount: number;
   totalInvoices: number;
   byMethod: CashRegisterMethodSummary[];
+}
+
+export interface SunatStatusResponse {
+  id: string;
+  invoiceId: string;
+  documentType: string;
+  status: 'PENDING' | 'SENT' | 'ACCEPTED' | 'REJECTED' | string;
+  ticket?: string | null;
+  errorMessage?: string | null;
+  sentAt?: string | null;
+  createdAt: string;
 }
 

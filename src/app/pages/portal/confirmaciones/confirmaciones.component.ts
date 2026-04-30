@@ -28,7 +28,10 @@ export class ConfirmacionesComponent implements OnInit {
 
   statusLabels: Record<string, string> = {
     SCHEDULED:   'Programada',
+    PENDING:     'Pendiente',
     CONFIRMED:   'Confirmada',
+    CHECKED_IN:  'En triaje',
+    IN_PROGRESS: 'En consulta',
     ATTENDED:    'Atendida',
     CANCELLED:   'Cancelada',
     NO_SHOW:     'No asistió',
@@ -49,7 +52,10 @@ export class ConfirmacionesComponent implements OnInit {
   statusColor(status: string): string {
     const map: Record<string, string> = {
       SCHEDULED:   'bg-blue-100 text-blue-700',
+      PENDING:     'bg-slate-100 text-slate-700',
       CONFIRMED:   'bg-green-100 text-green-700',
+      CHECKED_IN:  'bg-amber-100 text-amber-700',
+      IN_PROGRESS: 'bg-indigo-100 text-indigo-700',
       ATTENDED:    'bg-gray-100 text-gray-600',
       CANCELLED:   'bg-red-100 text-red-600',
       NO_SHOW:     'bg-orange-100 text-orange-600',

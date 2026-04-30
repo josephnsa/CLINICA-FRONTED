@@ -68,8 +68,14 @@ export class BusquedaComponent implements OnInit {
   }
 
   reservar(doctor: PortalDoctor) {
+    const firstServiceId = doctor.services?.[0]?.id ?? null;
     this.router.navigate(['/portal/reserva'], {
-      queryParams: { doctorId: doctor.id, specialty: doctor.specialty }
+      queryParams: {
+        doctorId: doctor.id,
+        specialty: doctor.specialty,
+        serviceId: firstServiceId,
+        sedeId: doctor.sedeId ?? null,
+      },
     });
   }
 

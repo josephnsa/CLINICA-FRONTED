@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   ApiResponse,
@@ -20,6 +22,56 @@ import {
 export class SecurityService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
+  private readonly preferScopedSecurity = true;
+
+  private isNotFound(err: unknown): boolean {
+    return !!err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 404;
+  }
+
+  private getWithFallback<T>(
+    scopedPath: string,
+    legacyPath: string,
+    options?: { params?: HttpParams }
+  ): Observable<T> {
+    const primary = this.preferScopedSecurity ? scopedPath : legacyPath;
+    const secondary = this.preferScopedSecurity ? legacyPath : scopedPath;
+    return this.http.get<T>(`${this.baseUrl}${primary}`, options).pipe(
+      catchError((err) => {
+        if (!this.isNotFound(err)) return throwError(() => err);
+        return this.http.get<T>(`${this.baseUrl}${secondary}`, options);
+      })
+    );
+  }
+
+  private postWithFallback<T>(
+    scopedPath: string,
+    legacyPath: string,
+    body: unknown
+  ): Observable<T> {
+    const primary = this.preferScopedSecurity ? scopedPath : legacyPath;
+    const secondary = this.preferScopedSecurity ? legacyPath : scopedPath;
+    return this.http.post<T>(`${this.baseUrl}${primary}`, body).pipe(
+      catchError((err) => {
+        if (!this.isNotFound(err)) return throwError(() => err);
+        return this.http.post<T>(`${this.baseUrl}${secondary}`, body);
+      })
+    );
+  }
+
+  private putWithFallback<T>(
+    scopedPath: string,
+    legacyPath: string,
+    body: unknown
+  ): Observable<T> {
+    const primary = this.preferScopedSecurity ? scopedPath : legacyPath;
+    const secondary = this.preferScopedSecurity ? legacyPath : scopedPath;
+    return this.http.put<T>(`${this.baseUrl}${primary}`, body).pipe(
+      catchError((err) => {
+        if (!this.isNotFound(err)) return throwError(() => err);
+        return this.http.put<T>(`${this.baseUrl}${secondary}`, body);
+      })
+    );
+  }
 
   getUsers(params: {
     search?: string;
@@ -35,36 +87,29 @@ export class SecurityService {
       .set('page', String(params.page ?? 0))
       .set('size', String(params.size ?? 20));
 
-    return this.http.get<ApiResponse<UserListResponse>>(
-      `${this.baseUrl}/security/users`,
-      { params: httpParams }
-    );
+    return this.getWithFallback<ApiResponse<UserListResponse>>('/security/users', '/users', {
+      params: httpParams,
+    });
   }
 
   createUser(body: UserCreateRequest) {
-    return this.http.post<ApiResponse<UserSummary>>(
-      `${this.baseUrl}/security/users`,
-      body
-    );
+    return this.postWithFallback<ApiResponse<UserSummary>>('/security/users', '/users', body);
   }
 
   updateUser(userId: string, body: UserUpdateRequest) {
-    return this.http.put<ApiResponse<UserSummary>>(
-      `${this.baseUrl}/security/users/${userId}`,
+    return this.putWithFallback<ApiResponse<UserSummary>>(
+      `/security/users/${userId}`,
+      `/users/${userId}`,
       body
     );
   }
 
   getRoles() {
-    return this.http.get<ApiResponse<Role[]>>(
-      `${this.baseUrl}/security/roles`
-    );
+    return this.getWithFallback<ApiResponse<Role[]>>('/security/roles', '/roles');
   }
 
   getPermissions() {
-    return this.http.get<ApiResponse<Permission[]>>(
-      `${this.baseUrl}/security/permissions`
-    );
+    return this.getWithFallback<ApiResponse<Permission[]>>('/security/permissions', '/permissions');
   }
 
   getAuditLogs(params: {
@@ -83,10 +128,9 @@ export class SecurityService {
       .set('page', String(params.page ?? 0))
       .set('size', String(params.size ?? 20));
 
-    return this.http.get<ApiResponse<AuditLogListResponse>>(
-      `${this.baseUrl}/security/audit-logs`,
-      { params: httpParams }
-    );
+    return this.getWithFallback<ApiResponse<AuditLogListResponse>>('/security/audit-logs', '/audit', {
+      params: httpParams,
+    });
   }
 
   getSedes() {
@@ -96,8 +140,9 @@ export class SecurityService {
   }
 
   updateUserSedes(userId: string, sedeIds: string[]) {
-    return this.http.post<ApiResponse<UserSummary>>(
-      `${this.baseUrl}/security/users/${userId}/sedes`,
+    return this.postWithFallback<ApiResponse<UserSummary>>(
+      `/security/users/${userId}/sedes`,
+      `/users/${userId}/sedes`,
       { sedeIds }
     );
   }

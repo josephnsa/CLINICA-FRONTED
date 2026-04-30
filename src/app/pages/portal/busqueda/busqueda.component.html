@@ -66,7 +66,7 @@
             @if (d.services?.length) {
               <div class="flex flex-wrap gap-2">
                 @for (s of d.services; track s) {
-                  <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{{ s }}</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{{ s.name }}</span>
                 }
               </div>
             }

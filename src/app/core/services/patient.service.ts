@@ -24,11 +24,11 @@ export class PatientService {
     .set('size', String(params.size ?? 20));
 
   if (params.search) {
-    httpParams = httpParams.set('query', params.search);
+    httpParams = httpParams.set('search', params.search);
   }
 
   return this.http.get<ApiResponse<PageResponse<Patient>>>(
-    `${this.baseUrl}/patients/search`,
+    `${this.baseUrl}/patients`,
     { params: httpParams }
   );
 }

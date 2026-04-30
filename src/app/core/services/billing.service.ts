@@ -7,6 +7,7 @@ import {
   CreateInvoiceRequest,
   InvoiceResponse,
   PaymentRequest,
+  SunatStatusResponse,
 } from '../models';
 
 @Injectable({
@@ -29,6 +30,13 @@ export class BillingService {
     );
   }
 
+  refundInvoice(invoiceId: string) {
+    return this.http.patch<ApiResponse<InvoiceResponse>>(
+      `${this.baseUrl}/invoices/${invoiceId}/refund`,
+      {}
+    );
+  }
+
   createPayment(payload: PaymentRequest) {
     return this.http.post<ApiResponse<InvoiceResponse>>(
       `${this.baseUrl}/payments`,
@@ -45,6 +53,25 @@ export class BillingService {
       `${this.baseUrl}/invoices/cash-register-summary`,
       { params: httpParams }
     );
+  }
+
+  sendToSunat(invoiceId: string) {
+    return this.http.post<ApiResponse<SunatStatusResponse>>(
+      `${this.baseUrl}/invoices/${invoiceId}/send-sunat`,
+      {}
+    );
+  }
+
+  getSunatStatus(invoiceId: string) {
+    return this.http.get<ApiResponse<SunatStatusResponse>>(
+      `${this.baseUrl}/invoices/${invoiceId}/sunat-status`
+    );
+  }
+
+  downloadInvoicePdf(invoiceId: string) {
+    return this.http.get(`${this.baseUrl}/invoices/${invoiceId}/pdf`, {
+      responseType: 'blob',
+    });
   }
 }
 

@@ -25,3 +25,8 @@ export interface ExamResult {
   result: string;
   fileUrl?: string;
 }
+
+export interface ExamOrderPdfResponse {
+  blob: Blob;
+  fileName: string;
+}

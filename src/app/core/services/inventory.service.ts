@@ -32,7 +32,7 @@ export class InventoryService {
   getLowStockAlerts(sedeId: string) {
   const httpParams = new HttpParams().set('sedeId', sedeId);
   return this.http.get<ApiResponse<LowStockAlert[]>>(
-    `${this.baseUrl}/inventory/alerts/low-stock`,
+    `${this.baseUrl}/inventory/alerts`,
     { params: httpParams }
   );
 }

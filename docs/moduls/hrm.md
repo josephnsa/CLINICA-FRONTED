@@ -52,13 +52,45 @@ Define los turnos semanales habituales del empleado.
 
 ---
 
+### AttendanceRecord (Registro de Asistencia)
+**Tabla:** `employee_attendance`
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| id | UUID | PK |
+| employeeId | UUID | FK → employees.id |
+| sedeId | UUID | Sede donde se registró |
+| date | DATE | Fecha del registro (único por empleado/día) |
+| checkIn | TIMESTAMP | Hora de entrada |
+| checkOut | TIMESTAMP | Hora de salida |
+| minutesWorked | INTEGER | Minutos trabajados (calculado automáticamente) |
+| status | Enum | Estado de asistencia |
+| notes | VARCHAR(500) | Observaciones |
+
+**Estados (`AttendanceStatus`):** `PRESENT`, `ABSENT`, `LATE`, `EXCUSED`
+
+**Métodos de dominio:**
+- `registerCheckOut(LocalDateTime)` — registra salida y calcula `minutesWorked`
+- `evaluateLate(LocalTime expectedStart)` — marca como LATE si llegó >10 min tarde
+- `completedMinimumShift()` — true si trabajó ≥ 4 horas (240 min)
+- `validate()` — requiere employeeId y date
+
+---
+
 ## Casos de Uso
 
 | Use Case | Descripción |
 |---|---|
 | `CreateEmployeeUseCase` | Registra un nuevo empleado |
-| `ListEmployeesUseCase` | Lista empleados con filtros opcionales por sede/rol |
+| `ListEmployeesUseCase` | Lista empleados con filtros opcionales por sede |
 | `DeactivateEmployeeUseCase` | Desactiva un empleado |
+| `CreateScheduleUseCase` | Asigna turno semanal a un empleado |
+| `ListSchedulesUseCase` | Lista horarios de un empleado |
+| `DeleteScheduleUseCase` | Elimina un horario |
+| `RegisterCheckInUseCase` | Registra entrada, evalúa tardanza vs. horario programado |
+| `RegisterCheckOutUseCase` | Registra salida y calcula minutos trabajados |
+| `ListAttendanceUseCase` | Lista asistencia de un empleado con filtro de fechas |
+| `GetProductivityReportUseCase` | Reporte de asistencia + citas atendidas (para médicos) |
 
 ---
 
@@ -67,14 +99,25 @@ Define los turnos semanales habituales del empleado.
 ### Empleados — `/api/hrm/employees`
 | Método | Ruta | Permiso | Descripción |
 |---|---|---|---|
-| POST | `/api/hrm/employees` | `hrm:write` | Crear empleado |
-| GET | `/api/hrm/employees` | `hrm:read` | Listar empleados |
-| DELETE | `/api/hrm/employees/{id}` | `hrm:write` | Desactivar empleado |
+| POST | `/api/hrm/employees` | `RR_HH_WRITE` | Crear empleado |
+| GET | `/api/hrm/employees` | `RR_HH_READ` | Listar empleados (filtros: `sedeId`, `activeOnly`) |
+| DELETE | `/api/hrm/employees/{id}` | `RR_HH_WRITE` | Desactivar empleado |
+| POST | `/api/hrm/employees/schedules` | `RR_HH_WRITE` | Crear horario semanal |
+| GET | `/api/hrm/employees/{id}/schedules` | `RR_HH_READ` | Ver horarios de empleado |
+| DELETE | `/api/hrm/employees/schedules/{id}` | `RR_HH_WRITE` | Eliminar horario |
 
----
+### Asistencia — `/api/hrm/attendance`
+| Método | Ruta | Permiso | Descripción |
+|---|---|---|---|
+| POST | `/api/hrm/attendance/checkin` | `RR_HH_WRITE` | Registrar entrada |
+| POST | `/api/hrm/attendance/checkout` | `RR_HH_WRITE` | Registrar salida |
+| GET | `/api/hrm/attendance` | `RR_HH_READ` | Ver asistencia (params: `employeeId`, `from`, `to`) |
+| GET | `/api/hrm/attendance/productivity/{employeeId}` | `RR_HH_READ` | Reporte de productividad (params: `from`, `to`) |
 
-## Pendiente para análisis
-- **Control de asistencia:** Registro de entrada/salida diaria. Requiere nueva tabla `attendance_records` y lógica para calcular horas trabajadas, tardanzas y ausencias.
+**Ejemplo productividad:**
+```
+GET /api/hrm/attendance/productivity/{employeeId}?from=2026-04-01&to=2026-04-30
+```
 
 ---
 

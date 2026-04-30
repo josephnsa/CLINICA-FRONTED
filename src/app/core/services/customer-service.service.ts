@@ -8,7 +8,7 @@ import { Complaint, CreateComplaintRequest, ResolveComplaintRequest, CreateSurve
 @Injectable({ providedIn: 'root' })
 export class CustomerServiceService {
   private http = inject(HttpClient);
-  private base = `${environment.apiUrl}/api/customer-service`;
+  private base = `${environment.apiUrl}/customer-service`;
 
   createComplaint(body: CreateComplaintRequest): Observable<Complaint> {
     return this.http.post<ApiResponse<Complaint>>(`${this.base}/complaints`, body)

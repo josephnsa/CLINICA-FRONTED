@@ -47,4 +47,10 @@ getOrders(params: { patientId?: string; status?: string; page?: number; size?: n
       {}
     );
   }
+
+  downloadOrderPdf(id: string) {
+    return this.http.get(`${this.baseUrl}/exams/orders/${id}/pdf`, {
+      responseType: 'blob',
+    });
+  }
 }

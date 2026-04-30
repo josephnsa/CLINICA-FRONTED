@@ -86,16 +86,25 @@ export class ReservaComponent implements OnInit {
 
   submit() {
     if (this.form.invalid || !this.patient || !this.selectedSlot()) return;
+    if (!this.serviceId()) {
+      this.snack.open('No se encontró un servicio para reservar con este especialista', 'Cerrar', { duration: 3500 });
+      return;
+    }
     this.saving.set(true);
     const slot = this.selectedSlot()!;
+    const selectedDate = this.form.controls.date.value
+      ? new Date(this.form.controls.date.value)
+      : null;
+    const startTime = selectedDate ? this.toDateTimeIso(selectedDate, slot.startTime) : slot.startTime;
+    const endTime = selectedDate ? this.toDateTimeIso(selectedDate, slot.endTime) : slot.endTime;
 
     this.svc.bookAppointment({
       patientId: this.patient.patientId,
       doctorId:  this.doctorId()!,
       serviceId: this.serviceId()!,
       sedeId:    this.sedeId() ?? slot.sedeId,
-      startTime: slot.startTime,
-      endTime:   slot.endTime,
+      startTime,
+      endTime,
       notes:     this.form.value.notes ?? undefined,
     }).subscribe({
       next: () => {
@@ -116,5 +125,12 @@ export class ReservaComponent implements OnInit {
   formatSlotTime(time: string): string {
     if (!time) return '';
     return time.length >= 5 ? time.slice(0, 5) : time;
+  }
+
+  private toDateTimeIso(date: Date, hhmmss: string): string {
+    const [hh = '00', mm = '00', ss = '00'] = (hhmmss || '').split(':');
+    const d = new Date(date);
+    d.setHours(Number(hh), Number(mm), Number(ss), 0);
+    return d.toISOString();
   }
 }

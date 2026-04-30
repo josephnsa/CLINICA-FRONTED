@@ -77,7 +77,10 @@ PENDING → IN_PROGRESS → RESOLVED → CLOSED
 |---|---|
 | `CreateComplaintUseCase` | Registra un nuevo reclamo |
 | `ResolveComplaintUseCase` | Resuelve un reclamo con descripción de solución |
+| `ListComplaintsUseCase` | Lista reclamos con filtros opcionales (patientId, sedeId, status) |
+| `GetComplaintUseCase` | Obtiene un reclamo por ID |
 | `CreateSurveyUseCase` | Registra encuesta de satisfacción post-atención |
+| `ListSurveysUseCase` | Lista encuestas con filtros opcionales (patientId, appointmentId) |
 
 ---
 
@@ -86,13 +89,25 @@ PENDING → IN_PROGRESS → RESOLVED → CLOSED
 ### Quejas — `/api/customer-service/complaints`
 | Método | Ruta | Permiso | Descripción |
 |---|---|---|---|
-| POST | `/api/customer-service/complaints` | `cs:write` | Crear reclamo |
-| PATCH | `/api/customer-service/complaints/{id}/resolve` | `cs:write` | Resolver reclamo |
+| POST | `/api/customer-service/complaints` | `ATENCION_CLIENTE_WRITE` | Crear reclamo |
+| GET | `/api/customer-service/complaints` | `ATENCION_CLIENTE_READ` | Listar reclamos (filtros: `patientId`, `sedeId`, `status`) |
+| GET | `/api/customer-service/complaints/{id}` | `ATENCION_CLIENTE_READ` | Ver detalle de reclamo |
+| PATCH | `/api/customer-service/complaints/{id}/resolve` | `ATENCION_CLIENTE_WRITE` | Resolver reclamo |
 
 ### Encuestas — `/api/customer-service/surveys`
 | Método | Ruta | Permiso | Descripción |
 |---|---|---|---|
-| POST | `/api/customer-service/surveys` | `cs:write` | Registrar encuesta |
+| POST | `/api/customer-service/surveys` | `ATENCION_CLIENTE_WRITE` | Registrar encuesta |
+| GET | `/api/customer-service/surveys` | `ATENCION_CLIENTE_READ` | Listar encuestas (filtros: `patientId`, `appointmentId`) |
+
+---
+
+## Permisos
+
+| Código | Descripción | Roles |
+|---|---|---|
+| `ATENCION_CLIENTE_WRITE` | Crear y resolver reclamos/encuestas | ADMIN, RECEPCIONISTA |
+| `ATENCION_CLIENTE_READ` | Ver reclamos y encuestas | ADMIN, RECEPCIONISTA |
 
 ---
 

@@ -50,4 +50,10 @@ export class PrescriptionService {
       `${this.baseUrl}/patients/${patientId}/kardex`
     );
   }
+
+  downloadPrescriptionPdf(id: string) {
+    return this.http.get(`${this.baseUrl}/prescriptions/${id}/pdf`, {
+      responseType: 'blob',
+    });
+  }
 }

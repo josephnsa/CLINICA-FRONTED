@@ -36,6 +36,11 @@ export const FacturacionRoutes: Routes = [
         component: FacturacionCajaComponent,
       },
       {
+        path: 'caja',
+        redirectTo: 'cierre-caja',
+        pathMatch: 'full',
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: 'comprobantes',

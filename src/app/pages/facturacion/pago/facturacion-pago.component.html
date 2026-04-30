@@ -1,6 +1,13 @@
-<div class="hci-mod hc-page flex flex-col gap-5 p-6 items-center">
-<mat-card class="cardWithShadow max-w-2xl w-full">
-  <mat-card-title>Registrar pago</mat-card-title>
+<div class="hci-mod hc-page flex flex-col gap-5 p-6">
+  <header class="hci-mod__hero">
+    <div class="hci-mod__titles">
+      <h1 class="hci-mod__title">Pagos</h1>
+      <p class="hci-mod__subtitle">Registro de pagos sobre comprobantes emitidos y control de saldo.</p>
+    </div>
+  </header>
+
+<mat-card class="cardWithShadow hci-mod-table-card max-w-2xl w-full">
+  <mat-card-title class="!hidden">Registrar pago</mat-card-title>
   <mat-card-content class="mt-4">
     <ng-container *ngIf="invoice; else loadingOrEmpty">
       <div class="mb-4 text-sm space-y-1">

@@ -45,6 +45,11 @@ export class RegistroComponent {
     this.loading.set(true);
     this.svc.login(this.loginForm.value as any).subscribe({
       next: (auth) => {
+        if (!auth?.accessToken) {
+          this.loading.set(false);
+          this.snack.open('No se pudo iniciar sesión. Token no recibido.', 'Cerrar', { duration: 3500 });
+          return;
+        }
         this.svc.saveSession(auth);
         this.router.navigate(['/portal/busqueda']);
       },
@@ -60,6 +65,11 @@ export class RegistroComponent {
     this.loading.set(true);
     this.svc.register(this.registerForm.value as any).subscribe({
       next: (auth) => {
+        if (!auth?.accessToken) {
+          this.loading.set(false);
+          this.snack.open('Registro exitoso, pero no se pudo abrir sesión automáticamente.', 'Cerrar', { duration: 4000 });
+          return;
+        }
         this.svc.saveSession(auth);
         this.router.navigate(['/portal/busqueda']);
       },

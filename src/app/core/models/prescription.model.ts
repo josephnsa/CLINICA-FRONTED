@@ -53,3 +53,8 @@ export interface KardexEntry {
   recordedBy?: string;
   recordedAt: string;
 }
+
+export interface PrescriptionPdfResponse {
+  blob: Blob;
+  fileName: string;
+}

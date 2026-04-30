@@ -22,9 +22,19 @@ export const PORTAL_ROUTES: Routes = [
       import('./reserva/reserva.component').then(m => m.ReservaComponent),
   },
   {
+    path: 'reservas',
+    redirectTo: 'reserva',
+    pathMatch: 'full',
+  },
+  {
     path: 'confirmaciones',
     loadComponent: () =>
       import('./confirmaciones/confirmaciones.component').then(m => m.ConfirmacionesComponent),
+  },
+  {
+    path: 'notificaciones',
+    redirectTo: 'confirmaciones',
+    pathMatch: 'full',
   },
   {
     path: 'pagos',
