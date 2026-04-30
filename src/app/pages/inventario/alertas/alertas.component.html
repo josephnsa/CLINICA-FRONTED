@@ -1,36 +1,115 @@
 <div class="flex flex-col gap-5">
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-    <h2 class="text-xl font-semibold text-gray-900">Inventario - Alertas</h2>
-    <p class="text-sm text-gray-500">Monitorea alertas de stock bajo y riesgo operativo.</p>
+
+  <!-- ── Cabecera del módulo ───────────────────────────────── -->
+  <div class="hc-module-header hc-module-header--critical flex items-center justify-between flex-wrap gap-3">
+    <div>
+      <h2 class="hc-module-title">Farmacia — Alertas de Inventario</h2>
+      <p class="hc-module-subtitle">Monitoreo de stock crítico, desabasto y medicamentos por vencer</p>
+    </div>
+    <div class="flex items-center gap-2">
+      @if (alerts.length > 0) {
+        <span class="sc-badge sc-badge--shortage">
+          {{ alerts.length }} alerta{{ alerts.length !== 1 ? 's' : '' }} activa{{ alerts.length !== 1 ? 's' : '' }}
+        </span>
+      }
+    </div>
   </div>
 
-  <div class="overflow-hidden rounded-xl border border-red-200 bg-red-50/40 shadow-sm" *ngIf="alerts.length > 0">
-    <table mat-table [dataSource]="alerts" class="w-full">
+  <!-- ── Banner crítico ────────────────────────────────────── -->
+  @if (alerts.length > 0) {
+    <div class="hc-alert-banner hc-alert-banner--critical">
+      <div class="hc-alert-icon">
+        <mat-icon style="font-size:20px;width:20px;height:20px">warning</mat-icon>
+      </div>
+      <div class="hc-alert-body">
+        <p class="hc-alert-title">Acción requerida — Stock por debajo del mínimo operativo</p>
+        <p class="hc-alert-message">
+          Existen medicamentos con stock insuficiente para la operación del día.
+          Revisa la tabla y genera órdenes de compra para los ítems críticos.
+          Los medicamentos controlados (C-II) requieren proceso DEA para reabastecimiento.
+        </p>
+      </div>
+    </div>
+  }
 
-    <ng-container matColumnDef="medicationName">
-      <th mat-header-cell *matHeaderCellDef>Medicamento</th>
-      <td mat-cell *matCellDef="let row">{{ row.medicationName }}</td>
-    </ng-container>
+  <!-- ── Tabla de alertas activas ─────────────────────────── -->
+  @if (alerts.length > 0) {
+    <div class="module-table-wrap">
+      <table mat-table [dataSource]="alerts" class="w-full">
 
-    <ng-container matColumnDef="currentStock">
-      <th mat-header-cell *matHeaderCellDef>Stock actual</th>
-      <td mat-cell *matCellDef="let row">
-        <span class="text-red-600 font-semibold">{{ row.currentStock }}</span>
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="medicationName">
+          <th mat-header-cell *matHeaderCellDef>Medicamento</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex items-center gap-2">
+              <span>{{ row.medicationName }}</span>
+              @if (row.controlled === 'C-II') {
+                <span class="cs-badge cs-badge--ii">C-II</span>
+              }
+              @if (row.controlled === 'C-IV') {
+                <span class="cs-badge cs-badge--iv">C-IV</span>
+              }
+            </div>
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="minStock">
-      <th mat-header-cell *matHeaderCellDef>Stock mínimo</th>
-      <td mat-cell *matCellDef="let row">{{ row.minStock }}</td>
-    </ng-container>
+        <ng-container matColumnDef="currentStock">
+          <th mat-header-cell *matHeaderCellDef>Stock actual</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex flex-col gap-1">
+              <span class="sc-badge"
+                [class.sc-badge--critical]="row.currentStock === 0"
+                [class.sc-badge--low]="row.currentStock > 0 && row.currentStock < row.minStock">
+                {{ row.currentStock }} uds
+              </span>
+              <div class="hc-stock-bar" style="min-width:80px">
+                <div class="hc-stock-track">
+                  <div class="hc-stock-fill"
+                    [class.hc-stock-fill--critical]="row.currentStock === 0"
+                    [class.hc-stock-fill--low]="row.currentStock > 0 && row.currentStock < row.minStock"
+                    [style.width.%]="row.minStock > 0 ? (row.currentStock / row.minStock) * 100 : 0">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </div>
+        <ng-container matColumnDef="minStock">
+          <th mat-header-cell *matHeaderCellDef>Stock mínimo</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="text-sm text-gray-600">{{ row.minStock }} uds</span>
+          </td>
+        </ng-container>
 
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-8 text-center text-sm text-gray-500 shadow-sm" *ngIf="alerts.length === 0">
-    No hay alertas de stock bajo en este momento.
-  </div>
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severidad</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="hc-badge"
+              [class.hc-badge--critical]="row.currentStock === 0"
+              [class.hc-badge--warning]="row.currentStock > 0 && row.currentStock < row.minStock">
+              {{ row.currentStock === 0 ? 'CRÍTICO' : 'BAJO' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          [class.hc-table-row--critical-stock]="row.currentStock === 0">
+        </tr>
+
+      </table>
+    </div>
+  }
+
+  <!-- ── Estado sin alertas ────────────────────────────────── -->
+  @if (alerts.length === 0) {
+    <div class="hc-verify-panel">
+      <mat-icon class="hc-verify-icon">check_circle</mat-icon>
+      <div>
+        <p class="hc-verify-label">Sin alertas activas</p>
+        <p class="hc-verify-sub">Todos los medicamentos están por encima del stock mínimo operativo</p>
+      </div>
+    </div>
+  }
 
 </div>

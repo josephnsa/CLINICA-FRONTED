@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills *)",
+      "WebFetch(domain:axelior.ai)",
+      "WebFetch(domain:devops.agenthub.axelior.ai)",
+      "Bash(npx ng *)"
+    ]
+  }
+}

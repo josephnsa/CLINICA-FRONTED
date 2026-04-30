@@ -1,57 +1,139 @@
 <div class="flex flex-col gap-5">
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-    <div class="flex items-center justify-between">
+
+  <!-- ── Cabecera del módulo ───────────────────────────────── -->
+  <div class="hc-module-header hc-module-header--pharmacy">
+    <div class="flex items-center justify-between flex-wrap gap-3">
       <div>
-        <h2 class="text-xl font-semibold text-gray-900">Inventario - Control de stock</h2>
-        <p class="text-sm text-gray-500">Registra ingresos y salidas de medicamentos.</p>
+        <h2 class="hc-module-title">Inventario — Control de Stock</h2>
+        <p class="hc-module-subtitle">
+          Registra ingresos y salidas de medicamentos.
+          Sigue el método FEFO (First Expired, First Out) para sustancias controladas.
+        </p>
       </div>
-      <button mat-flat-button color="primary" (click)="openForm()">
+      <button mat-flat-button class="btn-teal" (click)="openForm()">
         + Registrar movimiento
       </button>
     </div>
   </div>
 
-  <mat-card *ngIf="showForm" class="rounded-xl border border-blue-100 shadow-sm">
-    <mat-card-header class="bg-blue-50">
-      <mat-card-title class="text-blue-900">Nuevo movimiento</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="movementForm" class="flex flex-col gap-4 mt-4">
+  <!-- ── Formulario de movimiento ─────────────────────────── -->
+  @if (showForm) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Nuevo movimiento de stock</mat-card-title>
+        <mat-card-subtitle>
+          Para sustancias controladas (C-II) se requiere segundo responsable como testigo
+        </mat-card-subtitle>
+      </mat-card-header>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Medicamento</mat-label>
-          <mat-select formControlName="medicationId">
-            <mat-option *ngFor="let m of medications" [value]="m.id">
-              {{ m.genericName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <mat-card-content>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <mat-select formControlName="type">
-            <mat-option *ngFor="let t of types" [value]="t">{{ t }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <!-- Aviso DSCSA / trazabilidad -->
+        <div class="hc-alert-banner hc-alert-banner--info mb-4">
+          <div class="hc-alert-icon">
+            <mat-icon style="font-size:18px;width:18px;height:18px">qr_code_scanner</mat-icon>
+          </div>
+          <div class="hc-alert-body">
+            <p class="hc-alert-title">Trazabilidad DSCSA activa</p>
+            <p class="hc-alert-message">
+              Verifica el número de lote y fecha de vencimiento antes de registrar
+              el ingreso. Los productos deben tener cadena de custodia completa.
+            </p>
+          </div>
+        </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Cantidad</mat-label>
-          <input matInput type="number" formControlName="quantity" />
-        </mat-form-field>
+        <form [formGroup]="movementForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <mat-form-field appearance="outline">
-          <mat-label>Notas</mat-label>
-          <textarea matInput formControlName="notes" rows="2"></textarea>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="md:col-span-2">
+            <mat-label>Medicamento</mat-label>
+            <mat-select formControlName="medicationId">
+              @for (m of medications; track m.id) {
+                <mat-option [value]="m.id">
+                  {{ m.genericName }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
 
-      </form>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-button (click)="cancel()">Cancelar</button>
-      <button mat-flat-button color="primary" (click)="save()" [disabled]="movementForm.invalid">
-        Guardar
-      </button>
-    </mat-card-actions>
-  </mat-card>
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de movimiento</mat-label>
+            <mat-select formControlName="type">
+              @for (t of types; track t) {
+                <mat-option [value]="t">{{ t }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cantidad</mat-label>
+            <input matInput type="number" formControlName="quantity" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>N° de lote</mat-label>
+            <input matInput formControlName="lotNumber" placeholder="Ej: LOT-2024-A" />
+            <mat-hint>Requerido para trazabilidad DSCSA</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de vencimiento</mat-label>
+            <input matInput type="date" formControlName="expirationDate" />
+            <mat-hint>Verifica antes de aceptar el producto</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="md:col-span-2">
+            <mat-label>Notas / Justificación</mat-label>
+            <textarea matInput formControlName="notes" rows="2"
+              placeholder="Ej: Recepción de proveedor McKesson, factura INV-001"></textarea>
+          </mat-form-field>
+
+        </form>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button (click)="cancel()">Cancelar</button>
+        <button mat-flat-button class="btn-teal" (click)="save()"
+          [disabled]="movementForm.invalid">
+          Registrar movimiento
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+
+  <!-- ── Indicadores de buenas prácticas de farmacia ──────── -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+    <div class="hc-verify-panel">
+      <mat-icon class="hc-verify-icon" style="font-size:22px;width:22px;height:22px">
+        inventory_2
+      </mat-icon>
+      <div>
+        <p class="hc-verify-label">Método FEFO activo</p>
+        <p class="hc-verify-sub">Primero en vencer, primero en salir</p>
+      </div>
+    </div>
+
+    <div class="hc-verify-panel">
+      <mat-icon class="hc-verify-icon" style="font-size:22px;width:22px;height:22px">
+        qr_code
+      </mat-icon>
+      <div>
+        <p class="hc-verify-label">Trazabilidad DSCSA</p>
+        <p class="hc-verify-sub">Lote y serie verificados</p>
+      </div>
+    </div>
+
+    <div class="hc-verify-panel">
+      <mat-icon class="hc-verify-icon" style="font-size:22px;width:22px;height:22px">
+        security
+      </mat-icon>
+      <div>
+        <p class="hc-verify-label">Registro de auditoría</p>
+        <p class="hc-verify-sub">Todos los movimientos auditados</p>
+      </div>
+    </div>
+
+  </div>
 
 </div>

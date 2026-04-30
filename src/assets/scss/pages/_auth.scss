@@ -1,10 +1,362 @@
 @use "../variables" as *;
 
-.mat-mdc-form-field.mat-form-field-invalid {
+// ══════════════════════════════════════════════════════════════
+//  _auth.scss — Dark theme Axelior para páginas de autenticación
+//  Paleta: purple-600 (#7c3aed) → purple-950 (#2e1065) sobre #0d0928
+// ══════════════════════════════════════════════════════════════
 
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__trailing {
-    border-color: var(--mat-sys-error) !important;
+// ─── Root: full viewport dark ────────────────────────────────
+.axelior-login-root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  position: relative;
+  background: $axelior-dark;                 // #0d0928
+  overflow: hidden;
+  font-family: $font-family;
+}
+
+// ─── Fondo: orbes de luz (mesh gradient) ─────────────────────
+.axelior-bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.axelior-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+
+  &--1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, $axelior-purple-600, transparent 70%);
+    top: -15%;
+    left: -10%;
+    animation: orb-float 12s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, $axelior-purple-800, transparent 70%);
+    bottom: -10%;
+    right: -5%;
+    animation: orb-float 15s ease-in-out infinite reverse;
+  }
+
+  &--3 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.4), transparent 70%);
+    top: 40%;
+    left: 45%;
+    animation: orb-float 10s ease-in-out infinite 3s;
+    opacity: 0.20;
+  }
+}
+
+@keyframes orb-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(20px, -30px) scale(1.05); }
+  66%       { transform: translate(-15px, 20px) scale(0.95); }
+}
+
+// ─── Panel izquierdo: branding ────────────────────────────────
+.axelior-panel-brand {
+  position: relative;
+  z-index: 1;
+  width: 55%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 3.5rem;
+  background: linear-gradient(
+    145deg,
+    rgba($axelior-purple-600, 0.18) 0%,
+    rgba($axelior-purple-950, 0.30) 100%
+  );
+  border-right: 1px solid rgba($axelior-purple-400, 0.12);
+
+  @media (max-width: 1024px) { display: none !important; }
+}
+
+.axelior-brand-logo {
+  display: flex;
+  align-items: center;
+}
+
+.axelior-brand-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.axelior-brand-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $axelior-purple-400;
+  margin-bottom: 1.25rem;
+}
+
+.axelior-brand-headline {
+  font-size: clamp(2rem, 3.5vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1.08;
+  color: #ffffff;
+  margin: 0 0 1.25rem;
+}
+
+.axelior-brand-accent {
+  background: linear-gradient(90deg, $axelior-purple-400, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.axelior-brand-sub {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 480px;
+  margin: 0 0 2.5rem;
+}
+
+// Feature pills — 2 × 3 grid
+.axelior-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.axelior-feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(6px);
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba($axelior-purple-400, 0.25);
+  }
+}
+
+.axelior-feature-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba($axelior-purple-500, 0.18);
+  border: 1px solid rgba($axelior-purple-400, 0.22);
+}
+
+.axelior-feature-icon {
+  color: $axelior-purple-400 !important;
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.axelior-feature-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.3;
+}
+
+.axelior-brand-footer {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+// ─── Panel derecho: form de login ─────────────────────────────
+.axelior-panel-auth {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+// ─── Card del login ───────────────────────────────────────────
+.axelior-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(13, 9, 40, 0.72);    // dark con buena legibilidad
+  backdrop-filter: blur(32px) saturate(1.4);
+  -webkit-backdrop-filter: blur(32px) saturate(1.4);
+  border: 1px solid rgba(167, 139, 250, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 2.25rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  box-shadow:
+    0 0 0 1px rgba($axelior-purple-600, 0.12),
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.axelior-card-logo {
+  padding: 0.5rem;
+}
+
+.axelior-card-header {
+  text-align: center;
+}
+
+.axelior-card-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.axelior-card-subtitle {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.50);
+  margin: 0;
+  line-height: 1.5;
+}
+
+// Divider con texto
+.axelior-divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.30);
+  font-size: 0.78rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+// Wrapper del botón Google
+.axelior-google-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// Botón Google fallback — blanco sólido como el SDK real
+.axelior-btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0 1.5rem;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: $font-family;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+
+  &:hover {
+    background: #f8f8f8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  &:active {
+    background: #eeeeee;
+    box-shadow: none;
+  }
+}
+
+// Spinner de carga
+.axelior-spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .mat-mdc-progress-spinner circle {
+    stroke: $axelior-purple-400 !important;
+  }
+}
+
+.axelior-spinner-label {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+// Ayuda / contacto
+.axelior-card-help {
+  text-align: center;
+
+  p {
+    font-size: 0.83rem;
+    color: rgba(255, 255, 255, 0.40);
+    margin: 0 0 0.2rem;
+  }
+}
+
+.axelior-help-link {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: $axelior-purple-400;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    color: $axelior-purple-500;
+    text-decoration: underline;
+  }
+}
+
+// Footer de la card
+.axelior-card-footer {
+  font-size: 0.70rem;
+  color: rgba(255, 255, 255, 0.22);
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin: 0;
+}
+
+// ─── Override mat-form-field en contexto dark ─────────────────
+.axelior-login-card {
+  .mat-mdc-form-field.mat-form-field-invalid {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: $hc-critical !important;
+    }
   }
 }

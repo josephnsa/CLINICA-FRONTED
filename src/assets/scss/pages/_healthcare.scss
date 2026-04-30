@@ -1,0 +1,304 @@
+@use "../variables" as *;
+
+// ══════════════════════════════════════════════════════════════
+//  _healthcare.scss — Estilos globales de UX clínica/farmacia
+//  Basado en: healthcare-expert + pharmacy-supply-chain skills
+//  Aplica a toda la aplicación; complementa _modules.scss
+// ══════════════════════════════════════════════════════════════
+
+// ─── Paleta semántica local (Axelior purple) ──────────────────
+$h-teal:    $clinica-shell-teal-start;  // now #7c3aed Axelior purple-600
+$h-dark:    #1e1040;                    // dark purple para texto
+$h-muted:   #5a6a85;
+$h-surface: #f4f7fb;
+
+// ══════════════════════════════════════════════════════════════
+//  1. PÁGINA DE MÓDULO — layout base con breadcrumb clínico
+// ══════════════════════════════════════════════════════════════
+.hc-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+// Breadcrumb clínico (indicador de módulo / flujo)
+.hc-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: $h-muted;
+
+  .hc-breadcrumb-sep  { opacity: 0.4; }
+  .hc-breadcrumb-current {
+    color: $h-teal;
+    font-weight: 600;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  2. TARJETA DE PACIENTE — resumen clínico compacto
+// ══════════════════════════════════════════════════════════════
+.hc-patient-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid rgba($h-teal, 0.15);
+  border-left: 4px solid $h-teal;
+  border-radius: 10px;
+  padding: 0.875rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(8, 53, 56, 0.07);
+
+  .hc-patient-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba($h-teal, 0.12);
+    color: $clinica-shell-teal-mid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+    border: 2px solid rgba($h-teal, 0.20);
+  }
+
+  .hc-patient-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hc-patient-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $h-dark;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hc-patient-meta {
+    font-size: 0.78rem;
+    color: $h-muted;
+    margin: 0.1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .hc-patient-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .hc-patient-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  3. TARJETA DE MEDICAMENTO — vista de prescripción
+// ══════════════════════════════════════════════════════════════
+.hc-rx-card {
+  background: #fff;
+  border: 1px solid rgba($h-teal, 0.13);
+  border-radius: 10px;
+  padding: 0.875rem 1.1rem;
+  box-shadow: 0 1px 6px rgba(8, 53, 56, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  .hc-rx-drug {
+    font-size: 0.93rem;
+    font-weight: 700;
+    color: $h-dark;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hc-rx-dosage {
+    font-size: 0.82rem;
+    color: $h-muted;
+  }
+
+  .hc-rx-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  // Alerta de interacción (visible si hay interacción detectada)
+  .hc-rx-interaction {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.65rem;
+    background: $hc-critical-bg;
+    border: 1px solid $hc-critical-border;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $hc-critical;
+    margin-top: 0.25rem;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  4. DASHBOARD CLÍNICO — sección de métricas operativas
+// ══════════════════════════════════════════════════════════════
+
+// Grid de KPIs responsivo
+.hc-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (min-width: 640px)  { grid-template-columns: repeat(3, 1fr); }
+  @media (min-width: 1024px) { grid-template-columns: repeat(6, 1fr); }
+}
+
+// Stat inline (dentro de una card existente)
+.hc-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  .hc-stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: $h-dark;
+  }
+
+  .hc-stat-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $h-muted;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  5. INDICADOR DE ESTADO DE TURNO (header del dashboard)
+// ══════════════════════════════════════════════════════════════
+.hc-shift-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba($h-teal, 0.10);
+  color: $clinica-shell-teal-mid;
+  border: 1px solid rgba($h-teal, 0.22);
+
+  // Dot pulsante para turno activo
+  .hc-shift-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $h-teal;
+    animation: hc-pulse 2s ease-in-out infinite;
+  }
+}
+
+// Glow sutil Axelior en el dot pulsante
+@keyframes hc-pulse {
+  0%, 100% { opacity: 1; transform: scale(1);   box-shadow: 0 0 0 0 $axelior-glow; }
+  50%       { opacity: 0.7; transform: scale(0.85); box-shadow: 0 0 0 4px transparent; }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  6. TABLA DE LOTES (Inventory — Lotes/Batches)
+// ══════════════════════════════════════════════════════════════
+.hc-lot-expiry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  .hc-lot-date {
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .hc-lot-days {
+    font-size: 0.72rem;
+  }
+
+  &--ok       { .hc-lot-date { color: $sc-ok; }             .hc-lot-days { color: $sc-ok; } }
+  &--expiring { .hc-lot-date { color: $sc-expiring; }        .hc-lot-days { color: $sc-expiring; } }
+  &--critical { .hc-lot-date { color: $sc-critical-stock; }  .hc-lot-days { color: $sc-critical-stock; } }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  7. FORMULARIO CLÍNICO — sección con separador visual
+// ══════════════════════════════════════════════════════════════
+.hc-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .hc-form-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $h-teal;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid rgba($h-teal, 0.15);
+    margin: 0;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  8. RESPONSIVE — ajustes específicos de pantallas clínicas
+//  (quioscos, pantallas táctiles de consultorio)
+// ══════════════════════════════════════════════════════════════
+@media (max-width: 768px) {
+  // KPI cards: 2 columnas en tablet
+  .hc-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // Patient card: stack vertical
+  .hc-patient-card {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .hc-patient-actions {
+      width: 100%;
+
+      button { flex: 1; }
+    }
+  }
+
+  // Verify panels: apilados
+  .grid .hc-verify-panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  // Badges más grandes en táctil (accesibilidad)
+  .hc-badge {
+    font-size: 0.75rem;
+    padding: 0.28rem 0.75rem;
+  }
+
+  .cs-badge {
+    font-size: 0.72rem;
+    padding: 0.22rem 0.6rem;
+  }
+}

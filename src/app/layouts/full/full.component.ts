@@ -61,6 +61,7 @@ const GROUP_ICONS: Record<string, string> = {
 })
 export class FullComponent implements OnInit {
   navItems: NavItem[] = [];
+  readonly currentYear = new Date().getFullYear();
 
   @ViewChild('leftsidenav') public sidenav: MatSidenav;
   resView = false;

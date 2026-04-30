@@ -30,11 +30,12 @@ export class AppSideLoginComponent implements AfterViewInit {
   readonly currentYear = new Date().getFullYear();
 
   readonly features = [
-    { icon: 'calendar_month', label: 'Online appointments'        },
-    { icon: 'description',    label: 'Electronic medical records' },
-    { icon: 'science',        label: 'Exam management'            },
-    { icon: 'receipt_long',   label: 'Billing'                    },
-    { icon: 'medication',     label: 'Pharmacy'                   },
+    { icon: 'calendar_month', label: 'Gestión de citas'          },
+    { icon: 'description',    label: 'Historia clínica digital'  },
+    { icon: 'science',        label: 'Gestión de exámenes'       },
+    { icon: 'receipt_long',   label: 'Facturación electrónica'   },
+    { icon: 'medication',     label: 'Farmacia y stock'          },
+    { icon: 'people',         label: 'Gestión de pacientes'      },
   ];
 
   ngAfterViewInit(): void {
@@ -66,11 +67,12 @@ export class AppSideLoginComponent implements AfterViewInit {
       },
     });
     google.accounts.id.renderButton(this.googleBtnRef.nativeElement, {
-      theme: 'filled_blue',
+      theme: 'outline',
       size:  'large',
       text:  'continue_with',
       shape: 'rectangular',
       width: buttonWidth,
+      locale: 'es',
     });
     this.showGoogleFallback = false;
   }

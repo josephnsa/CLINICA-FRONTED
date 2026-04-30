@@ -7,15 +7,11 @@ html .topbar.clinica-header.mat-mdc-toolbar {
   z-index: 9;
   height: $header-height;
   min-height: $header-height;
-  background: linear-gradient(
-    90deg,
-    $clinica-shell-teal-start 0%,
-    $clinica-shell-teal-mid 55%,
-    $clinica-shell-teal-end 100%
-  );
+  // Violeta sólido suave — no gradient oscuro que sofoca
+  background: $axelior-purple-600;
   color: #fff;
   border-bottom: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.25);
 
   i-tabler {
     stroke-width: 1.75px;
@@ -150,7 +146,7 @@ button.clinica-header-search-trigger {
   height: 18px;
   padding: 0 5px;
   border-radius: 999px;
-  background: #38bdf8;
+  background: $axelior-purple-400;
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -159,7 +155,7 @@ button.clinica-header-search-trigger {
   justify-content: center;
   line-height: 1;
   pointer-events: none;
-  box-shadow: 0 0 0 2px rgba(8, 53, 56, 0.95);
+  box-shadow: 0 0 0 2px $axelior-purple-600;
 }
 
 .notification-badge {

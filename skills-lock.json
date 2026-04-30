@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "healthcare-expert": {
+      "source": "personamanagmentlayer/pcl",
+      "sourceType": "github",
+      "skillPath": "stdlib/domains/healthcare/SKILL.md",
+      "computedHash": "0f73867c28e49c0fdd1d1b5d66306bcefb8f56b3f650efb9a59add6aebf0632f"
+    },
+    "pharmacy-supply-chain": {
+      "source": "kishorkukreja/awesome-supply-chain",
+      "sourceType": "github",
+      "skillPath": "skills/pharmacy-supply-chain/SKILL.md",
+      "computedHash": "1bd96c01e7d4754464643eb6bcc662edf0bc089546355cead189ae88d917a387"
+    },
+    "typography-system": {
+      "source": "sanky369/vibe-building-skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/typography-system/SKILL.md",
+      "computedHash": "bc704d6c1e557f9a6446c76c6b8ca6d68a71607ed2f4d2e085510902d3f2261c"
+    },
+    "ux-design-systems": {
+      "source": "hoodini/ai-agents-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ux-design-systems/SKILL.md",
+      "computedHash": "dc7b9381f66d3168c7296d278e3cc9f4c283fedf8569ba0ce18ec8b20aaf3bbb"
+    }
+  }
+}

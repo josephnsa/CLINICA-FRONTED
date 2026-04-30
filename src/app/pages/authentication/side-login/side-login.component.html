@@ -1,124 +1,112 @@
-<div class="min-h-screen w-full flex" style="background:#eef2f9;">
+<div class="axelior-login-root">
 
-  <!-- ═══════════════ PANEL IZQUIERDO ═══════════════ -->
-  <div class="hidden lg:flex lg:w-[58%] flex-col justify-between p-10 xl:p-14 text-white relative overflow-hidden"
-       style="
-         background-color: #0b2545;
-         background-image: url('assets/images/logos/pasillo_clinico.png');
-         background-size: cover;
-         background-position: center;">
-
-    <!-- Overlay oscuro sobre la foto -->
-    <div class="absolute inset-0" style="background: rgba(8, 22, 48, 0.74); z-index:0;"></div>
-
-    <!-- Contenido (por encima del overlay) -->
-    <div class="relative z-10 flex flex-col h-full justify-between">
-
-      <!-- Logo top-left -->
-      <div class="flex items-center gap-3">
-        <img src="assets/images/logos/logo_clinica2.png"
-             onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
-             alt="Clínica"
-             class="w-30 h-30 object-contain">
-      </div>
-
-      <!-- Hero + Features -->
-      <div class="mb-8">
-        <h2 class="text-5xl xl:text-6xl font-extrabold leading-[1.08] mb-5">
-          Clinical Precision,<br>
-          <span style="color:#44d0b2;">Human Empathy.</span>
-        </h2>
-        <p class="text-base mb-10 max-w-lg leading-relaxed" style="color:rgba(255,255,255,0.72);">
-          Simplificamos la gestión médica para que puedas enfocarte
-          en lo más importante: la salud de tus pacientes.
-        </p>
-
-        <!-- Features grid 2 columnas -->
-        <div class="grid grid-cols-2 gap-4 max-w-2xl">
-          @for(feature of features; track feature.icon) {
-            <div class="flex items-center gap-4 rounded-2xl px-5 py-4"
-                 style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);">
-              <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                   style="background:rgba(68,208,178,0.18);">
-                <mat-icon style="color:#44d0b2; font-size:22px; width:22px; height:22px;">
-                  {{ feature.icon }}
-                </mat-icon>
-              </div>
-              <span class="text-base font-semibold text-white leading-tight">{{ feature.label }}</span>
-            </div>
-          }
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <p class="text-xs" style="color:rgba(255,255,255,0.32);">
-        © {{ currentYear }} Clínica · Clinical Precision
-      </p>
-
-    </div>
+  <!-- ── Fondo decorativo ─────────────────────────────────────── -->
+  <div class="axelior-bg-mesh" aria-hidden="true">
+    <div class="axelior-bg-orb axelior-bg-orb--1"></div>
+    <div class="axelior-bg-orb axelior-bg-orb--2"></div>
+    <div class="axelior-bg-orb axelior-bg-orb--3"></div>
   </div>
 
-  <!-- ═══════════════ PANEL DERECHO ═══════════════ -->
-  <div class="w-full lg:w-[42%] flex flex-col justify-center items-center px-4 sm:px-6 py-8 sm:py-10"
-       style="background:#eef2f9;">
+  <!-- ══════════ PANEL IZQUIERDO — Branding ══════════════════════ -->
+  <div class="axelior-panel-brand hidden lg:flex">
 
-    <!-- Card login -->
-    <div class="w-full max-w-lg">
-      <div class="rounded-3xl px-6 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-12 flex flex-col items-center"
-           style="background:#ffffff; box-shadow: 0 24px 60px rgba(10,35,66,0.13);">
+    <div class="axelior-brand-logo">
+      <img src="assets/images/logos/logo_clinica2.png"
+           onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
+           alt="Clínica · Axelior"
+           style="height:52px; object-fit:contain; filter:brightness(0) invert(1);">
+    </div>
 
-        <!-- Logo grande dentro de card -->
+    <div class="axelior-brand-hero">
+      <div class="axelior-brand-eyebrow">DESARROLLADO POR AXELIOR.AI</div>
+      <h1 class="axelior-brand-headline">
+        Precisión Clínica,<br>
+        <span class="axelior-brand-accent">Tecnología Inteligente.</span>
+      </h1>
+      <p class="axelior-brand-sub">
+        Simplificamos la gestión médica para que tu equipo
+        se enfoque en lo más importante: la salud de tus pacientes.
+      </p>
+
+      <!-- Feature pills — 2 × 3 grid -->
+      <div class="axelior-features-grid">
+        @for(feature of features; track feature.icon) {
+          <div class="axelior-feature-pill">
+            <div class="axelior-feature-icon-wrap">
+              <mat-icon class="axelior-feature-icon">{{ feature.icon }}</mat-icon>
+            </div>
+            <span class="axelior-feature-label">{{ feature.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="axelior-brand-footer">
+      © {{ currentYear }} Axelior.ai · Todos los derechos reservados
+    </p>
+  </div>
+
+  <!-- ══════════ PANEL DERECHO — Login card ══════════════════════ -->
+  <div class="axelior-panel-auth">
+    <div class="axelior-login-card">
+
+      <!-- Logo -->
+      <div class="axelior-card-logo">
         <img src="assets/images/logos/logo_clinica.png"
              onerror="this.onerror=null;this.src='assets/images/logos/logo-adminmart.svg';"
              alt="Clínica"
-             class="w-20 h-20 sm:w-28 sm:h-28 object-contain mb-3">
+             style="height:62px; object-fit:contain;">
+      </div>
 
-        <!-- Título -->
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center mb-2" style="color:#0f2544;">
-          Iniciar sesión
-        </h2>
-        <p class="text-base sm:text-xl lg:text-2xl leading-snug text-center mb-6" style="color:#5a6a85;">
-          Accede al portal clínico integral
-        </p>
+      <!-- Header -->
+      <div class="axelior-card-header">
+        <h2 class="axelior-card-title">Bienvenido de nuevo</h2>
+        <p class="axelior-card-subtitle">Accede a tu espacio clínico inteligente</p>
+      </div>
 
-        <!-- Botón Google -->
-        <div class="w-full mb-3" style="min-height:50px; display:flex; justify-content:center; align-items:center;">
-          <div #googleBtn style="display:flex; justify-content:center;"></div>
-        </div>
+      <!-- Botón Google SDK -->
+      <div class="axelior-google-wrap">
+        <div #googleBtn style="display:flex; justify-content:center; width:100%; border-radius:12px; overflow:hidden;"></div>
+
         @if(showGoogleFallback) {
-          <button type="button"
-                  class="w-full rounded-xl px-4 py-3 text-base font-semibold text-white mb-2"
-                  style="background:#4285f4;"
-                  (click)="retryGoogleButton()">
+          <button type="button" class="axelior-btn-google" (click)="retryGoogleButton()">
+            <!-- Google "G" logo -->
+            <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0;">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
             Continuar con Google
           </button>
         }
-
-        <!-- Spinner loading -->
-        @if(isLoading) {
-          <div class="flex flex-col items-center mt-4 gap-2">
-            <mat-spinner [diameter]="28"></mat-spinner>
-            <span class="text-xs text-gray-400">Verificando credenciales…</span>
-          </div>
-        }
-
-        <!-- Link de ayuda DENTRO de la card -->
-        <div class="text-center mt-6">
-          <p class="text-sm sm:text-base leading-tight" style="color:#4a5568;">¿Problemas para acceder?</p>
-          <a class="text-sm sm:text-base leading-tight font-bold cursor-pointer" style="color:#2abfa3;">
-            Contacta al administrador del sistema
-          </a>
-        </div>
-
-        <!-- Footer desktop DENTRO de la card -->
-        <p class="text-center text-xs mt-6 tracking-widest uppercase"
-           style="color:#a0aec0; letter-spacing:0.12em;">
-          © {{ currentYear }} Clínica &bull; Clinical Precision
-        </p>
-
       </div>
-    </div>
 
+      <!-- Divider informativo -->
+      <div class="axelior-divider">
+        <span>inicio de sesión seguro</span>
+      </div>
+
+      <!-- Estado de carga -->
+      @if(isLoading) {
+        <div class="axelior-spinner-wrap">
+          <mat-spinner [diameter]="26"></mat-spinner>
+          <span class="axelior-spinner-label">Verificando credenciales…</span>
+        </div>
+      }
+
+      <!-- Ayuda -->
+      <div class="axelior-card-help">
+        <p>¿Problemas para acceder?</p>
+        <a class="axelior-help-link">Contactar al administrador</a>
+      </div>
+
+      <!-- Footer -->
+      <p class="axelior-card-footer">
+        © {{ currentYear }} Axelior.ai · Sistema Clínico Integral
+      </p>
+
+    </div>
   </div>
 
 </div>

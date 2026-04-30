@@ -6,13 +6,13 @@
 // ══════════════════════════════════════════════════════════════
 
 // ─── Tokens locales ──────────────────────────────────────────
-$tm-start   : $clinica-shell-teal-start;   // #168080
-$tm-mid     : $clinica-shell-teal-mid;     // #0c4a4d
-$tm-end     : $clinica-shell-teal-end;     // #083538
-$tm-accent  : $success;                    // #13deb9
-$tm-light   : rgba(22, 128, 128, 0.06);
-$tm-light2  : rgba(22, 128, 128, 0.12);
-$tm-dark    : #0f2544;
+$tm-start   : $clinica-shell-teal-start;   // #7c3aed — Axelior purple-600
+$tm-mid     : $clinica-shell-teal-mid;     // #5b21b6 — Axelior purple-800
+$tm-end     : $clinica-shell-teal-end;     // #2e1065 — Axelior purple-950
+$tm-accent  : $axelior-purple-400;         // #a78bfa — acento violeta claro
+$tm-light   : rgba(124, 58, 237, 0.06);   // purple-600 con alfa baja
+$tm-light2  : rgba(124, 58, 237, 0.12);   // purple-600 con alfa media
+$tm-dark    : #1e1040;                     // texto oscuro con tinte purple
 $tm-muted   : #5a6a85;
 $tm-surface : #f4f7fb;
 $tm-card    : #ffffff;
@@ -63,7 +63,7 @@ mat-card,
 .mat-mdc-card {
   border-radius: 12px !important;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(8, 53, 56, 0.1) !important;
+  box-shadow: 0 2px 12px rgba(46, 16, 101, 0.10) !important;
 
   mat-card-header,
   .mat-mdc-card-header {
@@ -131,7 +131,7 @@ mat-card,
   border-radius: 12px;
   border-left: 4px solid $tm-start !important;
   padding: 1rem 1.25rem;
-  box-shadow: 0 2px 8px rgba(8, 53, 56, 0.07);
+  box-shadow: 0 2px 8px rgba(46, 16, 101, 0.07);
 
   .module-title {
     h2, h3 {
@@ -182,7 +182,7 @@ mat-card,
   -webkit-overflow-scrolling: touch;
   border-radius: 12px;
   background: $tm-card;
-  box-shadow: 0 2px 8px rgba(8, 53, 56, 0.07);
+  box-shadow: 0 2px 8px rgba(46, 16, 101, 0.07);
   border: 1px solid rgba($tm-start, 0.12);
 }
 
@@ -245,7 +245,7 @@ mat-card,
 // ══════════════════════════════════════════════════════════════
 .mat-expansion-panel {
   border-radius: 10px !important;
-  box-shadow: 0 1px 6px rgba(8, 53, 56, 0.08) !important;
+  box-shadow: 0 1px 6px rgba(46, 16, 101, 0.08) !important;
   border: 1px solid rgba($tm-start, 0.1);
   overflow: hidden;
 
@@ -435,9 +435,679 @@ a.btn-teal {
   font-weight: 600;
   white-space: nowrap;
 
-  // Mapeo de clases Tailwind existentes → paleta semántica
   &.text-green-600 { background: rgba(19, 222, 185, 0.12); color: #006a5e !important; }
   &.text-red-600   { background: rgba(244, 67, 54, 0.1);  color: #b71c1c !important; }
   &.text-blue-600  { background: rgba(83, 155, 255, 0.12); color: #1a4db5 !important; }
   &.text-yellow-600{ background: rgba(255, 174, 31, 0.12); color: #7a5100 !important; }
+}
+
+
+// ══════════════════════════════════════════════════════════════
+//  14. HEALTHCARE ENTERPRISE — Patrones UI clínicos y farmacia
+//  Basado en: healthcare-expert + pharmacy-supply-chain skills
+// ══════════════════════════════════════════════════════════════
+
+// ─── 14.1 BADGES DE ESTADO CLÍNICO ───────────────────────────
+// Semántica: seguridad del paciente primero, colores con significado médico
+.hc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  line-height: 1.4;
+
+  // Punto de estado (dot indicator)
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  // Estados clínicos
+  &--critical  { background: $hc-critical-bg;  color: $hc-critical;  border: 1px solid $hc-critical-border;  &::before { background: $hc-critical; } }
+  &--warning   { background: $hc-warning-bg;   color: $hc-warning;   border: 1px solid $hc-warning-border;   &::before { background: $hc-warning; } }
+  &--stable    { background: $hc-stable-bg;    color: $hc-stable;    border: 1px solid $hc-stable-border;    &::before { background: $hc-stable; } }
+  &--pending   { background: $hc-pending-bg;   color: $hc-pending;   border: 1px solid $hc-pending-border;   &::before { background: $hc-pending; } }
+  &--inactive  { background: $hc-inactive-bg;  color: $hc-inactive;  border: 1px solid rgba($hc-inactive, 0.28); &::before { background: $hc-inactive; } }
+  &--triage    { background: $hc-triage-bg;    color: $hc-triage;    border: 1px solid rgba($hc-triage, 0.30);  &::before { background: $hc-triage; } }
+
+  // Prescripciones
+  &--active    { background: $hc-stable-bg;    color: $hc-stable;    border: 1px solid $hc-stable-border;    &::before { background: $hc-stable; } }
+  &--dispensed { background: $hc-pending-bg;   color: $hc-pending;   border: 1px solid $hc-pending-border;   &::before { background: $hc-pending; } }
+  &--cancelled { background: $hc-inactive-bg;  color: $hc-inactive;  border: 1px solid rgba($hc-inactive, 0.28); &::before { background: $hc-inactive; } }
+  &--expired   { background: $hc-critical-bg;  color: $hc-critical;  border: 1px solid $hc-critical-border;  &::before { background: $hc-critical; } }
+}
+
+// ─── 14.2 BADGES DE SUSTANCIAS CONTROLADAS (DEA Schedules) ───
+// Farmacéutico ve de un vistazo qué requiere doble firma / bóveda
+.cs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  &--ii  { background: $cs-ii-bg;  color: $cs-ii-color;  border: 1px solid $cs-ii-border; }
+  &--iii { background: $cs-iii-bg; color: $cs-iii-color; border: 1px solid rgba($cs-iii-color, 0.30); }
+  &--iv  { background: $cs-iv-bg;  color: $cs-iv-color;  border: 1px solid rgba($cs-iv-color, 0.28); }
+}
+
+// ─── 14.3 INDICADORES DE SUPPLY CHAIN FARMACIA ────────────────
+// Visual immediato del estado del inventario de medicamentos
+.sc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.20rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.71rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &--critical  { background: $sc-critical-bg; color: $sc-critical-stock; border: 1px solid rgba($sc-critical-stock, 0.28); }
+  &--low       { background: $sc-low-bg;      color: $sc-low-stock;      border: 1px solid rgba($sc-low-stock, 0.25);      }
+  &--expiring  { background: $sc-expiring-bg; color: $sc-expiring;       border: 1px solid rgba($sc-expiring, 0.28);       }
+  &--shortage  { background: $sc-shortage-bg; color: $sc-shortage;       border: 1px solid rgba($sc-shortage, 0.28);       }
+  &--ok        { background: $sc-ok-bg;       color: $sc-ok;             border: 1px solid rgba($sc-ok, 0.25);             }
+}
+
+// ─── 14.4 BANNERS DE ALERTA CLÍNICA ──────────────────────────
+// Anuncio de nivel superior: alertas críticas de seguridad
+.hc-alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: 10px;
+  border-left: 4px solid;
+  font-size: 0.875rem;
+
+  .hc-alert-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hc-alert-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hc-alert-title {
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.2rem;
+  }
+
+  .hc-alert-message {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  &--critical {
+    background: $hc-critical-bg;
+    border-color: $hc-critical;
+    color: #b52323;
+    box-shadow: 0 2px 8px rgba($hc-critical, 0.12);
+  }
+
+  &--warning {
+    background: $hc-warning-bg;
+    border-color: $hc-warning;
+    color: #d44a00;
+    box-shadow: 0 2px 8px rgba($hc-warning, 0.12);
+  }
+
+  &--info {
+    background: $hc-pending-bg;
+    border-color: $hc-pending;
+    color: #1460b6;
+    box-shadow: 0 2px 8px rgba($hc-pending, 0.10);
+  }
+
+  &--shortage {
+    background: $sc-shortage-bg;
+    border-color: $sc-shortage;
+    color: #aa2f09;
+    box-shadow: 0 2px 8px rgba($sc-shortage, 0.12);
+  }
+}
+
+// ─── 14.5 KPI CARDS CLÍNICAS ─────────────────────────────────
+// Métricas operativas con semántica de color clínica
+.hc-kpi-card {
+  background: $tm-card;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 10px rgba(46, 16, 101, 0.08);
+  border: 1px solid rgba($tm-start, 0.10);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+
+  // Barra de acento izquierda — codificación de prioridad
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 12px 0 0 12px;
+  }
+
+  .hc-kpi-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $tm-muted;
+    margin: 0;
+  }
+
+  .hc-kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: $tm-dark;
+    margin: 0;
+  }
+
+  .hc-kpi-sub {
+    font-size: 0.78rem;
+    color: $tm-muted;
+    margin: 0;
+  }
+
+  .hc-kpi-trend {
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+
+    &--up   { color: $hc-stable; }
+    &--down { color: $hc-critical; }
+    &--flat { color: $tm-muted; }
+  }
+
+  // Variantes por tipo de KPI
+  &--appointments { &::before { background: $tm-start; } .hc-kpi-value { color: $tm-mid; } }
+  &--critical     { &::before { background: $hc-critical; } .hc-kpi-value { color: $hc-critical; } }
+  &--pending      { &::before { background: $hc-warning; } .hc-kpi-value { color: $hc-warning; } }
+  &--exams        { &::before { background: $hc-pending; } .hc-kpi-value { color: $hc-pending; } }
+  &--prescriptions { &::before { background: $cs-iv-color; } .hc-kpi-value { color: $cs-iv-color; } }
+  &--alerts       { &::before { background: $hc-critical; } background: $hc-critical-bg; }
+  &--shortage     { &::before { background: $sc-shortage; } background: $sc-shortage-bg; }
+}
+
+// ─── 14.6 SECCIÓN DE MÓDULO — Header con contexto clínico ────
+.hc-module-header {
+  background: $tm-card;
+  border-radius: 12px;
+  border-left: 4px solid $tm-start;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(46, 16, 101, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+
+  .hc-module-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hc-module-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $tm-dark;
+    margin: 0 0 0.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: $tm-start;
+      flex-shrink: 0;
+    }
+  }
+
+  .hc-module-subtitle {
+    font-size: 0.82rem;
+    color: $tm-muted;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .hc-module-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  // Variante crítica (alertas, escasez)
+  &--critical {
+    border-left-color: $hc-critical;
+    background: rgba(198, 40, 40, 0.04);
+  }
+
+  &--warning {
+    border-left-color: $hc-warning;
+  }
+
+  &--pharmacy {
+    border-left-color: $cs-ii-color;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .hc-module-actions button {
+      width: 100%;
+    }
+  }
+}
+
+// ─── 14.7 TABLA CLÍNICA — filas con indicadores de seguridad ──
+.hc-table-row {
+  // Fila con medicamento controlado
+  &--controlled {
+    background: rgba($cs-ii-color, 0.03) !important;
+    &:hover { background: rgba($cs-ii-color, 0.07) !important; }
+  }
+
+  // Fila con stock crítico
+  &--critical-stock {
+    background: $hc-critical-bg !important;
+    &:hover { background: rgba($hc-critical, 0.12) !important; }
+  }
+
+  // Fila por vencer
+  &--expiring {
+    background: $sc-expiring-bg !important;
+    &:hover { background: rgba($sc-expiring, 0.14) !important; }
+  }
+}
+
+// ─── 14.8 PANEL DE VERIFICACIÓN (HIPAA / dispensación) ────────
+.hc-verify-panel {
+  background: rgba($comply-ok, 0.05);
+  border: 1px solid rgba($comply-ok, 0.22);
+  border-radius: 10px;
+  padding: 0.875rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .hc-verify-icon { color: $comply-ok; flex-shrink: 0; }
+  .hc-verify-label { font-size: 0.82rem; font-weight: 700; color: $comply-ok; }
+  .hc-verify-sub   { font-size: 0.78rem; color: $tm-muted; }
+
+  &--pending {
+    background: rgba($comply-warn, 0.05);
+    border-color: rgba($comply-warn, 0.22);
+    .hc-verify-icon, .hc-verify-label { color: $comply-warn; }
+  }
+
+  &--fail {
+    background: $comply-fail-bg;
+    border-color: rgba($comply-fail, 0.28);
+    .hc-verify-icon, .hc-verify-label { color: $comply-fail; }
+  }
+}
+
+// ─── 14.9 BARRA DE DISPONIBILIDAD DE STOCK ────────────────────
+.hc-stock-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .hc-stock-track {
+    height: 6px;
+    background: rgba($tm-start, 0.10);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .hc-stock-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s ease;
+
+    &--ok       { background: $sc-ok; }
+    &--low      { background: $sc-low-stock; }
+    &--critical { background: $sc-critical-stock; }
+    &--expiring { background: $sc-expiring; }
+  }
+
+  .hc-stock-label {
+    font-size: 0.72rem;
+    color: $tm-muted;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+// ─── 14.10 TIMELINE CLÍNICO ───────────────────────────────────
+.hc-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 1.25rem;
+
+  .hc-timeline-item {
+    position: relative;
+    padding: 0 0 1.25rem 1.25rem;
+    border-left: 2px solid rgba($tm-start, 0.18);
+
+    &:last-child { border-left-color: transparent; }
+
+    .hc-timeline-dot {
+      position: absolute;
+      left: -7px;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: $tm-start;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px rgba($tm-start, 0.25);
+
+      &--critical  { background: $hc-critical; box-shadow: 0 0 0 2px $hc-critical-bg; }
+      &--warning   { background: $hc-warning;  box-shadow: 0 0 0 2px $hc-warning-bg; }
+      &--pending   { background: $hc-pending;  box-shadow: 0 0 0 2px $hc-pending-bg; }
+    }
+
+    .hc-timeline-time  { font-size: 0.72rem; color: $tm-muted; }
+    .hc-timeline-title { font-size: 0.85rem; font-weight: 600; color: $tm-dark; margin: 0.1rem 0; }
+    .hc-timeline-body  { font-size: 0.82rem; color: $tm-muted; }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  15. TAILWIND PATTERN OVERRIDES
+//  Convierte automáticamente todos los módulos que aún usan
+//  clases Tailwind directas al estilo enterprise Axelior.
+//  Sin tocar el HTML de cada página.
+// ══════════════════════════════════════════════════════════════
+
+// ─── 15.1 Contenedor de filtros / header de módulo ───────────
+// Patrón: <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+.rounded-xl.border.border-gray-200.bg-white {
+  background:    $tm-card !important;
+  border-color:  rgba($tm-start, 0.15) !important;
+  border-left:   4px solid $tm-start !important;
+  border-radius: 12px !important;
+  box-shadow:    0 2px 8px rgba(46, 16, 101, 0.07) !important;
+
+  > div > h2,
+  > h2 {
+    font-size:      1.15rem !important;
+    font-weight:    700 !important;
+    color:          $tm-dark !important;
+    letter-spacing: -0.01em;
+    line-height:    1.25;
+    margin-bottom:  0.15rem !important;
+  }
+
+  > div > p,
+  > p {
+    font-size:     0.82rem !important;
+    color:         $tm-muted !important;
+    line-height:   1.45;
+    margin-bottom: 0.65rem !important;
+  }
+}
+
+// ─── 15.2 Contenedor de tabla ─────────────────────────────────
+// Patrón: <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+.overflow-hidden.rounded-xl.border.border-gray-200.bg-white {
+  background:              $tm-card !important;
+  border-color:            rgba($tm-start, 0.12) !important;
+  border-left-width:       1px !important;   // neutraliza el 4px de 15.1
+  border-radius:           12px !important;
+  box-shadow:              0 2px 8px rgba(46, 16, 101, 0.07) !important;
+  overflow-x:              auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+// ─── 15.3 Secciones azul → Axelior purple ────────────────────
+// Patrón: class="... bg-blue-50 border border-blue-100 ..."
+.bg-blue-50  { background-color: rgba($tm-start, 0.04) !important; }
+.bg-blue-100 { background-color: rgba($tm-start, 0.08) !important; }
+
+.border-blue-100 { border-color: rgba($tm-start, 0.18) !important; }
+.border-blue-200 { border-color: rgba($tm-start, 0.22) !important; }
+
+.text-blue-900, .text-blue-800 { color: $tm-dark  !important; }
+.text-blue-700, .text-blue-600 { color: $tm-start !important; }
+.text-blue-500, .text-blue-400 { color: $axelior-purple-400 !important; }
+.text-blue-300                  { color: $axelior-purple-400 !important; }
+
+// Gradiente azul → Axelior purple (card headers, sección highlight)
+.bg-gradient-to-r.from-blue-50,
+.bg-gradient-to-r.from-blue-100 {
+  background: linear-gradient(90deg, rgba($tm-start, 0.06), rgba($tm-mid, 0.04)) !important;
+}
+
+// ─── 15.4 mat-card-header con clases Tailwind azules ─────────
+// Patrón: <mat-card-header class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 mb-4">
+.mat-mdc-card mat-card-header.bg-gradient-to-r,
+.mat-mdc-card .mat-mdc-card-header.bg-gradient-to-r {
+  background: linear-gradient(135deg, $tm-start 0%, $tm-mid 100%) !important;
+
+  mat-card-title,
+  .mat-mdc-card-title,
+  .mat-card-title {
+    color: #fff !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+  }
+
+  mat-card-subtitle,
+  .mat-mdc-card-subtitle { color: rgba(255, 255, 255, 0.75) !important; }
+
+  h2, h3, h4 { color: #fff !important; }
+}
+
+// ─── 15.5 h2 título standalone del módulo ────────────────────
+// Patrón: <h2 class="text-xl font-semibold">Módulo</h2>
+h2.text-xl.font-semibold,
+h2.text-xl {
+  font-size:      1.15rem !important;
+  font-weight:    700 !important;
+  color:          $tm-dark !important;
+  letter-spacing: -0.01em;
+  line-height:    1.25;
+  margin:         0 !important;
+}
+
+h3.text-lg.font-medium,
+h3.text-lg {
+  font-size:      1rem !important;
+  font-weight:    700 !important;
+  color:          $tm-dark !important;
+  letter-spacing: -0.005em;
+}
+
+h4.font-semibold {
+  font-size:   0.95rem !important;
+  font-weight: 700 !important;
+  color:       $tm-dark !important;
+}
+
+// ─── 15.6 Status spans en celdas → badge enterprise ─────────
+// Patrón: <span [ngClass]="row.isActive ? 'text-green-600' : 'text-red-600'">
+td .text-green-600,
+td .text-red-600,
+td .text-yellow-600,
+td .text-blue-600,
+td .text-gray-600 {
+  display:        inline-flex !important;
+  align-items:    center !important;
+  gap:            0.28rem !important;
+  padding:        0.2rem 0.6rem !important;
+  border-radius:  999px !important;
+  font-size:      0.71rem !important;
+  font-weight:    700 !important;
+  letter-spacing: 0.02em;
+  white-space:    nowrap;
+  line-height:    1.4;
+
+  &::before {
+    content:       '';
+    width:         5px;
+    height:        5px;
+    border-radius: 50%;
+    flex-shrink:   0;
+    background:    currentColor;
+  }
+}
+
+td .text-green-600  {
+  background:   $hc-stable-bg   !important;
+  color:        $hc-stable      !important;
+  border:       1px solid $hc-stable-border;
+}
+td .text-red-600    {
+  background:   $hc-critical-bg !important;
+  color:        $hc-critical    !important;
+  border:       1px solid $hc-critical-border;
+}
+td .text-yellow-600 {
+  background:   $hc-warning-bg  !important;
+  color:        $hc-warning     !important;
+  border:       1px solid $hc-warning-border;
+}
+td .text-blue-600   {
+  background:   $hc-pending-bg  !important;
+  color:        $hc-pending     !important;
+  border:       1px solid $hc-pending-border;
+}
+td .text-gray-600   {
+  background:   $hc-inactive-bg !important;
+  color:        $hc-inactive    !important;
+  border:       1px solid rgba($hc-inactive, 0.28);
+}
+
+// ─── 15.7 Alert divs clínicos (resultado triaje, etc.) ────────
+// Patrón: <div class="p-4 rounded ... bg-red-100 text-red-700">
+.bg-red-100.text-red-700 {
+  background:   $hc-critical-bg  !important;
+  color:        $hc-critical     !important;
+  border-left:  4px solid $hc-critical;
+  border-radius: 10px !important;
+  font-size:    0.875rem;
+  font-weight:  500;
+}
+
+.bg-green-100.text-green-700 {
+  background:   $hc-stable-bg   !important;
+  color:        $hc-stable      !important;
+  border-left:  4px solid $hc-stable;
+  border-radius: 10px !important;
+  font-size:    0.875rem;
+  font-weight:  500;
+}
+
+.bg-yellow-100.text-yellow-700 {
+  background:   $hc-warning-bg  !important;
+  color:        $hc-warning     !important;
+  border-left:  4px solid $hc-warning;
+  border-radius: 10px !important;
+  font-size:    0.875rem;
+  font-weight:  500;
+}
+
+// ─── 15.8 Estado vacío de tabla ───────────────────────────────
+// Patrón: <div class="px-4 py-6 text-center text-sm text-gray-500">
+.text-center.text-sm.text-gray-500 {
+  color:     $tm-muted !important;
+  font-size: 0.875rem !important;
+  padding:   2rem 1rem !important;
+}
+
+// ─── 15.9 Sección contextual (paciente seleccionado, etc.) ────
+// Patrón: <div class="... rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+.rounded-xl.border-blue-100.bg-blue-50,
+.rounded-xl.border.border-blue-100.bg-blue-50 {
+  border-left:   4px solid $tm-start !important;
+  border-radius: 10px !important;
+  padding:       0.875rem 1.25rem !important;
+  box-shadow:    0 2px 6px rgba(46, 16, 101, 0.06);
+}
+
+// ─── 15.10 Sección de formulario con fondo (contacto, etc.) ──
+// Patrón: <div class="rounded-lg border border-blue-100 bg-blue-50 p-4">
+.rounded-lg.border-blue-100.bg-blue-50,
+.rounded-lg.border.border-blue-100.bg-blue-50 {
+  border-left:   3px solid rgba($tm-start, 0.45) !important;
+  border-radius: 8px !important;
+
+  h4 {
+    font-size:   0.88rem !important;
+    font-weight: 700 !important;
+    color:       $tm-dark !important;
+  }
+}
+
+// ─── 15.11 Títulos de módulo en páginas maestro ───────────────
+// Cubre <h2 class="text-2xl font-bold ..."> y variantes
+h2.text-2xl.font-bold,
+h2.text-2xl {
+  font-size:      1.35rem !important;
+  font-weight:    800 !important;
+  color:          $tm-dark !important;
+  letter-spacing: -0.02em;
+  line-height:    1.2;
+}
+
+// ─── 15.12 Botón primario font weight ─────────────────────────
+// Asegura que todos los botones mat-flat-button tengan peso correcto
+button[mat-flat-button],
+button.mat-mdc-unelevated-button {
+  font-weight:    600 !important;
+  letter-spacing: 0.01em !important;
+}
+
+button[mat-stroked-button],
+button.mat-mdc-outlined-button {
+  font-weight: 600 !important;
+}
+
+// ─── 15.13 Tabla vacía / sin datos ───────────────────────────
+td[colspan] {
+  color:     $tm-muted;
+  font-size: 0.875rem;
+  text-align: center;
+  padding:   1.5rem !important;
 }

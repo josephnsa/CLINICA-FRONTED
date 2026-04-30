@@ -1,52 +1,125 @@
 <div class="flex flex-col gap-5">
-  <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-    <div class="mb-3">
-      <h2 class="text-xl font-semibold text-gray-900">Farmacia - Dispensacion</h2>
-      <p class="text-sm text-gray-500">Busca recetas activas por paciente y ejecuta la dispensacion.</p>
+
+  <!-- ── Cabecera del módulo ───────────────────────────────── -->
+  <div class="hc-module-header hc-module-header--pharmacy">
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+      <div>
+        <h2 class="hc-module-title">Farmacia — Dispensación</h2>
+        <p class="hc-module-subtitle">
+          Busca recetas activas por paciente y ejecuta la dispensación.
+          Los medicamentos controlados requieren doble verificación.
+        </p>
+      </div>
     </div>
-    <div class="flex flex-wrap gap-3 items-center" [formGroup]="searchForm">
+
+    <!-- Filtro de búsqueda -->
+    <div class="filter-row" [formGroup]="searchForm">
       <app-patient-autocomplete-field
         class="min-w-[280px] flex-1"
-        label="Paciente"
+        label="Buscar paciente"
         [idControl]="$any(searchForm.controls.patientId)"
       />
-      <button mat-flat-button color="primary" (click)="onSearch()">Buscar</button>
+      <button mat-flat-button class="btn-teal" (click)="onSearch()">
+        Buscar recetas
+      </button>
     </div>
   </div>
 
-  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+  <!-- ── Panel HIPAA: verificación de identidad ────────────── -->
+  @if (prescriptions.length > 0) {
+    <div class="hc-verify-panel">
+      <mat-icon class="hc-verify-icon" style="font-size:22px;width:22px;height:22px">
+        verified_user
+      </mat-icon>
+      <div>
+        <p class="hc-verify-label">Verificación de identidad requerida</p>
+        <p class="hc-verify-sub">
+          Confirma la identidad del paciente antes de dispensar.
+          Toda dispensación queda registrada en el audit trail del sistema.
+        </p>
+      </div>
+    </div>
+  }
+
+  <!-- ── Tabla de recetas activas para dispensar ───────────── -->
+  <div class="module-table-wrap">
     <table mat-table [dataSource]="prescriptions" class="w-full">
-    <ng-container matColumnDef="patientName">
-      <th mat-header-cell *matHeaderCellDef>Paciente</th>
-      <td mat-cell *matCellDef="let row">{{ displayPatientName(row) }}</td>
-    </ng-container>
-    <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef>Fecha</th>
-      <td mat-cell *matCellDef="let row">{{ row.createdAt | date:'dd/MM/yyyy' }}</td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Estado</th>
-      <td mat-cell *matCellDef="let row">
-        <span class="text-sm px-2 py-1 rounded bg-green-100 text-green-700">
-          {{ row.status }}
-        </span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Acción</th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-flat-button color="primary"
-          (click)="dispense(row)"
-          [disabled]="isDispensing === row.id">
-          {{ isDispensing === row.id ? 'Dispensando...' : 'Dispensar' }}
-        </button>
-      </td>
-    </ng-container>
+
+      <ng-container matColumnDef="patientName">
+        <th mat-header-cell *matHeaderCellDef>Paciente</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="font-medium">{{ displayPatientName(row) }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Fecha prescripción</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.createdAt | date:'dd/MM/yyyy HH:mm' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="hc-badge hc-badge--active">ACTIVA</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="controlled">
+        <th mat-header-cell *matHeaderCellDef>Tipo</th>
+        <td mat-cell *matCellDef="let row">
+          @if (row.controlled === 'C-II') {
+            <span class="cs-badge cs-badge--ii">C-II Controlado</span>
+          } @else if (row.controlled === 'C-IV') {
+            <span class="cs-badge cs-badge--iv">C-IV Controlado</span>
+          } @else {
+            <span class="hc-badge hc-badge--stable" style="font-size:0.68rem">ESTÁNDAR</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acción</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-flat-button class="btn-teal"
+            (click)="dispense(row)"
+            [disabled]="isDispensing === row.id">
+            @if (isDispensing === row.id) {
+              Dispensando...
+            } @else {
+              Dispensar
+            }
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-mdc-no-data-row">
+        <td [attr.colspan]="displayedColumns.length">
+          <div class="empty-state">
+            <mat-icon>medication</mat-icon>
+            <p>No hay recetas activas pendientes de dispensar</p>
+          </div>
+        </td>
+      </tr>
+
     </table>
-    <div *ngIf="prescriptions.length === 0" class="text-center text-gray-500 py-8">
-      No hay recetas activas pendientes de dispensar.
+  </div>
+
+  <!-- ── Nota de cumplimiento HIPAA ───────────────────────── -->
+  <div class="hc-alert-banner hc-alert-banner--info" style="font-size:0.8rem">
+    <div class="hc-alert-icon">
+      <mat-icon style="font-size:18px;width:18px;height:18px">info</mat-icon>
+    </div>
+    <div class="hc-alert-body">
+      <p class="hc-alert-title">Registro de auditoría activo</p>
+      <p class="hc-alert-message">
+        Cada dispensación genera un registro de auditoría con usuario, timestamp y datos del paciente
+        conforme a las políticas de trazabilidad de medicamentos (DSCSA).
+      </p>
     </div>
   </div>
 

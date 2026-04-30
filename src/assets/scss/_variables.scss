@@ -3,48 +3,115 @@
 // font
 $font-family: "DM Sans", sans-serif;
 
-// light color variable
-
 // Sidenav
 $sidenav-desktop: 270px !default;
 $sidenav-mini: 80px !default;
 $header-height: 70px !default;
 
-// Shell clínico (header + menú lateral): mismos tonos teal
-$clinica-shell-teal-start: #168080 !default;
-$clinica-shell-teal-mid: #0c4a4d !default;
-$clinica-shell-teal-end: #083538 !default;
+// ══════════════════════════════════════════════════════════════
+//  AXELIOR BRAND PALETTE — Purple / Violet
+//  Fuente: diseño oficial Axelior.ai
+// ══════════════════════════════════════════════════════════════
+$axelior-purple-400: #a78bfa;   // violet-400 — acento claro
+$axelior-purple-500: #8b5cf6;   // violet-500 — primario medio
+$axelior-purple-600: #7c3aed;   // violet-600 — primario principal ★
+$axelior-purple-700: #6d28d9;   // violet-700 — hover / profundidad
+$axelior-purple-800: #5b21b6;   // violet-800 — shell medio
+$axelior-purple-900: #4c1d95;   // violet-900 — shell profundo
+$axelior-purple-950: #2e1065;   // violet-950 — shell oscuro
+$axelior-dark:       #0d0928;   // fondo oscuro máximo (login / splash)
+$axelior-glow:       rgba(139, 92, 246, 0.22);   // glow effect
+
+// Shell (header + sidebar): gradiente Axelior purple
+$clinica-shell-teal-start: $axelior-purple-600 !default;   // #7c3aed
+$clinica-shell-teal-mid:   $axelior-purple-800 !default;   // #5b21b6
+$clinica-shell-teal-end:   $axelior-purple-950 !default;   // #2e1065
+
+// Sombra oscura del shell (reemplaza la sombra teal)
+$clinica-shell-shadow: rgba(46, 16, 101, 0.22);   // purple-950 con alfa
 
 //BorderColor
 $borderColor: var(--mat-sys-outline-variant);
 $borderformColor: var(--mat-sys-outline-variant);
 
-// custom
-$primary: var(--mat-sys-primary);
+// custom semantic
+$primary:   var(--mat-sys-primary);
 $secondary: var(--mat-sys-secondary);
-$accent: var(--mat-sys-secondary);
-$error: var(--mat-sys-error);
-$info: #539bff;
-$warning: #ffae1f;
-$success: #13deb9;
-$white: #ffffff;
+$accent:    var(--mat-sys-secondary);
+$error:     var(--mat-sys-error);
+$info:      $axelior-purple-400;    // violeta claro como "info"
+$warning:   #ffae1f;                // ámbar — señal de advertencia (mantener)
+$success:   #10b981;                // esmeralda — saludable / OK clínico
+$white:     #ffffff;
 
-$light: var(--mat-sys-surface-bright);
-$light-primary: var(--mat-sys-primary-fixed-dim);
+$light:           var(--mat-sys-surface-bright);
+$light-primary:   var(--mat-sys-primary-fixed-dim);
 $light-secondary: var(--mat-sys-secondary-fixed-dim);
-$light-accent: var(--mat-sys-secondary-fixed-dim);
-$light-error: var(--mat-sys-error-fixed-dim);
-$light-warning: #ffad1f40;
-$light-success: #13deb940;
-$light-info: #8754ec26;
+$light-accent:    var(--mat-sys-secondary-fixed-dim);
+$light-error:     var(--mat-sys-error-fixed-dim);
+$light-warning:   #ffad1f40;
+$light-success:   rgba(16, 185, 129, 0.15);
+$light-info:      rgba(167, 139, 250, 0.15);
 
 // layout
-$boxedWidth: 1200px;
-$border-radius: 7px;
-
-$card-spacer: 24px;
-
-$text-color: var(--mat-sys-on-background);
+$boxedWidth:     1200px;
+$border-radius:  7px;
+$card-spacer:    24px;
+$text-color:     var(--mat-sys-on-background);
 
 $dark-text-secondary: rgba(255, 255, 255, 0.67);
-$dark-body-bg: #141a21;
+$dark-body-bg:        #141a21;
+
+// ══════════════════════════════════════════════════════════════
+//  HEALTHCARE ENTERPRISE — tokens clínicos y farmacia
+//  Principios: seguridad del paciente, flujo clínico, cumplimiento
+// ══════════════════════════════════════════════════════════════
+
+// ─── Estado clínico del paciente ─────────────────────────────
+$hc-critical:        #c62828;
+$hc-critical-bg:     rgba(198, 40, 40, 0.08);
+$hc-critical-border: rgba(198, 40, 40, 0.30);
+$hc-warning:         #e65100;
+$hc-warning-bg:      rgba(230, 81, 0, 0.09);
+$hc-warning-border:  rgba(230, 81, 0, 0.30);
+$hc-stable:          #2e7d32;
+$hc-stable-bg:       rgba(46, 125, 50, 0.09);
+$hc-stable-border:   rgba(46, 125, 50, 0.28);
+$hc-pending:         #1565c0;
+$hc-pending-bg:      rgba(21, 101, 192, 0.09);
+$hc-pending-border:  rgba(21, 101, 192, 0.28);
+$hc-inactive:        #546e7a;
+$hc-inactive-bg:     rgba(84, 110, 122, 0.09);
+
+// Triaje: cyan (distinto del purple de marca Axelior)
+$hc-triage:         #0891b2;
+$hc-triage-bg:      rgba(8, 145, 178, 0.09);
+
+// ─── Farmacia — sustancias controladas (DEA Schedules) ────────
+$cs-ii-color:  #7b1fa2;
+$cs-ii-bg:     rgba(123, 31, 162, 0.10);
+$cs-ii-border: rgba(123, 31, 162, 0.32);
+$cs-iii-color: #6a1b9a;
+$cs-iii-bg:    rgba(106, 27, 154, 0.08);
+$cs-iv-color:  #4527a0;
+$cs-iv-bg:     rgba(69, 39, 160, 0.08);
+
+// ─── Supply Chain Farmacia ─────────────────────────────────────
+$sc-critical-stock: #b71c1c;
+$sc-critical-bg:    rgba(183, 28, 28, 0.08);
+$sc-low-stock:      #e53935;
+$sc-low-bg:         rgba(229, 57, 53, 0.08);
+$sc-expiring:       #f57f17;
+$sc-expiring-bg:    rgba(245, 127, 23, 0.09);
+$sc-shortage:       #bf360c;
+$sc-shortage-bg:    rgba(191, 54, 12, 0.09);
+$sc-ok:             #1b5e20;
+$sc-ok-bg:          rgba(27, 94, 32, 0.08);
+
+// ─── Cumplimiento / Auditoría ──────────────────────────────────
+$comply-ok:      #00695c;
+$comply-ok-bg:   rgba(0, 105, 92, 0.08);
+$comply-warn:    #e65100;
+$comply-warn-bg: rgba(230, 81, 0, 0.08);
+$comply-fail:    #b71c1c;
+$comply-fail-bg: rgba(183, 28, 28, 0.08);

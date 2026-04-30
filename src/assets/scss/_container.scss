@@ -8,9 +8,11 @@
 
 body {
   font-family: $font-family;
-  line-height: 1.334rem;
+  line-height: 1.55;
   overflow-x: hidden;
   color: var(--mat-sys-on-background);
+  background-color: var(--mat-sys-background);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Contenedor del layout autenticado: header a ancho completo + sidenav debajo */
@@ -26,6 +28,12 @@ body {
   min-height: 0;
   width: 100%;
   margin-top: 0;
+  background-color: #f0f3f8;
+}
+
+// Fuerza fondo del área de contenido (mat-sidenav-content)
+.contentWrapper {
+  background-color: #f0f3f8 !important;
 }
 
 .container {
@@ -42,10 +50,10 @@ body {
 }
 
 .pageWrapper {
-  padding: 24px 24px 0px;
+  padding: 24px 24px 24px;
   min-height: calc(100vh - 130px);
-
   margin: 0 auto;
+  background-color: #f0f3f8;
 
   &.maxWidth {
     max-width: $boxedWidth;

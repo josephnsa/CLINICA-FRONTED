@@ -5,20 +5,23 @@
 html {
   @include mat.theme(
     (
-      color: mat.$azure-palette,
+      color: mat.$violet-palette,
       typography: $font-family,
     )
   );
 
   @include mat.theme-overrides(
     (
-      primary: rgb(93, 135, 255),
-      error: rgb(250, 137, 107),
-      body-medium-size: 14px,
-      body-large-size: 14px,
-      outline-variant: #d7dde2,
-      level1: "#919eab4d 0px 0px 2px 0px, #919eab1f 0px 12px 24px -4px",
-      level2: rgba(145, 158, 171, 0.12) 0px 1px 16px,
+      // Axelior primary: violet-600 #7c3aed
+      primary:           rgb(124, 58, 237),
+      // Secondary: violet-400 #a78bfa (acento claro)
+      secondary:         rgb(167, 139, 250),
+      error:             rgb(198, 40, 40),
+      body-medium-size:  14px,
+      body-large-size:   14px,
+      outline-variant:   #d7dde2,
+      level1: "#7c3aed1a 0px 0px 2px 0px, #7c3aed0f 0px 12px 24px -4px",
+      level2: rgba(124, 58, 237, 0.08) 0px 1px 16px,
     )
   );
 }

@@ -1,6 +1,7 @@
+// Axelior violet theme (replaces legacy blue theme)
 html.blue_theme {
-  --mat-sys-primary: rgb(93, 135, 255);
-  --mat-sys-primary-fixed-dim: rgb(93, 135, 255, 0.15);
-  --mat-sys-secondary: rgb(68, 183, 247);
-  --mat-sys-secondary-fixed-dim: rgb(68, 183, 247, 0.15);
+  --mat-sys-primary:           rgb(124, 58, 237);           // #7c3aed violet-600
+  --mat-sys-primary-fixed-dim: rgba(124, 58, 237, 0.15);
+  --mat-sys-secondary:         rgb(167, 139, 250);          // #a78bfa violet-400
+  --mat-sys-secondary-fixed-dim: rgba(167, 139, 250, 0.15);
 }
